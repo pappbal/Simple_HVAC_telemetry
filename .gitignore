@@ -1,0 +1,11 @@
+.metadata
+RemoteSystemsTempFiles/
+.cproject
+.settings
+.project
+*.o
+*.elf
+Debug/
+*.html
+*.ini
+*.pdf
