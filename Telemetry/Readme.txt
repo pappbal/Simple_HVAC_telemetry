@@ -1,0 +1,1 @@
+This is the root directory of the telemetry source files. The design files of the telemetry software (designed with Qt, QML) should be put here.
