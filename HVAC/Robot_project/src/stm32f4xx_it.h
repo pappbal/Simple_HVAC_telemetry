@@ -33,27 +33,21 @@
  extern "C" {
 #endif 
 
-/* Includes ------------------------------------------------------------------*/
 #include "stm32f4xx.h"
 
-/* Exported types ------------------------------------------------------------*/
-/* Exported constants --------------------------------------------------------*/
-/* Exported macro ------------------------------------------------------------*/
-/* Exported functions ------------------------------------------------------- */
-
- uint8_t set_value[5];
- double setpoint=0;
- uint16_t measured_value1 = 0, measured_value2 = 0;
- uint16_t measured_value11 = 0, measured_value22 = 0;
- uint16_t CaptureNumber1 = 0;
- uint16_t CaptureNumber3 = 0;
- uint32_t Capture = 0;
- uint32_t Capture3 = 0;
- uint16_t TIM5Freq1 = 0;
- uint16_t TIM5Freq3 = 0;
- uint16_t TIM5Freq1_previous;
- uint16_t TIM5Freq3_previous;
- uint8_t enable=0;
+extern uint8_t set_value[5];
+extern double setpoint;
+extern uint32_t measured_value1, measured_value2;
+extern uint32_t measured_value11, measured_value22;
+extern uint32_t CaptureNumber1;
+extern uint32_t CaptureNumber3;
+extern uint32_t Capture;
+extern uint32_t Capture3;
+extern uint32_t TIM5Freq1;
+extern uint32_t TIM5Freq3;
+extern uint32_t TIM5Freq1_previous;
+extern uint32_t TIM5Freq3_previous;
+extern uint8_t enable;
 
 void NMI_Handler(void);
 void HardFault_Handler(void);
@@ -65,6 +59,7 @@ void DebugMon_Handler(void);
 void PendSV_Handler(void);
 void SysTick_Handler(void);
 
+void TIM5_IRQHandler(void);
 void TIM5_CC_IRQHandler(void);
 void TIM2_IRQHandler(void);
 

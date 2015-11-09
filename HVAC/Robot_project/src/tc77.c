@@ -70,12 +70,11 @@ void tc77_pin_config(void) {
 
 }
 
-double get_temperature(uint8_t thermometer_num) {
+uint16_t get_temperature(uint8_t thermometer_num) {
 	GPIO_TypeDef *chip_select_port;
 	uint16_t chip_select_pin;
 	uint16_t nothing = 0;
 	uint16_t measured_value;
-	//double celsius;
 
 	switch (thermometer_num) {
 	case 1:

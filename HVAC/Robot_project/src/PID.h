@@ -13,17 +13,17 @@
 
 
 void init_PID(double Kp_param, double Ki_param, double Kd_param);
-float PID_Controller(double setpoint, uint16_t measured_value);
+uint32_t PID_Controller(double setpoint, uint16_t measured_value);
 void PID_sampletime(void);
 
-double Kp, Ki, Kd;
-double actual_error=0;
-double error_previous=0;
-float P ;
-float I ;
-float D ;
-int dummy_thermo ;
-float PID ;
-double celsius;
+extern double Kp, Ki, Kd;
+extern double actual_error;
+extern double error_previous;
+extern double P;
+extern double I;
+extern double D;
+extern int dummy_thermo;
+extern uint32_t PID;
+extern double celsius;
 
 #endif /* PID_H_ */

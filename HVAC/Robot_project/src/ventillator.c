@@ -21,8 +21,8 @@ void ventillator_EN_init(void) {
 	GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_NOPULL;
 	GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
 	GPIO_Init(GPIOC, &GPIO_InitStructure);
-	GPIO_ResetBits(GPIOC, GPIO_Pin_5 );
-	GPIO_ResetBits(GPIOC, GPIO_Pin_4 );
+	GPIO_ResetBits(GPIOC, GPIO_Pin_5);
+	GPIO_ResetBits(GPIOC, GPIO_Pin_4);
 
 	// 4. ventillátor
 	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_11;
@@ -31,9 +31,8 @@ void ventillator_EN_init(void) {
 	GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_NOPULL;
 	GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
 	GPIO_Init(GPIOC, &GPIO_InitStructure);
-	GPIO_ResetBits(GPIOC, GPIO_Pin_11 );
+	GPIO_ResetBits(GPIOC, GPIO_Pin_11);
 }
-
 
 void ventillator_PWM_init(void) {
 
@@ -52,9 +51,9 @@ void ventillator_PWM_init(void) {
 	GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
 	GPIO_Init(GPIOC, &GPIO_InitStructure);
 
-	GPIO_PinAFConfig(GPIOC, GPIO_PinSource6, GPIO_AF_TIM3 );  // ventillator 1
-	GPIO_PinAFConfig(GPIOC, GPIO_PinSource8, GPIO_AF_TIM3 );  // ventillator 2
-	GPIO_PinAFConfig(GPIOC, GPIO_PinSource9, GPIO_AF_TIM3 );  // ventillator 3
+	GPIO_PinAFConfig(GPIOC, GPIO_PinSource6, GPIO_AF_TIM3);  // ventillator 1
+	GPIO_PinAFConfig(GPIOC, GPIO_PinSource8, GPIO_AF_TIM3);  // ventillator 2
+	GPIO_PinAFConfig(GPIOC, GPIO_PinSource9, GPIO_AF_TIM3);  // ventillator 3
 
 	TIM_InitStructure.TIM_Period = 999;
 	TIM_InitStructure.TIM_Prescaler = 4;
@@ -82,23 +81,27 @@ void ventillator_PWM_init(void) {
 
 }
 
-void set_ventillator_PWM (uint8_t venti_num, uint16_t threshold) {
-if (threshold<0) threshold=0;
-if (threshold > 1000)	threshold = 1000;
-if (threshold < 100) threshold = 0;
-if ((threshold > 100) && (threshold < 130)) threshold = 130;
+void set_ventillator_PWM(uint8_t venti_num, uint32_t threshold) {
+
+	if (threshold > 1000)
+		threshold = 1000;
+	if (threshold < 100)
+		threshold = 0;
+	if ((threshold > 100) && (threshold < 130))
+		threshold = 130;
 
 	switch (venti_num) {
-case 1: TIM3->CCR1 = threshold;
-	break;
-case 2: TIM3->CCR3 = threshold;
-	break;
-case 3: TIM3->CCR4 = threshold;
-	break;
+	case 1:
+		TIM3->CCR1 = threshold;
+		break;
+	case 2:
+		TIM3->CCR3 = threshold;
+		break;
+	case 3:
+		TIM3->CCR4 = threshold;
+		break;
+	}
 }
-}
-
-
 
 void input_capture_setup(void) {
 
@@ -122,13 +125,13 @@ void input_capture_setup(void) {
 	GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_NOPULL;
 	GPIO_Init(GPIOA, &GPIO_InitStructure);
 
-	GPIO_PinAFConfig(GPIOA, GPIO_PinSource1, GPIO_AF_TIM5 );
-	GPIO_PinAFConfig(GPIOA, GPIO_PinSource3, GPIO_AF_TIM5 );
+	GPIO_PinAFConfig(GPIOA, GPIO_PinSource1, GPIO_AF_TIM5);
+	GPIO_PinAFConfig(GPIOA, GPIO_PinSource3, GPIO_AF_TIM5);
 
 	TIM_InitStructure.TIM_CounterMode = TIM_CounterMode_Up;
 	TIM_InitStructure.TIM_Period = 0xFFFFFFFF;
 	TIM_InitStructure.TIM_Prescaler = 16799;
-	TIM_InitStructure.TIM_ClockDivision=TIM_CKD_DIV1;
+	TIM_InitStructure.TIM_ClockDivision = TIM_CKD_DIV1;
 	TIM_TimeBaseInit(TIM5, &TIM_InitStructure);
 
 	TIM_ICInitStructure.TIM_Channel = TIM_Channel_2;
@@ -145,7 +148,6 @@ void input_capture_setup(void) {
 	TIM_ICInitStructure.TIM_ICFilter = 0x5;
 	TIM_ICInit(TIM5, &TIM_ICInitStructure);
 
-
 	NVIC_InitStructure.NVIC_IRQChannel = TIM5_IRQn;
 	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0;
 	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 3;
@@ -156,9 +158,5 @@ void input_capture_setup(void) {
 	TIM_ITConfig(TIM5, TIM_IT_CC4, ENABLE);
 	TIM_Cmd(TIM5, ENABLE);
 
-
 }
-
-
-
 

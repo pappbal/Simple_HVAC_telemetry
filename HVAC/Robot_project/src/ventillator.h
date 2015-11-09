@@ -13,7 +13,7 @@
 void ventillator_EN_init(void);
 void ventillator_PWM_init(void);
 void input_capture_setup(void);
-void set_ventillator_PWM (uint8_t venti_num, uint16_t threshold);
+void set_ventillator_PWM (uint8_t venti_num, uint32_t threshold);
 
 
 
