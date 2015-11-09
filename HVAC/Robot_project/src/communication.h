@@ -9,7 +9,7 @@
 #define SRC_COMMUNICATION_H_
 
 void Data_transform(uint8_t mod, uint8_t egesz, uint8_t vesszo, uint8_t tort, uint8_t kieg);
-void Send_data(uint16_t param);
+void Send_data(uint8_t param);
 
 
 #endif /* SRC_COMMUNICATION_H_ */

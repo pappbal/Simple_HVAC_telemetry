@@ -43,7 +43,7 @@ extern uint32_t CaptureNumber1;
 extern uint32_t CaptureNumber3;
 extern uint32_t Capture;
 extern uint32_t Capture3;
-extern uint32_t TIM5Freq1;
+extern uint32_t Fan_1_frequency;
 extern uint32_t TIM5Freq3;
 extern uint32_t TIM5Freq1_previous;
 extern uint32_t TIM5Freq3_previous;

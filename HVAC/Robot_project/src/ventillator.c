@@ -14,7 +14,7 @@ void ventillator_EN_init(void) {
 
 	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOC, ENABLE);
 	GPIO_InitTypeDef GPIO_InitStructure;
-	//1,2 EN, 3,4 EN
+	//1,2 EN pin for fan 1 and 2, 3,4 EN pin for fan 3
 	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_5 | GPIO_Pin_4;
 	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;
 	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_2MHz;
@@ -24,7 +24,7 @@ void ventillator_EN_init(void) {
 	GPIO_ResetBits(GPIOC, GPIO_Pin_5);
 	GPIO_ResetBits(GPIOC, GPIO_Pin_4);
 
-	// 4. ventillátor
+	// 4. fan
 	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_11;
 	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;
 	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_2MHz;
@@ -32,6 +32,18 @@ void ventillator_EN_init(void) {
 	GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
 	GPIO_Init(GPIOC, &GPIO_InitStructure);
 	GPIO_ResetBits(GPIOC, GPIO_Pin_11);
+}
+
+void enable_fan_group(uint8_t fan_group){
+
+	if(fan_group == 1) GPIO_SetBits(GPIOC, GPIO_Pin_5);
+	else if(fan_group == 2) GPIO_SetBits(GPIOC, GPIO_Pin_4);
+}
+
+void disable_fan_group(uint8_t fan_group){
+
+	if(fan_group == 1) GPIO_ResetBits(GPIOC, GPIO_Pin_5);
+	else if(fan_group == 2) GPIO_ResetBits(GPIOC, GPIO_Pin_4);
 }
 
 void ventillator_PWM_init(void) {
@@ -92,13 +104,13 @@ void set_ventillator_PWM(uint8_t venti_num, uint32_t threshold) {
 
 	switch (venti_num) {
 	case 1:
-		TIM3->CCR1 = threshold;
+		TIM3->CCR1 = threshold; // fan 1
 		break;
 	case 2:
-		TIM3->CCR3 = threshold;
+		TIM3->CCR3 = threshold; // fan 2
 		break;
 	case 3:
-		TIM3->CCR4 = threshold;
+		TIM3->CCR4 = threshold; // fan 3
 		break;
 	}
 }

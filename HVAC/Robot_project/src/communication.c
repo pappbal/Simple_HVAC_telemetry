@@ -66,7 +66,7 @@ void Data_transform(uint8_t mod, uint8_t egesz, uint8_t vesszo, uint8_t tort, ui
 
 	}
 }
-void Send_data(uint16_t param) {
+void Send_data(uint8_t param) {
 	uint8_t* buf;
 	buf = &param;
 	VCP_DataTx(buf, 2);

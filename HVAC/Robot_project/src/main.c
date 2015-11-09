@@ -24,11 +24,11 @@ int main(void) {
 
 	setpoint = 25;
 
-	GPIO_SetBits(GPIOC, GPIO_Pin_5);
-	 GPIO_SetBits(GPIOC, GPIO_Pin_4);
+	enable_fan_group(1);
+	enable_fan_group(2);
 
 	set_ventillator_PWM(1, 0);
-	set_ventillator_PWM(2, 0);
+	set_ventillator_PWM(3, 0);
 
 	STM32F4_Discovery_LEDInit(LED3);
 	STM32F4_Discovery_LEDInit(LED4);
