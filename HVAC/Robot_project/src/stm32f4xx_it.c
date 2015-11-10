@@ -32,15 +32,26 @@
 #include "stm32f4_discovery.h"
 #include "usbd_cdc_core.h"
 #include "usbd_cdc_vcp.h"
-//#include "PID.h"
+#include "PID.h"
 #include "tc77.h"
 #include "ventillator.h"
 
-/* Private typedef -----------------------------------------------------------*/
-/* Private define ------------------------------------------------------------*/
-/* Private macro -------------------------------------------------------------*/
-/* Private variables ---------------------------------------------------------*/
-/* Private function prototypes -----------------------------------------------*/
+#define Fan_1_PWM TIM3->CCR1
+#define Fan_3_PWM TIM3->CCR4
+
+uint8_t set_value[5];
+double setpoint = 0;
+uint32_t measured_value1 = 0, measured_value2 = 0;
+uint32_t measured_value11 = 0, measured_value22 = 0;
+uint32_t CaptureNumber1 = 0;
+uint32_t CaptureNumber3 = 0;
+uint32_t Capture = 0;
+uint32_t Capture3 = 0;
+uint32_t Fan_1_frequency = 0;
+uint32_t Fan_3_frequency = 0;
+uint32_t Fan_1_frequency_previous;
+uint32_t Fan_3_frequency_previous;
+uint8_t enable = 0;
 
 extern USB_OTG_CORE_HANDLE USB_OTG_dev;
 extern uint32_t USBD_OTG_ISR_Handler(USB_OTG_CORE_HANDLE *pdev);
@@ -49,16 +60,11 @@ extern uint32_t USBD_OTG_EP1IN_ISR_Handler (USB_OTG_CORE_HANDLE *pdev);
 extern uint32_t USBD_OTG_EP1OUT_ISR_Handler (USB_OTG_CORE_HANDLE *pdev);
 #endif
 
-
-
-
 /* Private functions ---------------------------------------------------------*/
 
 /******************************************************************************/
 /*            Cortex-M4 Processor Exceptions Handlers                         */
 /******************************************************************************/
-
-
 
 #ifdef USE_USB_OTG_FS
 void OTG_FS_WKUP_IRQHandler(void) {
@@ -67,7 +73,7 @@ void OTG_FS_WKUP_IRQHandler(void) {
 		SystemInit();
 		USB_OTG_UngateClock(&USB_OTG_dev);
 	}
-	EXTI_ClearITPendingBit(EXTI_Line18 );
+	EXTI_ClearITPendingBit(EXTI_Line18);
 }
 #endif
 
@@ -132,88 +138,84 @@ void OTG_HS_EP1_OUT_IRQHandler(void)
 /*  file (startup_stm32f4xx.s).                                               */
 /******************************************************************************/
 
-
-
+//Period = Capture(1) /(TIMx_CLK *(PSC+1)*(ICxPSC)*polarity_index(2))
 
 void TIM5_IRQHandler(void) {
-	if (TIM_GetITStatus(TIM5, TIM_IT_CC2 ) == SET) {
-		TIM5Freq1_previous = TIM5Freq1;
-		TIM_ClearITPendingBit(TIM5, TIM_IT_CC2 );
+
+	if (TIM_GetITStatus(TIM5, TIM_IT_CC2) == SET) {
+		Fan_1_frequency_previous = Fan_1_frequency;
+		TIM_ClearITPendingBit(TIM5, TIM_IT_CC2);
 		if (CaptureNumber1 == 0) {
-			measured_value1 = TIM_GetCapture2(TIM5 );
+			measured_value1 = TIM_GetCapture2(TIM5);
 			CaptureNumber1 = 1;
 		} else if (CaptureNumber1 == 1) {
-			measured_value2 = TIM_GetCapture2(TIM5 );
+			measured_value2 = TIM_GetCapture2(TIM5);
 			if (measured_value2 > measured_value1) {
 				Capture = (measured_value2 - measured_value1);
 			} else if (measured_value2 < measured_value1) {
-				Capture = ((TIM5 ->ARR - measured_value1) + measured_value2);
+				Capture = ((TIM5->ARR - measured_value1) + measured_value2);
 			}
-			TIM5Freq1 = ((84000000 / 16800) / 2) / Capture;
+			Fan_1_frequency = ((84000000 / 16800) / 2) / Capture;
 			CaptureNumber1 = 0;
-			if (TIM5Freq1 > 50)
-				TIM5Freq1 = TIM5Freq1_previous;
+			if (Fan_1_frequency > 50)
+				Fan_1_frequency = Fan_1_frequency_previous;
 		}
 	}
 
 	if (TIM_GetITStatus(TIM5, TIM_IT_CC4) == SET) {
-		TIM5Freq3_previous = TIM5Freq3;
+		Fan_3_frequency_previous = Fan_3_frequency;
 		TIM_ClearITPendingBit(TIM5, TIM_IT_CC4);
 		if (CaptureNumber3 == 0) {
 			measured_value11 = TIM_GetCapture4(TIM5);
 			CaptureNumber3 = 1;
 		} else if (CaptureNumber3 == 1) {
-			measured_value22 = TIM_GetCapture4(TIM5 );
+			measured_value22 = TIM_GetCapture4(TIM5);
 			if (measured_value22 > measured_value11) {
 				Capture3 = (measured_value22 - measured_value11);
 			} else if (measured_value22 < measured_value11) {
-				Capture3 = ((TIM5 ->ARR - measured_value11) + measured_value22);
+				Capture3 = ((TIM5->ARR - measured_value11) + measured_value22);
 			}
-			TIM5Freq3 = ((84000000 / 16800) / 2) / Capture3;
+			Fan_3_frequency = ((84000000 / 16800) / 2) / Capture3;
 			CaptureNumber3 = 0;
-			if (TIM5Freq3 > 50)
-				TIM5Freq3 = TIM5Freq3_previous;
+			if (Fan_3_frequency > 50)
+				Fan_3_frequency = Fan_3_frequency_previous;
 		}
 	}
 
 }
 
-//Period = Capture(1) /(TIMx_CLK *(PSC+1)*(ICxPSC)*polarity_index(2))
 
-
-
-
-extern float PID_Controller(double setpoint, uint16_t measured_value);
 
 void TIM2_IRQHandler(void) {
 	if (TIM_GetITStatus(TIM2, TIM_IT_Update) == SET) {
 		TIM_ClearITPendingBit(TIM2, TIM_IT_Update);
-
 
 		VCP_get_char(&set_value[0]);
 		VCP_get_char(&set_value[1]);
 		VCP_get_char(&set_value[2]);
 		VCP_get_char(&set_value[3]);
 		VCP_get_char(&set_value[4]);
-		Data_transform (set_value[0],set_value[1],set_value[2],set_value[3],set_value[4]);
+		Data_transform(set_value[0], set_value[1], set_value[2], set_value[3],set_value[4]);
 
 		if ((TIM3->CCR1) == 0)
-			TIM5Freq1 = 0;
+			Fan_1_frequency = 0;
 		if ((TIM3->CCR4) == 0)
-			TIM5Freq3 = 0;
+			Fan_3_frequency = 0;
 
-
-		set_ventillator_PWM(1, 100 * PID_Controller(setpoint, get_temperature(1)));
+		set_ventillator_PWM(1,100 * PID_Controller(setpoint, get_temperature(1)));
 		set_ventillator_PWM(3, 100 * PID_Controller(setpoint, get_temperature(1)));
-		Send_data(get_temperature(1));
-		Send_data(TIM5Freq1);
-		Send_data(TIM5Freq3);
-		Send_data(TIM3->CCR1);
+
+		uint8_t temp_1 = 0.0625 * (get_temperature(1) >> 3);
+		//Send_data((0.0625 * (temp_1 >> 3))+48);
+		Send_data(temp_1/10 + 48);
+		Send_data(temp_1%10 + 48);
+		Send_data(10);
+		Send_data(13); //Carriage return
+		/*Send_data(get_temperature(1));
+		Send_data(Fan_1_frequency);
+		Send_data(Fan_3_frequency);
+		Send_data(Fan_1_PWM);*/
 
 	}
 }
-
-
-
-
 

@@ -8,7 +8,15 @@
 #include "stm32f4xx_conf.h"
 #include "PID.h"
 
-
+double Kp, Ki, Kd;
+double actual_error=0;
+double error_previous=0;
+double P;
+double I;
+double D;
+int dummy_thermo;
+uint32_t PID;
+double celsius;
 
 
 void PID_sampletime(void) {
@@ -39,7 +47,7 @@ void init_PID(double Kp_param, double Ki_param, double Kd_param) {
 
 //Variables
 
-float PID_Controller(double setpoint, uint16_t measured_value) {
+uint32_t PID_Controller(double setpoint, uint16_t measured_value) {
 
 	celsius = 0.0625 * (measured_value >> 3);
 

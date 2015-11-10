@@ -28,12 +28,8 @@
 #include "usbd_cdc_core.h"
 #include "usbd_conf.h"
 
-
-
-void Data_transform (uint8_t mod,uint8_t egesz,uint8_t vesszo, uint8_t tort, uint8_t kieg);
-void Send_data(uint16_t param);
 uint8_t VCP_get_char(uint8_t *buf);
-void recieve_time_init(void);
+
 
 /* Exported typef ------------------------------------------------------------*/
 /* The following structures groups all needed parameters to be configured for the 
