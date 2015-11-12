@@ -11,3 +11,4 @@ Debug/
 *.pdf
 *.user
 Telemetry/build-Telemetry-Desktop_Qt_5_5_1_GCC_64bit-Debug/
+*.autosave
