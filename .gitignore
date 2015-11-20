@@ -12,3 +12,6 @@ Debug/
 *.user
 Telemetry/build-Telemetry-Desktop_Qt_5_5_1_GCC_64bit-Debug/
 *.autosave
+
+#Mergetool generated orig file after merging
+*.orig
