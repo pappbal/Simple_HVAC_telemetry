@@ -5,6 +5,7 @@
 #-------------------------------------------------
 
 QT       += core gui
+QT += serialport
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -14,9 +15,11 @@ TEMPLATE = app
 
 SOURCES += main.cpp\
         mainwindow.cpp \
-    data_logger.cpp
+   	data_logger.cpp
+    	communication.cpp
 
 HEADERS  += mainwindow.h \
-    data_logger.h
+	data_logger.h
+        communication.h
 
 FORMS    += mainwindow.ui
