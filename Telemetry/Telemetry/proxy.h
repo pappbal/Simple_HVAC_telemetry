@@ -1,7 +1,7 @@
 #ifndef PROXY_H
 #define PROXY_H
 
-#endif // PROXY_H
+
 
 //to indicators
 #define ID_temp1 1
@@ -27,15 +27,20 @@
 #include <iostream>
 #include <QDataStream>
 #include <QObject>
+#include <qbytearray.h>
 
 
 
 class Package
 {
 public:
-    qint32 ID;
-    QVector<qint32> payload;
+    qint8 ID;
+    QVector<qint8> payload;
+    Package();
+    Package(QByteArray& data);
+    Package(const Package& other);
 };
+
 
 /*---------------------------------------------------------------------*/
 
@@ -48,7 +53,12 @@ public:
     qint32 temp4;
 
     void reset();
+    Temperatures& operator=(Temperatures&& other); //move assignment
+    Temperatures& operator=(const Temperatures& other); //assignment
 };
+
+
+
 
 /*---------------------------------------------------------------------*/
 
@@ -59,6 +69,8 @@ public:
     qint32 speed2;
 
     void reset();
+    Speeds& operator=(Speeds&& other); //move assignment
+    Speeds& operator=(const Speeds& other); //assignment
 };
 
 /*---------------------------------------------------------------------*/
@@ -74,7 +86,10 @@ public:
 
 public:
     State();
-    ~State();
+    State(State&& other); //move constructor
+    State(const State& other); //copy constructor
+    State& operator=(State&& other); //move assignment
+    State& operator=(const State& other); //assignment
     void setParam(Package &package);
     int readyToSend();
     void reset();
@@ -129,5 +144,5 @@ public slots:
 /*-------------------------------------------------------------------------------------------*/
 
 
-
+#endif // PROXY_H
 

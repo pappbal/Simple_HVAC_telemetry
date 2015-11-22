@@ -17,11 +17,13 @@ int main(int argc, char *argv[])
     Proxy proxy(comm,stateHistory);
     QObject::connect(&comm, SIGNAL(signalProxy()),&proxy, SLOT(dataReady()));
 
+
+    for(int i=0; i<300; i++)
+    {
     comm.sendSignal();
+    }
 
-    comm.sendSignal();
-
-
+    std::cout << "Program has finished" << std::endl;
 
     return a.exec();
 }

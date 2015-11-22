@@ -23,4 +23,7 @@ HEADERS  += mainwindow.h \
         proxy.h \
 
 
+
 FORMS    += mainwindow.ui
+
+CONFIG += c++11
