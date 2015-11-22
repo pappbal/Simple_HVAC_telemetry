@@ -79,3 +79,39 @@ void Get_data(uint8_t* data, uint32_t len){
 	//VCP_get_char(data);
 	return;
 }
+
+void construct_temperature_message(uint8_t * message,uint16_t temperature, uint8_t header){
+
+	message[0] = START; //START
+	message[1] = header; //HEADER
+	message[2] = 2; //Length
+	message[3] = 0; //Length
+	message[4] = 0; //Length
+	message[5] = 0; //Length
+	message[6] = temperature; // Temperature lower 1 byte
+	message[7] = temperature >> 8; // Temperature upper 1 byte
+}
+
+void construct_fan_frequency_message(uint8_t * message,uint32_t frequency, uint8_t header){
+
+	message[0] = START; //START
+	message[1] = header; //HEADER
+	message[2] = 1; //Length
+	message[3] = 0; //Length
+	message[4] = 0; //Length
+	message[5] = 0; //Length
+	message[6] = (uint8_t)frequency; // Frequency, casting it to uint8_t, it is enough now
+
+}
+
+void construct_fan_PWM_message(uint8_t * message,uint32_t PWM, uint8_t header){
+
+	message[0] = START; //START
+	message[1] = header; //HEADER
+	message[2] = 1; //Length
+	message[3] = 0; //Length
+	message[4] = 0; //Length
+	message[5] = 0; //Length
+	message[6] = (uint8_t)PWM; // PWM, casting it to uint8_t, it is enough now
+
+}

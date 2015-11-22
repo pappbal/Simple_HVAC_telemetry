@@ -34,8 +34,11 @@
 #include "usbd_cdc_vcp.h"
 #include "PID.h"
 #include "tc77.h"
-#include "ventillator.h"
+#include "./ventillator.h"
 #include "usbd_cdc_vcp.h"
+
+#include "communication.h"
+#include <stdlib.h>
 
 
 #define Fan_1_PWM TIM3->CCR1
@@ -187,41 +190,94 @@ void TIM5_IRQHandler(void) {
 }
 
 
-
+// Sending out data regulary ~ 1 sec period
 void TIM2_IRQHandler(void) {
 	if (TIM_GetITStatus(TIM2, TIM_IT_Update) == SET) {
 		TIM_ClearITPendingBit(TIM2, TIM_IT_Update);
 
 		uint16_t temperature = 0;
-		uint8_t temperature_message[3];
+
+
+		/*Temperature message:
+		 * 1 byte - START
+		 * 1 byte - HEADER
+		 * 4 byte - Length  - Client needs this length
+		 * 2 byte - Data
+		 * TOTAL: 8 byte
+		 */
+
+		// can not use malloc beacuse inside free program goes to infinit loop for some reason...
+		//uint8_t *message = (uint8_t*)malloc(temperature_message_length);
+		uint8_t message_temperature[temperature_message_length];
 
 		//Sending temperature 1 data
 		temperature = get_temperature(1);
-		temperature_message[0] = ID_temp1; // HEADER
-		temperature_message[1] = temperature;
-		temperature_message[2] = temperature >> 8;
-		Send_data(temperature_message,3);
+		construct_temperature_message(message_temperature,temperature,ID_temp1);
+		Send_data(message_temperature,temperature_message_length);
 
 		//Sending temperature 2 data
 		temperature = get_temperature(2);
-		temperature_message[0] = ID_temp2; // HEADER
-		temperature_message[1] = temperature;
-		temperature_message[2] = temperature >> 8;
-		Send_data(temperature_message,3);
+		construct_temperature_message(message_temperature,temperature,ID_temp2);
+		Send_data(message_temperature,temperature_message_length);
 
 		//Sending temperature 3 data
 		temperature = get_temperature(3);
-		temperature_message[0] = ID_temp3; // HEADER
-		temperature_message[1] = temperature;
-		temperature_message[2] = temperature >> 8;
-		Send_data(temperature_message,3);
+		construct_temperature_message(message_temperature,temperature,ID_temp3);
+		Send_data(message_temperature,temperature_message_length);
 
 		//Sending temperature 4 data
 		temperature = get_temperature(4);
-		temperature_message[0] = ID_temp4; // HEADER
-		temperature_message[1] = temperature;
-		temperature_message[2] = temperature >> 8;
-		Send_data(temperature_message,3);
+		construct_temperature_message(message_temperature,temperature,ID_temp4);
+		Send_data(message_temperature,temperature_message_length);
+
+		//free(message);
+
+		/*Fan frequency message:
+		 * 1 byte - START
+		 * 1 byte - HEADER
+		 * 4 byte - Length  - Client needs this length
+		 * 1 byte - Data
+		 * TOTAL: 7 byte
+		 */
+
+		// can not use malloc beacuse inside free program goes to infinit loop for some reason...
+		//message = (uint8_t*)malloc(fan_frequency_message_length);
+
+		uint8_t message_frequency[fan_frequency_message_length];
+		// Sending frequency of Fan 1
+		construct_fan_frequency_message(message_frequency,Fan_1_frequency,ID_freq1);
+		Send_data(message_frequency,fan_frequency_message_length);
+
+		// Sending frequency of Fan 3
+		construct_fan_frequency_message(message_frequency,Fan_3_frequency,ID_freq3);
+		Send_data(message_frequency,fan_frequency_message_length);
+
+		//free(message);
+
+
+		/*Fan PWM message:
+		 * 1 byte - START
+		 * 1 byte - HEADER
+		 * 4 byte - Length  - Client needs this length
+		 * 1 byte - Data
+		 * TOTAL: 7 byte
+		 */
+
+		// can not use malloc beacuse inside free program goes to infinit loop for some reason...
+		//message = (uint8_t*)malloc(fan_PWM_message_length);
+
+		uint8_t message_PWM[fan_PWM_message_length];
+
+		// Sending PWM of fan 1
+		construct_fan_PWM_message(message_PWM,Fan_1_PWM,ID_fan_1_PWM);
+		Send_data(message_PWM,fan_PWM_message_length);
+
+		// Sending PWM of fan 3
+		construct_fan_PWM_message(message_PWM,Fan_3_PWM,ID_fan_3_PWM);
+		Send_data(message_PWM,fan_PWM_message_length);
+
+		//free(message);
+
 
 
 		/*VCP_get_char(&set_value[0]);
@@ -246,6 +302,8 @@ void TIM2_IRQHandler(void) {
 		Send_data(temp_1%10 + 48);
 		Send_data(10); //New line
 		Send_data(13); //Carriage return
+
+
 		Send_data(get_temperature(1));
 		Send_data(Fan_1_frequency);
 		Send_data(Fan_3_frequency);
