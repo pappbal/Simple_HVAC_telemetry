@@ -25,8 +25,9 @@ void Speeds::reset()
 State::State()
 {
     deficient = 1;
-    this->reset();
     param_set = QVector<quint8>(no_of_params);
+    this->reset();
+
 }
 
 
@@ -100,6 +101,8 @@ Communication::~Communication()
 Package Communication::getData()
 {
     Package package;
+    package.ID=1;
+    package.payload.append(5);
     return package;
 }
 
@@ -124,7 +127,7 @@ StateHistory::StateHistory():stateContainer(0)
 //TODO
 }*/
 
-void StateHistory::append(State state)
+void StateHistory::append(State &state)
 {
     stateContainer.append(state);
 
@@ -151,20 +154,23 @@ void Proxy::dataReady()
     Package package;
     package = comm.getData();
 
-    if(currentState.param_set[package.ID-1] == 1)
+    if(package.ID != 0 )
     {
-        //parameter already set, send deficient state
-        stateHistory.append(currentState);
-        currentState.reset();
-        currentState.setParam(package);
-    }
-    else
-    {
-        currentState.setParam(package);
-        if(currentState.readyToSend())
+        if(currentState.param_set[package.ID-1] == 1)
         {
-        stateHistory.append(currentState);
-        currentState.reset();
+            //parameter already set, send deficient state
+            stateHistory.append(currentState);
+            currentState.reset();
+            currentState.setParam(package);
+        }
+        else
+        {
+            currentState.setParam(package);
+            if(currentState.readyToSend())
+            {
+            stateHistory.append(currentState);
+            currentState.reset();
+            }
         }
     }
 

@@ -11,10 +11,13 @@ int main(int argc, char *argv[])
     MainWindow w;
     w.show();
 
+    //State state;
     Communication comm;
     StateHistory stateHistory;
     Proxy proxy(comm,stateHistory);
     QObject::connect(&comm, SIGNAL(signalProxy()),&proxy, SLOT(dataReady()));
+
+    comm.sendSignal();
 
     comm.sendSignal();
 
