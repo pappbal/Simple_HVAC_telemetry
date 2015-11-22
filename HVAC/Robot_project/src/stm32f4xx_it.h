@@ -63,6 +63,23 @@ void TIM5_IRQHandler(void);
 void TIM5_CC_IRQHandler(void);
 void TIM2_IRQHandler(void);
 
+
+// Headers
+#define ID_temp1 1
+#define ID_temp2 2
+#define ID_temp3 3
+#define ID_temp4 4
+#define ID_speed1 5
+#define ID_speed2 6
+#define ID_act_signal 7
+#define ID_pid_p 8
+#define ID_pid_i 9
+#define ID_pid_d 10
+#define ID_req_temp 11
+#define ID_start 12
+#define ID_stop 13
+#define ID_self_check 14
+
 #ifdef __cplusplus
 }
 #endif

@@ -12,7 +12,8 @@
 #include "PID.h"
 #include "communication.h"
 
-extern uint16_t VCP_DataTx(uint8_t* Buf, uint32_t Len);
+/*extern uint16_t VCP_DataRx(uint8_t* Buf, uint32_t Len);
+extern uint16_t VCP_DataTx(uint8_t* Buf, uint32_t Len);*/
 
 void Data_transform(uint8_t mod, uint8_t egesz, uint8_t vesszo, uint8_t tort, uint8_t kieg) {
 	double temp1 = (tort - 48);
@@ -66,8 +67,15 @@ void Data_transform(uint8_t mod, uint8_t egesz, uint8_t vesszo, uint8_t tort, ui
 
 	}
 }
-void Send_data(uint8_t param) {
-	uint8_t* buf;
-	buf = &param;
-	VCP_DataTx(buf, 2);
+void Send_data(uint8_t* data, uint32_t len) {
+
+	VCP_DataTx(data, len);
+	return;
+}
+
+void Get_data(uint8_t* data, uint32_t len){
+
+	VCP_DataRx(data, len);
+	//VCP_get_char(data);
+	return;
 }

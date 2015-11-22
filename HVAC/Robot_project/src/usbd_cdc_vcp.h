@@ -29,6 +29,8 @@
 #include "usbd_conf.h"
 
 uint8_t VCP_get_char(uint8_t *buf);
+uint16_t VCP_DataTx(uint8_t* Buf, uint32_t Len);
+uint16_t VCP_DataRx(uint8_t* Buf, uint32_t Len);
 
 
 /* Exported typef ------------------------------------------------------------*/

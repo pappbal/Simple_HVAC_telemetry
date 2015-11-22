@@ -115,6 +115,7 @@ void set_ventillator_PWM(uint8_t venti_num, uint32_t threshold) {
 	}
 }
 
+
 void input_capture_setup(void) {
 
 	TIM_TimeBaseInitTypeDef TIM_InitStructure;
