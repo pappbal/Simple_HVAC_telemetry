@@ -1,0 +1,14 @@
+.metadata
+RemoteSystemsTempFiles/
+.cproject
+.settings
+.project
+*.o
+*.elf
+Debug/
+*.html
+*.ini
+*.pdf
+*.user
+Telemetry/build-Telemetry-Desktop_Qt_5_5_1_GCC_64bit-Debug/
+*.autosave
