@@ -9,6 +9,7 @@ class State
 public:
     Temperatures temps;
     Speeds speeds;
+    Actuators acts;
     qint32 deficient;
     QVector<quint8> param_set;
 
@@ -24,14 +25,16 @@ public:
 };
 
 
-class StateHistory
+class StateHistory : public QObject
 {
-
+    Q_OBJECT
 public:
     QVector<State> stateContainer;
    StateHistory();
    // ~StateHistory();
     void append(State &state);
+signals:
+    void newData();
 };
 
 #endif // STATEHISTORY
