@@ -1,15 +1,19 @@
 #include <application.h>
 
-Package::Package(QByteArray& data)
+Package::Package(QByteArray data)
 {
     if(data != NULL)
     {
         this->ID = data[0];
-        payload.resize(data.size() - 1);
+        //payload.resize(data.size() - 5);
         for(int i=5;i<data.size();i++)
         {
-            this->payload[i-1] = data[i];
+            //this->payload[i-5] = data[i];
+            payload.append(data[i]);
         }
+
+
+        std::cout << "ID: " << (uint)ID << std::endl;
     }
 }
 

@@ -105,7 +105,7 @@ void State::setParam(Package &package) //ebben allapitom meg, hogy milyen ID es 
             speeds.speed2 = package.payload[0];
         break;
         default:
-            std::cout << "ERROR: Undefined package ID: %d, package dropped.";
+            std::cout << "ERROR: Undefined package ID: %d, package dropped." << std::endl;
             //TODO also send the message for the GUI!!!
     }
 

@@ -37,6 +37,6 @@ int main(int argc, char *argv[])
 
 
     //gui.sendSignal(10,5);
-    std::cout << "Program has finished" << std::endl;
+    //std::cout << "Program has finished" << std::endl;
     return a.exec();
 }
