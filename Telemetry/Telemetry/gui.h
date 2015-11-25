@@ -10,9 +10,9 @@ class GUI : public QObject
 public:
     StateHistory& stateHistory;
     GUI(StateHistory& stateHistory);
-    void sendSignal(int pid_ID, int data);
+    void sendSignal(qint8 pid_ID, qint32 data);
 signals:
-    void signalPID(int pid_ID, int data);
+    void signalCommand(qint8 pid_ID, qint32 data);
 public slots:
     void plotData();
 };

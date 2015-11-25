@@ -5,15 +5,14 @@
 
 class State
 {
-
+private:
+    qint16 calcTemp(qint8 lower, qint8 upper);
 public:
     Temperatures temps;
     Speeds speeds;
     Actuators acts;
     qint32 deficient;
     QVector<quint8> param_set;
-
-public:
     State();
     State(State&& other); //move constructor
     State(const State& other); //copy constructor
@@ -28,6 +27,8 @@ public:
 class StateHistory : public QObject
 {
     Q_OBJECT
+
+
 public:
     QVector<State> stateContainer;
    StateHistory();

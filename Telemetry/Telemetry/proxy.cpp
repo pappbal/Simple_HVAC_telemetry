@@ -43,7 +43,7 @@ void Proxy::dataReady()
 
 }
 
-void Proxy::sendPID(int pid_ID, int data)
+void Proxy::sendCommand(qint8 pid_ID, qint32 data)
 {
 
     Package package(pid_ID,data);

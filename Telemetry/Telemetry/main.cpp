@@ -27,14 +27,14 @@ int main(int argc, char *argv[])
 
     GUI gui(stateHistory);
     QObject::connect(&serial_Communication, SIGNAL(signalToProxy()),&proxy, SLOT(dataReady()));
-    QObject::connect(&gui, SIGNAL(signalPID(int,int)), &proxy, SLOT(sendPID(int,int)));
+    QObject::connect(&gui, SIGNAL(signalCommand(qint8,qint32)), &proxy, SLOT(sendCommand(qint8,qint32)));
 
     QObject::connect(&stateHistory, SIGNAL(newData()),&gui, SLOT(plotData()));
 
 
 
 
-   gui.signalPID(5,10);
+   gui.signalCommand(5,10);
 
     //gui.sendSignal(10,5);
     //std::cout << "Program has finished" << std::endl;

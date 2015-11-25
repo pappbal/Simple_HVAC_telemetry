@@ -37,7 +37,7 @@ public:
     QVector<qint8> payload;
     Package();
     Package(QByteArray data);
-    Package(quint8 ID, qint8 data);
+    Package(quint8 ID, qint32 data);
     Package(const Package& other);
 };
 
@@ -48,10 +48,10 @@ QDataStream& operator<<(QDataStream& out, const Package& package);
 class Temperatures
 {
 public:
-    qint32 temp1;
-    qint32 temp2;
-    qint32 temp3;
-    qint32 temp4;
+    double temp1;
+    double temp2;
+    double temp3;
+    double temp4;
 
     void reset();
     Temperatures& operator=(Temperatures&& other); //move assignment

@@ -18,8 +18,8 @@ public:
 
     ~Proxy();
 public slots:
-    void dataReady();
-    void sendPID(int pid_ID, int data);
+    void dataReady(); //slot for communication. Called on new incoming packet.
+    void sendCommand(qint8 pid_ID, qint32 data); //slot for GUI. Called when parameter is set.
 };
 
 

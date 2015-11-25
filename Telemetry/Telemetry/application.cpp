@@ -17,11 +17,15 @@ Package::Package(QByteArray data)
     }
 }
 
-Package::Package(quint8 ID, qint8 data)
+Package::Package(quint8 ID, qint32 data)
 {
     this->ID = ID;
-    this -> payload = QVector<qint8>(1);
+    this -> payload = QVector<qint8>(4);
+
     this -> payload[0] = data;
+    this -> payload[1] = data >> 8;
+    this -> payload[2] = data >> 16;
+    this -> payload[3] = data >> 24;
 }
 
 Package::Package(const Package& other)

@@ -87,16 +87,16 @@ void State::setParam(Package &package) //ebben allapitom meg, hogy milyen ID es 
     switch(package.ID)
     {
         case ID_temp1:
-            temps.temp1 = package.payload[0];
+        temps.temp1 = calcTemp(package.payload[0],package.payload[1]);
         break;
         case ID_temp2:
-            temps.temp2 = package.payload[0];
+            temps.temp2 = calcTemp(package.payload[0],package.payload[1]);
         break;
         case ID_temp3:
-            temps.temp3 = package.payload[0];
+            temps.temp3 = calcTemp(package.payload[0],package.payload[1]);
         break;
         case ID_temp4:
-            temps.temp4 = package.payload[0];
+            temps.temp4 = calcTemp(package.payload[0],package.payload[1]);
         break;
         case ID_speed1:
             speeds.speed1 = package.payload[0];
@@ -116,6 +116,12 @@ void State::setParam(Package &package) //ebben allapitom meg, hogy milyen ID es 
     }
 
     //TODO set timestamp?
+}
+
+qint16 State::calcTemp(qint8 lower, qint8 upper)
+{
+    qint16 temp_raw = (((qint16)upper) << 8) + (qint16)lower;
+    return 0.0625 * (temp_raw >> 3);
 }
 
 int State::readyToSend()
