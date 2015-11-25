@@ -15,11 +15,21 @@ TEMPLATE = app
 
 SOURCES += main.cpp\
         mainwindow.cpp \
-   	data_logger.cpp
-    	communication.cpp
+        communication.cpp \
+        proxy.cpp \
+    application.cpp \
+    statehistory.cpp \
+    gui.cpp
 
 HEADERS  += mainwindow.h \
-	data_logger.h
-        communication.h
+        communication.h \
+        proxy.h \
+    application.h \
+    statehistory.h \
+    gui.h
+
+
 
 FORMS    += mainwindow.ui
+
+CONFIG += c++11
