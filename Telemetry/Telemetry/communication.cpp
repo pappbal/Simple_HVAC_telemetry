@@ -19,13 +19,6 @@ Communication::Communication(){
 Communication::~Communication(){
 
 }
-/*Package Communication::getData() {
-    return Package(received_data_stream);
-}*/
-
-void Communication::sendData(Package package){
-
-}
 
 Serial_Communication::Serial_Communication(qint32 baudRate,QSerialPort::DataBits dataBits,QSerialPort::Parity parity,QSerialPort::StopBits stopBits,QSerialPort::FlowControl flow_control){
 
@@ -50,28 +43,6 @@ Serial_Communication::~Serial_Communication(){
 }
 
 
-/*Package Communication::getData()
-{
-    //generates a random ID from 0-6, payload is the double of ID, 0 is handled as invalid
-    Package package;
-    package.ID=rand() % 7;
-    package.payload.append(package.ID*2);
-    return package;
-}
-
-void Communication::sendData(Package package)
-{
-    std::cout << "setData called with package ID of " << (uint)package.ID  <<std::endl;
-}
-
-void Communication::sendSignal()
-{
-    emit signalToProxy();
-}
-*/
-
-
-
 bool Serial_Communication::open_serial_port(QString portName){
 
     Serial_port.setPortName(portName);
@@ -88,6 +59,34 @@ bool Serial_Communication::open_serial_port(QString portName){
     }
 }
 
+void Communication::sendData(Package package){
+
+    unsigned char start = 0xff; // START character
+
+    data_stream_out.append(start); // Append start chaarcter to the beginning of the array
+    QDataStream stream(&data_stream_out,QIODevice::ReadWrite); // Redirect the stream into the QByteArray
+    stream.setByteOrder(QDataStream::LittleEndian); // Set endianness according to the HVAC
+
+    stream << start << package; //Compose the packet
+
+    for(auto elem : data_stream_out){
+        cout << "Byte out: " << (uint)elem << endl;
+    }
+    cout << "End packet " << endl;
+
+    sendData_specific();
+
+}
+
+void Serial_Communication::sendData_specific(){
+
+    if(!Serial_port.isOpen()) {
+        qDebug() << "Port "<<Serial_port.portName()<<" is not opened";
+        return;
+    }
+
+    Serial_port.write(data_stream_out);
+}
 
 void Serial_Communication::read_received_data(){
 
@@ -126,10 +125,6 @@ void Serial_Communication::read_received_data(){
             for(auto elem : received_data_stream){
                 cout << static_cast<unsigned>(elem) << endl;
             }
-            /*quint16 celsius = dataArray[0] + (dataArray[1] << 8);
-            double celsius_d = 0.0625 * (celsius >> 3);
-            cout << "celsius: " << celsius_d << endl;
-            cout << "end packet" << endl;*/
 
             emit signalToProxy();
             start_arrived = false;

@@ -41,6 +41,7 @@ public:
     Package(const Package& other);
 };
 
+QDataStream& operator<<(QDataStream& out, const Package& package);
 
 /*---------------------------------------------------------------------*/
 

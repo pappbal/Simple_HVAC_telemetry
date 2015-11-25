@@ -16,7 +16,6 @@ int main(int argc, char *argv[])
     w.show();
 
     Serial_Communication serial_Communication(QSerialPort::Baud115200,QSerialPort::Data8,QSerialPort::OddParity,QSerialPort::OneStop,QSerialPort::NoFlowControl);
-    //QObject::connect(&serial_Communication.getSerial_port(), SIGNAL(readyRead()), serial_Communication, SLOT(read_received_data()));
 
     if(serial_Communication.open_serial_port("/dev/ttyS1") == false){
        cout << "Failed opening the port"  <<  endl;
@@ -24,17 +23,12 @@ int main(int argc, char *argv[])
 
     StateHistory stateHistory;
     Proxy proxy(serial_Communication,stateHistory);
-    //GUI gui;
+    GUI gui;
     QObject::connect(&serial_Communication, SIGNAL(signalToProxy()),&proxy, SLOT(dataReady()));
-    //QObject::connect(&gui, SIGNAL(signalPID(int,int)), &proxy, SLOT(sendPID(int,int)));
+    QObject::connect(&gui, SIGNAL(signalPID(int,int)), &proxy, SLOT(sendPID(int,int)));
 
 
-    /*for(int i=0; i<300; i++)
-    {
-    comm.sendSignal();
-    }*/
-
-
+        gui.signalPID(5,10);
 
     //gui.sendSignal(10,5);
     //std::cout << "Program has finished" << std::endl;

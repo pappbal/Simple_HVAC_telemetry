@@ -13,7 +13,10 @@ class Communication : public QObject {
     Q_OBJECT
 
     protected:
+        virtual void sendData_specific() = 0;
+
         QByteArray received_data_stream;
+        QByteArray data_stream_out;
 
     public:
      Communication();
@@ -33,6 +36,8 @@ class Serial_Communication : public Communication{
     Q_OBJECT
 
     QSerialPort Serial_port;
+    //Class specific data sending
+    void sendData_specific();
 
     public:
 
@@ -43,6 +48,8 @@ class Serial_Communication : public Communication{
 
         //QSerialPort& getSerial_port() {return QSerialPort;}
         bool open_serial_port(QString portName);
+
+
 
 
 public slots:
