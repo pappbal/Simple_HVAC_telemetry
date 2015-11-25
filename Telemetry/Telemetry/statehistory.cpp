@@ -104,6 +104,12 @@ void State::setParam(Package &package) //ebben allapitom meg, hogy milyen ID es 
         case ID_speed2:
             speeds.speed2 = package.payload[0];
         break;
+        case ID_act_signal1:
+            acts.act1 = package.payload[0];
+        break;
+        case ID_act_signal2:
+            acts.act2 = package.payload[0];
+        break;
         default:
             std::cout << "ERROR: Undefined package ID: %d, package dropped." << std::endl;
             //TODO also send the message for the GUI!!!
@@ -157,5 +163,5 @@ void StateHistory::append(State& state)
 
     stateContainer.append(*stateToStore);
 
-    //TODO signal GUI
+    emit newData();
 }

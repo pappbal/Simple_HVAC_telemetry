@@ -75,7 +75,16 @@ public:
 
 /*---------------------------------------------------------------------*/
 
+class Actuators
+{
+public:
+    qint32 act1;
+    qint32 act2;
 
+    void reset();
+    Actuators& operator=(Actuators&& other); //move assignment
+    Actuators& operator=(const Actuators& other); //assignment
+};
 
 
 #endif // APPLICATION_H

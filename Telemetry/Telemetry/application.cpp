@@ -105,3 +105,29 @@ Speeds& Speeds::operator=(const Speeds& other)
     }
     return *this;
 }
+
+void Actuators::reset()
+{
+    act1 = act2 = 0;
+}
+Actuators& Actuators::operator=(Actuators&& other)
+{
+    if(this != &other)
+    {
+        this->act1 = other.act1;
+        this->act2 = other.act2;
+        other.act1 = 0;
+        other.act2 = 0;
+    }
+    return *this;
+}
+
+Actuators& Actuators::operator=(const Actuators& other)
+{
+    if(this != &other)
+    {
+        this->act1 = other.act1;
+        this->act2 = other.act2;
+    }
+    return *this;
+}

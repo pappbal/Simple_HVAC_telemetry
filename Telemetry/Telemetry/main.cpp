@@ -24,15 +24,12 @@ int main(int argc, char *argv[])
 
     StateHistory stateHistory;
     Proxy proxy(serial_Communication,stateHistory);
-    //GUI gui;
+    GUI gui(stateHistory);
     QObject::connect(&serial_Communication, SIGNAL(signalToProxy()),&proxy, SLOT(dataReady()));
-    //QObject::connect(&gui, SIGNAL(signalPID(int,int)), &proxy, SLOT(sendPID(int,int)));
+    QObject::connect(&gui, SIGNAL(signalPID(int,int)), &proxy, SLOT(sendPID(int,int)));
 
+    QObject::connect(&stateHistory, SIGNAL(newData()),&gui, SLOT(plotData()));
 
-    /*for(int i=0; i<300; i++)
-    {
-    comm.sendSignal();
-    }*/
 
 
 
