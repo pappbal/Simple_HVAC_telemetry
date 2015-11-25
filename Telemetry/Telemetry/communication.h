@@ -26,16 +26,6 @@
 #define ID_self_check 15
 
 
-/*class Package{
-
-    uint32_t ID;
-    uint32_t payload;
-
-public:
-    SendData():ID(0),payload(0){}
-    uint32_t getID(){return ID;}
-};*/
-
 
 class Communication : public QObject {
 
@@ -50,7 +40,10 @@ class Communication : public QObject {
         //void send_packet(SendData &packet);
 
         //virtual void read_received_data() = 0;
-        /*Package*/ int getData() { /*return Package(received_data_stream);*/ return received_data_stream[0];}
+        Package getData() {return Package(received_data_stream);}
+
+    signals:
+        void signalToProxy();
 
 
 };
