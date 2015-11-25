@@ -1,9 +1,13 @@
 #include "mainwindow.h"
 #include <QApplication>
 
-#ifndef PROXY_H
+
+#include <gui.h>
+#include <communication.h>
+#include <statehistory.h>
 #include <proxy.h>
-#endif
+
+
 
 int main(int argc, char *argv[])
 {
@@ -15,7 +19,9 @@ int main(int argc, char *argv[])
     Communication comm;
     StateHistory stateHistory;
     Proxy proxy(comm,stateHistory);
-    QObject::connect(&comm, SIGNAL(signalProxy()),&proxy, SLOT(dataReady()));
+    GUI gui;
+    QObject::connect(&comm, SIGNAL(signalToProxy()),&proxy, SLOT(dataReady()));
+    QObject::connect(&gui, SIGNAL(signalPID(int,int)), &proxy, SLOT(sendPID(int,int)));
 
 
     for(int i=0; i<300; i++)
@@ -23,7 +29,9 @@ int main(int argc, char *argv[])
     comm.sendSignal();
     }
 
-    std::cout << "Program has finished" << std::endl;
 
+
+    gui.sendSignal(10,5);
+    std::cout << "Program has finished" << std::endl;
     return a.exec();
 }

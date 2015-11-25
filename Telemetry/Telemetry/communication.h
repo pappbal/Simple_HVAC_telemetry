@@ -1,28 +1,21 @@
 #ifndef COMMUNICATION_H
 #define COMMUNICATION_H
 
-#include <stdint.h>
-#include <QSerialPort>
+#include <application.h>
 
-typedef struct packet_s{
-    uint32_t ID;
-    uint32_t payload;
-}packet_t;
-
-
-class Comm_Interface{
-
-   QSerialPort Serial_port_handle;
-
+class Communication : public QObject
+{
+    Q_OBJECT
 public:
-   Comm_Interface();
-   ~Comm_Interface();
+    Communication();
+    ~Communication();
+    Package getData();
+    void sendSignal();
+    void sendData(Package package);
+signals:
+    void signalToProxy();
 
-    void signal_packet();
-    void send_packet(packet_t packet);
-    packet_t get_packet();
 };
-
 
 #endif // COMMUNICATION_H
 

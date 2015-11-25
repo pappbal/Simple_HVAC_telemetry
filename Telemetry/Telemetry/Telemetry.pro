@@ -17,10 +17,16 @@ SOURCES += main.cpp\
         mainwindow.cpp \
         communication.cpp \
         proxy.cpp \
+    application.cpp \
+    statehistory.cpp \
+    gui.cpp
 
 HEADERS  += mainwindow.h \
         communication.h \
         proxy.h \
+    application.h \
+    statehistory.h \
+    gui.h
 
 
 
