@@ -41,11 +41,12 @@
 #include <stdlib.h>
 
 
-#define Fan_1_PWM TIM3->CCR1
-#define Fan_3_PWM TIM3->CCR4
+uint8_t WORK = 0;
+
+
+
 
 uint8_t set_value[5];
-double setpoint = 0;
 uint32_t measured_value1 = 0, measured_value2 = 0;
 uint32_t measured_value11 = 0, measured_value22 = 0;
 uint32_t CaptureNumber1 = 0;
@@ -190,125 +191,157 @@ void TIM5_IRQHandler(void) {
 }
 
 
+/*void USART1_IRQHandler(void){
+
+	// check if the USART1 receive interrupt flag was set
+	if( USART_GetITStatus(USART1, USART_IT_RXNE) == SET ){
+		TIM_ClearITPendingBit(USART1, USART_IT_RXNE);
+
+
+	}
+
+}*/
+
+
+uint8_t start_arrived = 0;
+
+uint8_t header_arrived = 0;
+uint8_t header;
+
+uint8_t length_byte_count = 0;
+uint32_t length;
+
+uint8_t data_byte_count = 0;
+uint8_t data[2];
+
 // Sending out data regulary ~ 1 sec period
+void TIM7_IRQHandler(void) {
+	if (TIM_GetITStatus(TIM7, TIM_IT_Update) == SET) {
+			TIM_ClearITPendingBit(TIM7, TIM_IT_Update);
+
+			uint16_t temperature = 0;
+			uint8_t received_data;
+
+
+			// Sending out data if client started the system
+			if(WORK == 1) {
+
+				/*Temperature message:
+				 * 1 byte - START
+				 * 1 byte - HEADER
+				 * 4 byte - Length  - Client needs this length
+				 * 2 byte - Data
+				 * TOTAL: 8 byte
+				 */
+
+				uint8_t message_temperature[temperature_message_length];
+
+				//Sending temperature 1 data
+				temperature = get_temperature(1);
+				construct_temperature_message(message_temperature,temperature,ID_temp1);
+				Send_data(message_temperature,temperature_message_length);
+
+				//Sending temperature 2 data
+				temperature = get_temperature(2);
+				construct_temperature_message(message_temperature,temperature,ID_temp2);
+				Send_data(message_temperature,temperature_message_length);
+
+				//Sending temperature 3 data
+				temperature = get_temperature(3);
+				construct_temperature_message(message_temperature,temperature,ID_temp3);
+				Send_data(message_temperature,temperature_message_length);
+
+				//Sending temperature 4 data
+				temperature = get_temperature(4);
+				construct_temperature_message(message_temperature,temperature,ID_temp4);
+				Send_data(message_temperature,temperature_message_length);
+
+				//free(message);
+
+				/*Fan frequency message:
+				 * 1 byte - START
+				 * 1 byte - HEADER
+				 * 4 byte - Length  - Client needs this length
+				 * 1 byte - Data
+				 * TOTAL: 7 byte
+				 */
+
+				uint8_t message_frequency[fan_frequency_message_length];
+				// Sending frequency of Fan 1
+				construct_fan_frequency_message(message_frequency,Fan_1_frequency,ID_freq1);
+				Send_data(message_frequency,fan_frequency_message_length);
+
+				// Sending frequency of Fan 3
+				construct_fan_frequency_message(message_frequency,Fan_3_frequency,ID_freq3);
+				Send_data(message_frequency,fan_frequency_message_length);
+
+
+				/*Fan PWM message:
+				 * 1 byte - START
+				 * 1 byte - HEADER
+				 * 4 byte - Length  - Client needs this length
+				 * 1 byte - Data
+				 * TOTAL: 7 byte
+				 */
+
+				uint8_t message_PWM[fan_PWM_message_length];
+
+				// Sending PWM of fan 1
+				construct_fan_PWM_message(message_PWM,Fan_1_PWM,ID_fan_1_PWM);
+				Send_data(message_PWM,fan_PWM_message_length);
+
+				// Sending PWM of fan 3
+				construct_fan_PWM_message(message_PWM,Fan_3_PWM,ID_fan_3_PWM);
+				Send_data(message_PWM,fan_PWM_message_length);
+			}
+
+
+			// Processing  received data
+			while(Get_data(&received_data) == 1){
+
+				if(received_data == 0xff){
+					start_arrived = 1;
+					header = 0;
+				}
+				else if(start_arrived){
+					header = received_data;
+					start_arrived = 0;
+					header_arrived = 1;
+				}
+				else if(header_arrived){
+					length += ((uint32_t)received_data) << (length_byte_count * 8);
+					length_byte_count++;
+					if(length_byte_count == 4){
+						header_arrived = 0;
+					}
+				}
+				else if(length_byte_count == 4){
+					data[data_byte_count] = received_data;
+					data_byte_count++;
+					if(data_byte_count == length){
+						length_byte_count = 0;
+						length = 0;
+						data_byte_count = 0;
+						Parse_message(header,data);
+					}
+				}
+			}
+	}
+}
+
+
+// Setting PWM of the fans
 void TIM2_IRQHandler(void) {
 	if (TIM_GetITStatus(TIM2, TIM_IT_Update) == SET) {
 		TIM_ClearITPendingBit(TIM2, TIM_IT_Update);
-
-		uint16_t temperature = 0;
-
-
-		/*Temperature message:
-		 * 1 byte - START
-		 * 1 byte - HEADER
-		 * 4 byte - Length  - Client needs this length
-		 * 2 byte - Data
-		 * TOTAL: 8 byte
-		 */
-
-		// can not use malloc beacuse inside free program goes to infinit loop for some reason...
-		//uint8_t *message = (uint8_t*)malloc(temperature_message_length);
-		uint8_t message_temperature[temperature_message_length];
-
-		//Sending temperature 1 data
-		temperature = get_temperature(1);
-		construct_temperature_message(message_temperature,temperature,ID_temp1);
-		Send_data(message_temperature,temperature_message_length);
-
-		//Sending temperature 2 data
-		temperature = get_temperature(2);
-		construct_temperature_message(message_temperature,temperature,ID_temp2);
-		Send_data(message_temperature,temperature_message_length);
-
-		//Sending temperature 3 data
-		temperature = get_temperature(3);
-		construct_temperature_message(message_temperature,temperature,ID_temp3);
-		Send_data(message_temperature,temperature_message_length);
-
-		//Sending temperature 4 data
-		temperature = get_temperature(4);
-		construct_temperature_message(message_temperature,temperature,ID_temp4);
-		Send_data(message_temperature,temperature_message_length);
-
-		//free(message);
-
-		/*Fan frequency message:
-		 * 1 byte - START
-		 * 1 byte - HEADER
-		 * 4 byte - Length  - Client needs this length
-		 * 1 byte - Data
-		 * TOTAL: 7 byte
-		 */
-
-		// can not use malloc beacuse inside free program goes to infinit loop for some reason...
-		//message = (uint8_t*)malloc(fan_frequency_message_length);
-
-		uint8_t message_frequency[fan_frequency_message_length];
-		// Sending frequency of Fan 1
-		construct_fan_frequency_message(message_frequency,Fan_1_frequency,ID_freq1);
-		Send_data(message_frequency,fan_frequency_message_length);
-
-		// Sending frequency of Fan 3
-		construct_fan_frequency_message(message_frequency,Fan_3_frequency,ID_freq3);
-		Send_data(message_frequency,fan_frequency_message_length);
-
-		//free(message);
-
-
-		/*Fan PWM message:
-		 * 1 byte - START
-		 * 1 byte - HEADER
-		 * 4 byte - Length  - Client needs this length
-		 * 1 byte - Data
-		 * TOTAL: 7 byte
-		 */
-
-		// can not use malloc beacuse inside free program goes to infinit loop for some reason...
-		//message = (uint8_t*)malloc(fan_PWM_message_length);
-
-		uint8_t message_PWM[fan_PWM_message_length];
-
-		// Sending PWM of fan 1
-		construct_fan_PWM_message(message_PWM,Fan_1_PWM,ID_fan_1_PWM);
-		Send_data(message_PWM,fan_PWM_message_length);
-
-		// Sending PWM of fan 3
-		construct_fan_PWM_message(message_PWM,Fan_3_PWM,ID_fan_3_PWM);
-		Send_data(message_PWM,fan_PWM_message_length);
-
-		//free(message);
-
-
-
-		/*VCP_get_char(&set_value[0]);
-		VCP_get_char(&set_value[1]);
-		VCP_get_char(&set_value[2]);
-		VCP_get_char(&set_value[3]);
-		VCP_get_char(&set_value[4]);
-		Data_transform(set_value[0], set_value[1], set_value[2], set_value[3],set_value[4]);
-
-		if ((TIM3->CCR1) == 0)
-			Fan_1_frequency = 0;
-		if ((TIM3->CCR4) == 0)
-			Fan_3_frequency = 0;
-
-
-		set_ventillator_PWM(1,100 * PID_Controller(setpoint, get_temperature(1)));
-		set_ventillator_PWM(3, 100 * PID_Controller(setpoint, get_temperature(1)));
-
-		//uint8_t temp_1 = 0.0625 * (get_temperature(1) >> 3);
-		//Send_data((0.0625 * (temp_1 >> 3))+48);
-		Send_data(temp_1/10 + 48);
-		Send_data(temp_1%10 + 48);
-		Send_data(10); //New line
-		Send_data(13); //Carriage return
-
-
-		Send_data(get_temperature(1));
-		Send_data(Fan_1_frequency);
-		Send_data(Fan_3_frequency);
-		Send_data(Fan_1_PWM);*/
-
+		if(WORK == 1) {
+			set_ventillator_PWM(1, 100 * PID_Controller(&setpoint_1, get_temperature(1), &error_previous_1, &actual_error_1, &P_1, &I_1, &D_1, Fan_1_PWM));
+			set_ventillator_PWM(3, 100 * PID_Controller(&setpoint_3, get_temperature(3), &error_previous_3, &actual_error_3, &P_3, &I_3, &D_3, Fan_3_PWM));
+		}
+		else {
+			set_ventillator_PWM(1,0);
+			set_ventillator_PWM(3,0);
+		}
 	}
 }
 

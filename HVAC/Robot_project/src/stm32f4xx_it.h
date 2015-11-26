@@ -36,7 +36,6 @@
 #include "stm32f4xx.h"
 
 extern uint8_t set_value[5];
-extern double setpoint;
 extern uint32_t measured_value1, measured_value2;
 extern uint32_t measured_value11, measured_value22;
 extern uint32_t CaptureNumber1;
@@ -62,7 +61,11 @@ void SysTick_Handler(void);
 void TIM5_IRQHandler(void);
 void TIM5_CC_IRQHandler(void);
 void TIM2_IRQHandler(void);
+void TIM7_IRQHandler(void);
+void USART1_IRQHandler(void);
 
+
+extern uint8_t WORK;
 
 // Headers
 #define START 0xff
@@ -77,10 +80,13 @@ void TIM2_IRQHandler(void);
 #define ID_pid_p 9
 #define ID_pid_i 10
 #define ID_pid_d 11
-#define ID_req_temp 12
-#define ID_start 13
-#define ID_stop 14
-#define ID_self_check 15
+#define ID_req_temp1 12
+#define ID_req_temp2 13
+#define ID_req_temp3 14
+#define ID_req_temp4 15
+#define ID_start 16
+#define ID_stop 17
+#define ID_self_check 18
 
 //Message length
 #define temperature_message_length 8

@@ -8,10 +8,9 @@
 #include "ventillator.h"
 #include "tc77.h"
 #include "PID.h"
+#include "communication.h"
 
 __ALIGN_BEGIN USB_OTG_CORE_HANDLE USB_OTG_dev __ALIGN_END;
-
-extern double setpoint;
 
 int main(void) {
 
@@ -19,16 +18,24 @@ int main(void) {
 	ventillator_PWM_init();
 	input_capture_setup();
 	tc77_pin_config();
-	init_PID(5, 0.1, 3);
-	PID_sampletime();
 
-	setpoint = 25;
+	init_PID(5, 0.1, 3);
+
+	PID_sampletime();
+	Set_Serial_send_receive_time();
+
+
+	Set_setpoint_1(25);
+	Set_setpoint_3(25);
 
 	enable_fan_group(1);
 	enable_fan_group(2);
 
+
 	set_ventillator_PWM(1, 0);
 	set_ventillator_PWM(3, 0);
+
+	//Set_USART();
 
 	STM32F4_Discovery_LEDInit(LED3);
 	STM32F4_Discovery_LEDInit(LED4);

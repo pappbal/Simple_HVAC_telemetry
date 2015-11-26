@@ -9,14 +9,14 @@
 #include "PID.h"
 
 double Kp, Ki, Kd;
-double actual_error=0;
-double error_previous=0;
-double P;
-double I;
-double D;
+double actual_error_1 = 0 ,actual_error_2 = 0, actual_error_3 = 0, actual_error_4 = 0;
+double error_previous_1 = 0, error_previous_2 = 0, error_previous_3 = 0, error_previous_4 = 0;
+double P_1,P_2,P_3,P_4;
+double I_1,I_2,I_3,I_4;
+double D_1,D_2,D_3,D_4;
+double setpoint_1=0,setpoint_2,setpoint_3,setpoint_4;
 int dummy_thermo;
-uint32_t PID;
-double celsius;
+
 
 
 void PID_sampletime(void) {
@@ -32,7 +32,7 @@ void PID_sampletime(void) {
 	NVIC_PriorityGroupConfig(NVIC_PriorityGroup_1);
 	NVIC_InitStructure.NVIC_IRQChannel = TIM2_IRQn;
 	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0;
-	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 1;
+	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 2;
 	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
 	NVIC_Init(&NVIC_InitStructure);
 
@@ -45,35 +45,61 @@ void init_PID(double Kp_param, double Ki_param, double Kd_param) {
 	Kd = Kd_param;
 }
 
+void Set_Kp(uint8_t P_param){
+	Kp = P_param;
+}
+void Set_Ki(uint8_t I_param){
+	Ki = I_param;
+}
+void Set_Kd(uint8_t D_param){
+	Kd = D_param;
+}
+
+void Set_setpoint_1(double setpoint_param){
+	setpoint_1 = setpoint_param;
+}
+void Set_setpoint_2(double setpoint_param){
+	setpoint_2 = setpoint_param;
+}
+void Set_setpoint_3(double setpoint_param){
+	setpoint_3 = setpoint_param;
+}
+void Set_setpoint_4(double setpoint_param){
+	setpoint_4 = setpoint_param;
+}
+
 //Variables
 
-uint32_t PID_Controller(double setpoint, uint16_t measured_value) {
+uint32_t PID_Controller(double *setpoint, uint16_t measured_value, double* error_previous, double* actual_error, double* P, double* I, double* D, uint32_t Fan_PWM) {
 
-	celsius = 0.0625 * (measured_value >> 3);
+	uint32_t PID = 0;
+	double celsius = 0.0625 * (measured_value >> 3);
 
 	if (dummy_thermo < 6) {
 		dummy_thermo++;
 		return 0;
 	} else {
 		dummy_thermo = 6;
-		error_previous = actual_error;
-		actual_error = celsius - setpoint;
 
-		P = actual_error;
+		*error_previous = *actual_error;
+		*actual_error = celsius - *setpoint;
 
-		I += error_previous;
+		*P = *actual_error;
 
-		if (I >= 50)
-			I = 50;
+		*I += *error_previous;
 
-		if ((actual_error - 0.2 < celsius) || (actual_error + 0.2 > celsius))
-			D = 0;
+		if (*I >= 50)
+			*I = 50;
+
+		if ((*actual_error - 0.2 < celsius) || (*actual_error + 0.2 > celsius))
+			*D = 0;
 		else
-			D = actual_error - error_previous;
-		if ((TIM3 ->CCR1 == 0) || (TIM3 ->CCR4 == 0))
-			I = 0;
+			*D = *actual_error - *error_previous;
 
-		PID = Kp * P + Ki * I + Kd * D;
+		if (Fan_PWM)
+			*I = 0;
+
+		PID = Kp * (*P) + Ki * (*I) + Kd * (*D);
 
 		return PID;
 	}
