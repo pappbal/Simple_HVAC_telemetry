@@ -33,8 +33,9 @@ int main(int argc, char *argv[])
 
 
 
-
-   gui.signalCommand(5,10);
+    gui.signalCommand(16,1);
+    gui.signalCommand(12,40);
+    gui.signalCommand(14,10);
 
     //gui.sendSignal(10,5);
     //std::cout << "Program has finished" << std::endl;

@@ -22,10 +22,13 @@
 #define ID_pid_p 9
 #define ID_pid_i 10
 #define ID_pid_d 11
-#define ID_req_temp 12
-#define ID_start 13
-#define ID_stop 14
-#define ID_self_check 15
+#define ID_req_temp1 12
+#define ID_req_temp2 13
+#define ID_req_temp3 14
+#define ID_req_temp4 15
+#define ID_start 16
+#define ID_stop 17
+#define ID_self_check 18
 
 #define no_of_params 8 //defines the number of parameters stored in State. temp1..4 + speed1..2
 

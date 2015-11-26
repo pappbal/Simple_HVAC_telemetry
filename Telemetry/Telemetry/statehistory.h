@@ -18,7 +18,7 @@ public:
     State(const State& other); //copy constructor
     State& operator=(State&& other); //move assignment
     State& operator=(const State& other); //assignment
-    void setParam(Package &package);
+    void setParam(Package package);
     int readyToSend();
     void reset();
 };

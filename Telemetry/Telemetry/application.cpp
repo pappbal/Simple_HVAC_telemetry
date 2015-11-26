@@ -14,6 +14,9 @@ Package::Package(QByteArray data)
 
 
         std::cout << "ID: " << (uint)ID << std::endl;
+        for(auto elem : payload){
+            std::cout << "data: " << static_cast<unsigned>(elem) << std::endl;
+        }
     }
 }
 

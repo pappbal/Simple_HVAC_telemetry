@@ -39,6 +39,13 @@ class Serial_Communication : public Communication{
     //Class specific data sending
     void sendData_specific();
 
+    bool start_arrived = false;
+    bool header_arrived = false;
+    int length_byte_arrive = 0;
+    qint32 data_length = 0;
+    QByteArray Temp_array_for_length;
+    QByteArray Temp_array_for_data;
+
     public:
 
         //Constructor

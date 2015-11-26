@@ -81,7 +81,7 @@ State& State::operator=(const State& other)
 
 
 
-void State::setParam(Package &package) //ebben allapitom meg, hogy milyen ID es hogy ez alapjan melyik mezot irom.
+void State::setParam(Package package) //ebben allapitom meg, hogy milyen ID es hogy ez alapjan melyik mezot irom.
 {
     param_set[package.ID-1] = (unsigned char)1;
     switch(package.ID)
@@ -121,7 +121,7 @@ void State::setParam(Package &package) //ebben allapitom meg, hogy milyen ID es 
 qint16 State::calcTemp(qint8 lower, qint8 upper)
 {
     qint16 temp_raw = (((qint16)upper) << 8) + (qint16)lower;
-    return 0.0625 * (temp_raw >> 3);
+    return 0.0625 * (double)(temp_raw >> 3);
 }
 
 int State::readyToSend()

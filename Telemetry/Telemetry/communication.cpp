@@ -91,48 +91,48 @@ void Serial_Communication::sendData_specific(){
 void Serial_Communication::read_received_data(){
 
     char data = 0;
-    bool start_arrived = false;   
-    qint64 length_size = 4;
-    qint32 length = 0;
 
-    while(Serial_port.read(&data,1) > 0){
+
+    while(Serial_port.bytesAvailable()){
+
+        Serial_port.read(&data,1);
 
         if((unsigned char)data == 0xff){
             cout << "start: " << std::hex <<static_cast<unsigned>(data) << endl;
             start_arrived = true;
             received_data_stream.clear();
-            length = 0;
+            Temp_array_for_length.clear();
+            Temp_array_for_data.clear();
         }
-        else if(start_arrived){\
-            quint8 header = data;
-
-            cout << "header: " << static_cast<unsigned>(header)<< endl;
-
-            QByteArray lengthArray = Serial_port.read(length_size);
-
-            for(auto& elem : lengthArray){
-               // cout << "length: " << static_cast<unsigned>(elem) << endl;
-                quint32 length_elem = elem;
-
-                length += length_elem << (8* (&elem-lengthArray.begin()));
-            }
-            cout << "length: " << length << endl;
-            QByteArray dataArray = Serial_port.read(length);
-
-            received_data_stream.append(header);
-            received_data_stream.append(lengthArray);
-            received_data_stream.append(dataArray);
-            for(auto elem : received_data_stream){
-                cout << static_cast<unsigned>(elem) << endl;
-            }
-
-            emit signalToProxy();
+        else if(start_arrived){
+            cout << "Header: " << std::hex <<static_cast<unsigned>(data) << endl;
+            received_data_stream.append(data);
             start_arrived = false;
+            header_arrived = true;
+        }
+        else if(header_arrived){
+            Temp_array_for_length.append(data);
+            cout << "Length: " << std::hex <<static_cast<unsigned>(data) << endl;
+            data_length += ((uint32_t)data) << 8*length_byte_arrive;
+            length_byte_arrive++;
+            if(length_byte_arrive == 4){
+                header_arrived = false;
+                received_data_stream.append(Temp_array_for_length);
+            }
+        }
+        else if(length_byte_arrive == 4){
+            Temp_array_for_data.append(data);
+             cout << "Data: " << std::hex <<static_cast<unsigned>(data) << endl;
+            data_length--;
+            if(data_length == 0){
+                received_data_stream.append(Temp_array_for_data);
+                length_byte_arrive = 0;
+                //cout << "------------END PACKET------------" << endl;
+                emit signalToProxy();
+               // cout << "------------Signal Emitted--------" << endl;
+            }
 
         }
 
     }
-    cout << "end" << endl;
-
-
 }
