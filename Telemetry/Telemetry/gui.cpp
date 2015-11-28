@@ -3,7 +3,7 @@
 
 using namespace std;
 
-GUI::GUI(QObject *rootObject, StateHistory& stateHistory) : stateHistory(stateHistory)
+GUI::GUI(QObject *rootObject, StateHistory& stateHistory) : stateHistory(stateHistory), tester()
 {
     std::cout << "GUI constructor called" << std::endl;
 
@@ -18,9 +18,9 @@ GUI::GUI(QObject *rootObject, StateHistory& stateHistory) : stateHistory(stateHi
     QObject::connect(mainWindowObject, SIGNAL(disconnectSignal()),  this, SLOT(receiveDisconnectSignal()));
     QObject::connect(mainWindowObject, SIGNAL(startSignal()),       this, SLOT(receiveStartSignal()));
     QObject::connect(mainWindowObject, SIGNAL(stopSignal()),        this, SLOT(receiveStopSignal()));
+
+    QObject::connect(&tester, SIGNAL(sendMessage(QString)),         this, SLOT(testMessage(QString)));
 }
-
-
 
 void GUI::sendSignal(qint8 pid_ID, qint32 data) //for debug to emit signal to Proxy
 {
@@ -42,24 +42,37 @@ void GUI::plotData(){
 
 }
 
+void GUI::testMessage(QString message)
+{
+    auto MainForm = findItemByName("MainForm");
+
+    QVariant returnedValue;
+    QVariant messageText = message;
+    QMetaObject::invokeMethod(MainForm, "showMessage",
+        Q_RETURN_ARG(QVariant, returnedValue),
+        Q_ARG(QVariant, messageText));
+}
+
 void GUI::receiveConnectSignal()
 {
-    cout << "Connect" << endl;
+    qDebug() << "Connect" << endl;
 }
 
 void GUI::receiveDisconnectSignal()
 {
-    cout << "Disconnect" << endl;
+    qDebug() << "Disconnect" << endl;
 }
 
 void GUI::receiveStartSignal()
 {
-    cout << "Start" << endl;
+    qDebug() << "Start" << endl;
+    tester.Start(1);
 }
 
 void GUI::receiveStopSignal()
 {
-    cout << "Stop" << endl;
+    qDebug() << "Stop" << endl;
+    tester.Stop();
 }
 
 QQuickItem* GUI::findItemByName(const QString& name)
@@ -101,4 +114,25 @@ QQuickItem* GUI::findItemByName(QList<QObject*> nodes, const QString& name)
     }
     // Nem találtuk.
     return nullptr;
+}
+
+GUITester::GUITester()
+{
+    connect(&timer, SIGNAL(timeout()), this, SLOT(tick()));
+}
+
+void GUITester::Start(float intervalSec)
+{
+    timer.start((long)(intervalSec*1000.0F));
+}
+
+void GUITester::Stop()
+{
+    timer.stop();
+}
+
+void GUITester::tick()
+{
+    cout << "time" << endl;
+    emit sendMessage("Hello world!");
 }

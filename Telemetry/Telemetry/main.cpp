@@ -28,11 +28,11 @@ int main(int argc, char *argv[])
 
 
     GUI gui(engine.rootObjects()[0], stateHistory);
+
     QObject::connect(&serial_Communication, SIGNAL(signalToProxy()),&proxy, SLOT(dataReady()));
     QObject::connect(&gui, SIGNAL(signalCommand(qint8,qint32)), &proxy, SLOT(sendCommand(qint8,qint32)));
 
     QObject::connect(&stateHistory, SIGNAL(newData()),&gui, SLOT(plotData()));
-
 
 
 //    gui.signalCommand(16,1);

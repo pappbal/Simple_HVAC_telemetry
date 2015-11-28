@@ -10,6 +10,7 @@ ApplicationWindow {
     visible: true
 
     objectName: "ApplicationWindow"
+
     signal connectSignal();
     signal disconnectSignal();
     signal startSignal();
@@ -34,18 +35,7 @@ ApplicationWindow {
     }
 
     MainForm {
-        anchors.fill: parent
         startButton.onClicked: startSignal();
         stopButton.onClicked: stopSignal();
-    }
-
-    MessageDialog {
-        id: messageDialog
-        title: qsTr("May I have your attention, please?")
-
-        function show(caption) {
-            messageDialog.text = caption;
-            messageDialog.open();
-        }
     }
 }

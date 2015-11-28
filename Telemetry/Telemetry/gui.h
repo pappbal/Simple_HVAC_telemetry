@@ -6,6 +6,32 @@
 #include <QQmlProperty>
 #include <QObject>
 #include <QQuickItem>
+#include <QTimer>
+#include <QString>
+
+class GUITester : public QObject
+{
+    Q_OBJECT
+public:
+    GUITester();
+
+    void Start(float intervalSec);
+    void Stop();
+
+private:
+    /** Időzítő a tick() metódus periodikus hívására. */
+    QTimer timer;
+
+private slots:
+    /** A timer hívja meg, meghatározza a robot
+     * állapotát a következő időpillanatban. */
+    void tick();
+
+signals:
+    void sendMessage(QString message);
+};
+
+
 
 class GUI : public QObject
 {
@@ -18,8 +44,11 @@ private:
     QQuickItem* findItemByName(QList<QObject*> nodes, const QString& name);
     QQuickItem* mainWindowObject;
 
+    GUITester tester;
+
 public:
     GUI(QObject *rootObject, StateHistory& stateHistory);
+
     void sendSignal(qint8 pid_ID, qint32 data);
 
 signals:
@@ -32,10 +61,9 @@ public slots:
     void receiveDisconnectSignal();
     void receiveStartSignal();
     void receiveStopSignal();
+
+    void testMessage(QString message);
 };
-
-
-
 
 #endif // GUI
 
