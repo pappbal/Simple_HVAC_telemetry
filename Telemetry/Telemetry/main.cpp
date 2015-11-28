@@ -1,5 +1,6 @@
 #include "mainwindow.h"
 #include <QApplication>
+#include <QQmlApplicationEngine>
 
 
 #include <gui.h>
@@ -11,9 +12,10 @@ using namespace std;
 
 int main(int argc, char *argv[])
 {
-    QApplication a(argc, argv);
-    MainWindow w;
-    w.show();
+    QApplication app(argc, argv);
+
+    QQmlApplicationEngine engine;
+    engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
 
     Serial_Communication serial_Communication(QSerialPort::Baud115200,QSerialPort::Data8,QSerialPort::OddParity,QSerialPort::OneStop,QSerialPort::NoFlowControl);
 
@@ -25,7 +27,7 @@ int main(int argc, char *argv[])
     Proxy proxy(serial_Communication,stateHistory);
 
 
-    GUI gui(stateHistory);
+    GUI gui(engine.rootObjects()[0], stateHistory);
     QObject::connect(&serial_Communication, SIGNAL(signalToProxy()),&proxy, SLOT(dataReady()));
     QObject::connect(&gui, SIGNAL(signalCommand(qint8,qint32)), &proxy, SLOT(sendCommand(qint8,qint32)));
 
@@ -33,11 +35,11 @@ int main(int argc, char *argv[])
 
 
 
-    gui.signalCommand(16,1);
-    gui.signalCommand(12,40);
-    gui.signalCommand(14,10);
+//    gui.signalCommand(16,1);
+//    gui.signalCommand(12,40);
+//    gui.signalCommand(14,10);
 
     //gui.sendSignal(10,5);
     //std::cout << "Program has finished" << std::endl;
-    return a.exec();
+    return app.exec();
 }
