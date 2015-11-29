@@ -20,6 +20,9 @@ GUI::GUI(QObject *rootObject, QQmlContext &qmlContext, StateHistory& stateHistor
     QObject::connect(mainWindowObject, SIGNAL(disconnectSignal()),  this, SLOT(receiveDisconnectSignal()));
     QObject::connect(mainWindowObject, SIGNAL(startSignal()),       this, SLOT(receiveStartSignal()));
     QObject::connect(mainWindowObject, SIGNAL(stopSignal()),        this, SLOT(receiveStopSignal()));
+    QObject::connect(mainWindowObject, SIGNAL(setPSignal()),        this, SLOT(receiveSetPSignal()));
+    QObject::connect(mainWindowObject, SIGNAL(setISignal()),        this, SLOT(receiveSetISignal()));
+    QObject::connect(mainWindowObject, SIGNAL(setDSignal()),        this, SLOT(receiveSetDSignal()));
 
     QObject::connect(&tester, SIGNAL(sendMessage(QString)),         this, SLOT(testMessage(QString)));
     QObject::connect(&tester, SIGNAL(stateHistoryUpdateSimulatorSignal()), this, SLOT(stateHistoryUpdated()));
@@ -169,6 +172,66 @@ void GUI::receiveStopSignal()
 {
     qDebug() << "Stop";
     tester.Stop();
+}
+
+void GUI::receiveSetPSignal()
+{
+    qDebug() << "Set P";
+
+    auto setPID = findItemByName("setPID");
+
+    if(setPID == nullptr)
+    {
+        qDebug() << "setPID not found";
+        return;
+    }
+
+    QVariant returnedValue;
+    QMetaObject::invokeMethod(setPID, "getP",
+        Q_RETURN_ARG(QVariant, returnedValue));
+
+    int valueP = returnedValue.toInt();
+    qDebug() << "New P value:" << valueP;
+}
+
+void GUI::receiveSetISignal()
+{
+    qDebug() << "Set I";
+
+    auto setPID = findItemByName("setPID");
+
+    if(setPID == nullptr)
+    {
+        qDebug() << "setPID not found";
+        return;
+    }
+
+    QVariant returnedValue;
+    QMetaObject::invokeMethod(setPID, "getI",
+        Q_RETURN_ARG(QVariant, returnedValue));
+
+    int valueI = returnedValue.toInt();
+    qDebug() << "New I value:" << valueI;
+}
+
+void GUI::receiveSetDSignal()
+{
+    qDebug() << "Set D";
+
+    auto setPID = findItemByName("setPID");
+
+    if(setPID == nullptr)
+    {
+        qDebug() << "setPID not found";
+        return;
+    }
+
+    QVariant returnedValue;
+    QMetaObject::invokeMethod(setPID, "getD",
+        Q_RETURN_ARG(QVariant, returnedValue));
+
+    int valueD = returnedValue.toInt();
+    qDebug() << "New D value:" << valueD;
 }
 
 QQuickItem* GUI::findItemByName(const QString& name)

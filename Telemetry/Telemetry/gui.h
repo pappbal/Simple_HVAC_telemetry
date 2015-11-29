@@ -86,6 +86,9 @@ public slots:
     void receiveDisconnectSignal();
     void receiveStartSignal();
     void receiveStopSignal();
+    void receiveSetPSignal();
+    void receiveSetISignal();
+    void receiveSetDSignal();
 
     // From GUITester
     void testMessage(QString message);

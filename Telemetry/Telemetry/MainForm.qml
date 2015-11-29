@@ -10,6 +10,10 @@ Item {
     property alias startButton: startButton
     property alias stopButton: stopButton
 
+    property alias buttonP: setPid.buttonP
+    property alias buttonI: setPid.buttonI
+    property alias buttonD: setPid.buttonD
+
     function showMessage(messageText)
     {
         eventLogModel.append({message: messageText});
@@ -96,7 +100,7 @@ Item {
 
                 Text {
                     id: messagesLabel
-                    text: "Üzenetek:"
+                    text: "Messages:"
                     anchors.left: parent.left
                     anchors.top: stopButton.bottom
                     anchors.topMargin:30
@@ -166,10 +170,26 @@ Item {
             id: middleGroup
             Layout.fillHeight: true
             Layout.fillWidth: true
+
+            ColumnLayout
+            {
+                anchors.fill: parent
+                anchors.left: parent.left
+                anchors.right: parent.right
+                width: 50
+
+                SetPID
+                {
+                    anchors.fill: parent
+
+                    id: setPid
+                }
+            }
         }
 
         ColumnLayout
         {
+            id: rightColumn
             anchors.right: parent.right
             anchors.top: parent.top
             anchors.bottom: parent.bottom
