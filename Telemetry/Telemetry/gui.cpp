@@ -1,12 +1,12 @@
 #include <gui.h>
 #include <iostream>
+#include <sstream>
 
 using namespace std;
 
-GUI::GUI(QObject *rootObject, StateHistory& stateHistory) : stateHistory(stateHistory), tester()
+GUI::GUI(QObject *rootObject, QQmlContext &qmlContext, StateHistory& stateHistory)
+    : qmlContext(qmlContext), stateHistory(stateHistory), tester(stateHistory)
 {
-    std::cout << "GUI constructor called" << std::endl;
-
     mainWindowObject = findItemByName(rootObject, QString("ApplicationWindow"));
 
     if (!mainWindowObject)
@@ -14,17 +14,94 @@ GUI::GUI(QObject *rootObject, StateHistory& stateHistory) : stateHistory(stateHi
         qDebug() << "ApplicationWindow object not found";
     }
 
+    QObject::connect(&stateHistory, SIGNAL(newData()),  this, SLOT(stateHistoryUpdated()));
+
     QObject::connect(mainWindowObject, SIGNAL(connectSignal()),     this, SLOT(receiveConnectSignal()));
     QObject::connect(mainWindowObject, SIGNAL(disconnectSignal()),  this, SLOT(receiveDisconnectSignal()));
     QObject::connect(mainWindowObject, SIGNAL(startSignal()),       this, SLOT(receiveStartSignal()));
     QObject::connect(mainWindowObject, SIGNAL(stopSignal()),        this, SLOT(receiveStopSignal()));
 
     QObject::connect(&tester, SIGNAL(sendMessage(QString)),         this, SLOT(testMessage(QString)));
+    QObject::connect(&tester, SIGNAL(stateHistoryUpdateSimulatorSignal()), this, SLOT(stateHistoryUpdated()));
+
+    ConnectQmlSignals(rootObject);
+}
+
+void GUI::ConnectQmlSignals(QObject *rootObject)
+{
+    QQuickItem *historyGraph = findItemByName(rootObject, QString("historyGraph"));
+    if (historyGraph)
+    {
+        QObject::connect(this, SIGNAL(historyContextUpdated()), historyGraph, SLOT(requestPaint()));
+    }
+    else
+    {
+        qDebug() << "GUI ERROR: historyGraph not found in QML";
+    }
 }
 
 void GUI::sendSignal(qint8 pid_ID, qint32 data) //for debug to emit signal to Proxy
 {
     emit signalCommand(pid_ID,data);
+}
+
+void GUI::stateHistoryUpdated()
+{
+    qDebug() << "GUI: slot stateHistorySignal received a signal";
+
+    if(!stateHistory.GetSize())
+    {
+        return;
+    }
+
+    State currentState = stateHistory.GetCurrentState();
+    ostringstream stream;
+    stream << "T1: " << currentState.temps.temp1 << " ";
+    stream << "T2: " << currentState.temps.temp2 << " ";
+    stream << "T3: " << currentState.temps.temp3 << " ";
+    stream << "T4: " << currentState.temps.temp4 << " ";
+    stream << "S1: " << currentState.speeds.speed1 << " ";
+    stream << "S2: " << currentState.speeds.speed2 << " ";
+    string messageString = stream.str();
+    QString message = QString::fromStdString(messageString);
+
+    auto MainForm = findItemByName("MainForm");
+    QVariant returnedValue;
+    QVariant messageText = message;
+    QMetaObject::invokeMethod(MainForm, "showMessage",
+        Q_RETURN_ARG(QVariant, returnedValue),
+        Q_ARG(QVariant, messageText));
+
+    QList<int> graphVelocities;
+
+    for(int i=0; i<showStateNumber; i++)
+    {
+        graphVelocities.append(0);
+    }
+    qmlContext.setContextProperty(QStringLiteral("historyGraphVelocity"), QVariant::fromValue(graphVelocities));
+
+
+    graphTemperatures1.clear();
+    graphTemperatures2.clear();
+    graphTemperatures3.clear();
+    graphTemperatures4.clear();
+    unsigned lastElementsNum = stateHistory.GetSize() > showStateNumber ? showStateNumber : stateHistory.GetSize();
+    auto it = stateHistory.End() - lastElementsNum;
+    for(; it != stateHistory.End(); it++)
+    {
+        graphTemperatures1.append(it->temps.temp1);
+        graphTemperatures2.append(it->temps.temp2);
+        graphTemperatures3.append(it->temps.temp3);
+        graphTemperatures4.append(it->temps.temp4);
+    }
+
+    qmlContext.setContextProperty(QStringLiteral("historyGraphTemperatures1"), QVariant::fromValue(graphTemperatures1));
+    qmlContext.setContextProperty(QStringLiteral("historyGraphTemperatures2"), QVariant::fromValue(graphTemperatures2));
+    qmlContext.setContextProperty(QStringLiteral("historyGraphTemperatures3"), QVariant::fromValue(graphTemperatures3));
+    qmlContext.setContextProperty(QStringLiteral("historyGraphTemperatures4"), QVariant::fromValue(graphTemperatures4));
+
+    emit historyContextUpdated();
+
 }
 
 void GUI::plotData(){
@@ -44,6 +121,7 @@ void GUI::plotData(){
 
 void GUI::testMessage(QString message)
 {
+    qDebug() << "GUI: slot testMessage received a signal";
     auto MainForm = findItemByName("MainForm");
 
     QVariant returnedValue;
@@ -55,23 +133,23 @@ void GUI::testMessage(QString message)
 
 void GUI::receiveConnectSignal()
 {
-    qDebug() << "Connect" << endl;
+    qDebug() << "Connect";
 }
 
 void GUI::receiveDisconnectSignal()
 {
-    qDebug() << "Disconnect" << endl;
+    qDebug() << "Disconnect";
 }
 
 void GUI::receiveStartSignal()
 {
-    qDebug() << "Start" << endl;
+    qDebug() << "Start";
     tester.Start(1);
 }
 
 void GUI::receiveStopSignal()
 {
-    qDebug() << "Stop" << endl;
+    qDebug() << "Stop";
     tester.Stop();
 }
 
@@ -116,9 +194,17 @@ QQuickItem* GUI::findItemByName(QList<QObject*> nodes, const QString& name)
     return nullptr;
 }
 
-GUITester::GUITester()
+GUITester::GUITester(StateHistory &stateHistory) : stateHistory(stateHistory)
 {
     connect(&timer, SIGNAL(timeout()), this, SLOT(tick()));
+
+    temps.temp1 = 0;
+    temps.temp2 = 1;
+    temps.temp3 = 2;
+    temps.temp4 = 3;
+
+    speeds.speed1 = 0;
+    speeds.speed2 = 1;
 }
 
 void GUITester::Start(float intervalSec)
@@ -133,6 +219,16 @@ void GUITester::Stop()
 
 void GUITester::tick()
 {
-    cout << "time" << endl;
-    emit sendMessage("Hello world!");
+    //emit sendMessage("Hello world!");
+
+    State newState;
+    newState.temps.temp1 = temps.temp1 > 10 ? temps.temp1 = 0 : temps.temp1++;
+    newState.temps.temp2 = temps.temp2 > 10 ? temps.temp2 = 0 : temps.temp2++;
+    newState.temps.temp3 = temps.temp3 > 10 ? temps.temp3 = 0 : temps.temp3++;
+    newState.temps.temp4 = temps.temp4 > 10 ? temps.temp4 = 0 : temps.temp4++;
+    newState.speeds.speed1 = speeds.speed1 > 5 ? speeds.speed1 = 0 : speeds.speed1++;
+    newState.speeds.speed2 = speeds.speed2 > 5 ? speeds.speed2 = 0 : speeds.speed2++;
+    stateHistory.AddNewState(newState);
+
+    emit stateHistoryUpdateSimulatorSignal();
 }

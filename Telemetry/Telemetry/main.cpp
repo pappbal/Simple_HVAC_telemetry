@@ -27,7 +27,7 @@ int main(int argc, char *argv[])
     Proxy proxy(serial_Communication,stateHistory);
 
 
-    GUI gui(engine.rootObjects()[0], stateHistory);
+    GUI gui(engine.rootObjects()[0], *engine.rootContext(), stateHistory);
 
     QObject::connect(&serial_Communication, SIGNAL(signalToProxy()),&proxy, SLOT(dataReady()));
     QObject::connect(&gui, SIGNAL(signalCommand(qint8,qint32)), &proxy, SLOT(sendCommand(qint8,qint32)));

@@ -31,9 +31,15 @@ class StateHistory : public QObject
 
 public:
     QVector<State> stateContainer;
-   StateHistory();
-   // ~StateHistory();
+    StateHistory();
+    // ~StateHistory();
     void append(State &state);
+
+    void AddNewState(State &newState) { stateContainer.push_back(newState); }
+    State GetCurrentState() const { return stateContainer.back(); }
+    unsigned GetSize() const { return stateContainer.size(); }
+    QVector<State>::const_iterator End() const {return stateContainer.end(); }
+
 signals:
     void newData();
 };

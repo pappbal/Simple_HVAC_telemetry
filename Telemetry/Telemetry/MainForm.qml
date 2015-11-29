@@ -7,9 +7,6 @@ Item {
     anchors.fill: parent
     objectName: "MainForm"
 
-    width: 640
-    height: 480
-
     property alias startButton: startButton
     property alias stopButton: stopButton
 
@@ -21,10 +18,10 @@ Item {
     RowLayout {
         id: baseGrid
         anchors.fill: parent
-        anchors.margins: margin
 
         GroupBox
         {
+            id: leftGroup
             Layout.fillHeight: true
 
             ColumnLayout
@@ -146,7 +143,6 @@ Item {
                                 Row {
                                     anchors.left: parent.left
                                     anchors.margins: 10
-                                    //spacing: 100
                                     Text {
                                         text: message
                                         anchors.verticalCenter: parent.verticalCenter
@@ -154,15 +150,7 @@ Item {
                                     }
                                 }
                            }
-                            model: ListModel {
-                                id: eventLogModel
-                                ListElement {
-                                    message: "Indul a program..."
-                                }
-                                ListElement {
-                                    message: "Még egy üzenet"
-                                }
-                            }
+                            model: ListModel { id: eventLogModel }
 
                             onCountChanged: {
                                 eventLog.currentIndex = eventLog.count - 1;
@@ -175,9 +163,43 @@ Item {
 
         GroupBox
         {
+            id: middleGroup
             Layout.fillHeight: true
             Layout.fillWidth: true
         }
 
+        GroupBox
+        {
+            title: "Temperatures"
+            //anchors.right: parent.right
+            anchors.top: parent.top
+            //anchors.bottom: parent.bottom
+            anchors.left: middleGroup.right
+            width: 400
+            height: 250
+
+            HistoryGraph {
+                id: historyGraph
+                anchors.fill: parent
+                width: 297
+                height: 417
+                objectName: "historyGraph"
+
+                // A RowLayout erre az elemre vonatkozó elhelyezés beállításai.
+                Layout.fillHeight: true
+                Layout.fillWidth: true
+                Layout.minimumWidth: 200
+                Layout.preferredWidth: 400
+                Layout.minimumHeight: 150
+
+                graphVelocities: historyGraphVelocity
+
+                graphTemperatures1: historyGraphTemperatures1
+                graphTemperatures2: historyGraphTemperatures2
+                graphTemperatures3: historyGraphTemperatures3
+                graphTemperatures4: historyGraphTemperatures4
+            }
+       }
     }
 }
+

@@ -12,7 +12,6 @@ State::State()
 //move constructor
 State::State(State&& other)
 {
-    std::cout << "Moving resource: State" << std::endl;
     this->temps = other.temps;
     this->speeds = other.speeds;
     this->deficient = other.deficient;
@@ -25,7 +24,6 @@ State::State(State&& other)
 
 State::State(const State& other)
 {
-    std::cout << "Copying resource: State" << std::endl;
     this->temps = other.temps;
     this->speeds = other.speeds;
     this->deficient = other.deficient;
