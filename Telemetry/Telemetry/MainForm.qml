@@ -112,7 +112,7 @@ Item {
                     anchors.bottom: parent.bottom
                     anchors.bottomMargin: 0
 
-                    implicitWidth: 240
+                    implicitWidth: 340
 
                     color: "white"
                     border.width: 1
@@ -243,7 +243,7 @@ Item {
 
                     HistoryGraphTemperature {
                         id: historyGraphTemperature
-                        anchors.bottom: graphsPlaceholder.top
+                        anchors.bottom: speeds.top
                         width: 300
                         height: 220
                         objectName: "historyGraphTemperature"
@@ -259,6 +259,75 @@ Item {
                         graphTemperatures2: historyGraphTemperatures2
                         graphTemperatures3: historyGraphTemperatures3
                         graphTemperatures4: historyGraphTemperatures4
+                    }
+
+//                    Item
+//                    {
+//                        id: graphsPlaceholder
+//                        Layout.fillWidth: true
+//                        Layout.fillHeight: true
+//                        anchors.bottom: parent.bottom
+//                    }
+                }
+            }
+
+            GroupBox
+            {
+                title: "Speeds"
+                id: speeds
+
+                ColumnLayout
+                {
+                    RowLayout
+                    {
+                        id: speedRadioButtons
+                        Layout.fillWidth: true
+
+                        anchors.bottom: historyGraphTemperature.top
+
+                        RadioButton
+                        {
+                            id: selectSpeed1
+                            text: "Speed1"
+                            checked: true
+
+                            onClicked:
+                            {
+                                historyGraphSpeed.showSpeed1 = !historyGraphSpeed.showSpeed1;
+                                historyGraphSpeed.requestPaint();
+                            }
+                        }
+                        RadioButton
+                        {
+                            id: selectSpeed2
+                            text: "Speed2"
+                            checked: true
+
+
+                            onClicked:
+                            {
+                                historyGraphSpeed.showSpeed2 = !historyGraphSpeed.showSpeed2;
+                                historyGraphSpeed.requestPaint();
+                            }
+                        }
+                    }
+
+                    HistoryGraphSpeed {
+                        id: historyGraphSpeed
+                        anchors.bottom: graphsPlaceholder.top
+                        width: 300
+                        height: 220
+                        objectName: "historyGraphSpeed"
+
+                        Layout.fillWidth: true
+                        Layout.minimumWidth: 200
+                        Layout.preferredWidth: 400
+                        Layout.minimumHeight: 150
+
+                        graphVelocities: historyGraphVelocity
+
+                        graphSpeed1: historyGraphSpeeds1
+                        graphSpeed2: historyGraphSpeeds2
                     }
 
                     Item

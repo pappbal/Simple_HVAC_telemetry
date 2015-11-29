@@ -56,11 +56,14 @@ private:
 
     GUITester tester;
 
-    const int showStateNumber = 40;
+    const unsigned showStateNumber = 40;
     QList<double> graphTemperatures1;
     QList<double> graphTemperatures2;
     QList<double> graphTemperatures3;
     QList<double> graphTemperatures4;
+
+    QList<int> graphSpeeds1;
+    QList<int> graphSpeeds2;
 
 public:
     GUI(QObject *rootObject, QQmlContext& qmlContext, StateHistory& stateHistory);

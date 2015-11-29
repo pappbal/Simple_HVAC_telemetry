@@ -29,14 +29,24 @@ GUI::GUI(QObject *rootObject, QQmlContext &qmlContext, StateHistory& stateHistor
 
 void GUI::ConnectQmlSignals(QObject *rootObject)
 {
-    QQuickItem *historyGraph = findItemByName(rootObject, QString("historyGraphTemperature"));
-    if (historyGraph)
+    QQuickItem *historyGraphTemp = findItemByName(rootObject, QString("historyGraphTemperature"));
+    if (historyGraphTemp)
     {
-        QObject::connect(this, SIGNAL(historyContextUpdated()), historyGraph, SLOT(requestPaint()));
+        QObject::connect(this, SIGNAL(historyContextUpdated()), historyGraphTemp, SLOT(requestPaint()));
     }
     else
     {
-        qDebug() << "GUI ERROR: historyGraph not found in QML";
+        qDebug() << "GUI ERROR: historyGraphTemp not found in QML";
+    }
+
+    QQuickItem *historyGraphSpeed = findItemByName(rootObject, QString("historyGraphSpeed"));
+    if (historyGraphSpeed)
+    {
+        QObject::connect(this, SIGNAL(historyContextUpdated()), historyGraphSpeed, SLOT(requestPaint()));
+    }
+    else
+    {
+        qDebug() << "GUI ERROR: historyGraphSpeed not found in QML";
     }
 }
 
@@ -85,6 +95,8 @@ void GUI::stateHistoryUpdated()
     graphTemperatures2.clear();
     graphTemperatures3.clear();
     graphTemperatures4.clear();
+    graphSpeeds1.clear();
+    graphSpeeds2.clear();
     unsigned lastElementsNum = stateHistory.GetSize() > showStateNumber ? showStateNumber : stateHistory.GetSize();
     auto it = stateHistory.End() - lastElementsNum;
     for(; it != stateHistory.End(); it++)
@@ -93,12 +105,18 @@ void GUI::stateHistoryUpdated()
         graphTemperatures2.append(it->temps.temp2);
         graphTemperatures3.append(it->temps.temp3);
         graphTemperatures4.append(it->temps.temp4);
+
+        graphSpeeds1.append(it->speeds.speed1);
+        graphSpeeds2.append(it->speeds.speed2);
     }
 
     qmlContext.setContextProperty(QStringLiteral("historyGraphTemperatures1"), QVariant::fromValue(graphTemperatures1));
     qmlContext.setContextProperty(QStringLiteral("historyGraphTemperatures2"), QVariant::fromValue(graphTemperatures2));
     qmlContext.setContextProperty(QStringLiteral("historyGraphTemperatures3"), QVariant::fromValue(graphTemperatures3));
     qmlContext.setContextProperty(QStringLiteral("historyGraphTemperatures4"), QVariant::fromValue(graphTemperatures4));
+
+    qmlContext.setContextProperty(QStringLiteral("historyGraphSpeeds1"), QVariant::fromValue(graphSpeeds1));
+    qmlContext.setContextProperty(QStringLiteral("historyGraphSpeeds2"), QVariant::fromValue(graphSpeeds2));
 
     emit historyContextUpdated();
 
