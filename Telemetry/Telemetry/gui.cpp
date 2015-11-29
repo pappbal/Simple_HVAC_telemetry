@@ -29,7 +29,7 @@ GUI::GUI(QObject *rootObject, QQmlContext &qmlContext, StateHistory& stateHistor
 
 void GUI::ConnectQmlSignals(QObject *rootObject)
 {
-    QQuickItem *historyGraph = findItemByName(rootObject, QString("historyGraph"));
+    QQuickItem *historyGraph = findItemByName(rootObject, QString("historyGraphTemperature"));
     if (historyGraph)
     {
         QObject::connect(this, SIGNAL(historyContextUpdated()), historyGraph, SLOT(requestPaint()));

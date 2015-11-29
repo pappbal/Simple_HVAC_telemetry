@@ -168,38 +168,109 @@ Item {
             Layout.fillWidth: true
         }
 
-        GroupBox
+        ColumnLayout
         {
-            title: "Temperatures"
-            //anchors.right: parent.right
+            anchors.right: parent.right
             anchors.top: parent.top
-            //anchors.bottom: parent.bottom
+            anchors.bottom: parent.bottom
             anchors.left: middleGroup.right
-            width: 400
-            height: 250
 
-            HistoryGraph {
-                id: historyGraph
-                anchors.fill: parent
-                width: 297
-                height: 417
-                objectName: "historyGraph"
+            GroupBox
+            {
+                title: "Temperatures"
 
-                // A RowLayout erre az elemre vonatkozó elhelyezés beállításai.
-                Layout.fillHeight: true
-                Layout.fillWidth: true
-                Layout.minimumWidth: 200
-                Layout.preferredWidth: 400
-                Layout.minimumHeight: 150
+                ColumnLayout
+                {
+                    RowLayout
+                    {
+                        id: tempRadioButtons
+                        Layout.fillWidth: true
 
-                graphVelocities: historyGraphVelocity
+                        anchors.bottom: historyGraphTemperature.top
 
-                graphTemperatures1: historyGraphTemperatures1
-                graphTemperatures2: historyGraphTemperatures2
-                graphTemperatures3: historyGraphTemperatures3
-                graphTemperatures4: historyGraphTemperatures4
+                        RadioButton
+                        {
+                            id: selectTemp1
+                            text: "Temp1"
+                            checked: true
+
+                            onClicked:
+                            {
+                                historyGraphTemperature.showTemp1 = !historyGraphTemperature.showTemp1;
+                                historyGraphTemperature.requestPaint();
+                            }
+                        }
+                        RadioButton
+                        {
+                            id: selectTemp2
+                            text: "Temp2"
+                            checked: true
+
+
+                            onClicked:
+                            {
+                                historyGraphTemperature.showTemp2 = !historyGraphTemperature.showTemp2;
+                                historyGraphTemperature.requestPaint();
+                            }
+                        }
+                        RadioButton
+                        {
+                            id: selectTemp3
+                            text: "Temp3"
+                            checked: true
+
+
+                            onClicked:
+                            {
+                                historyGraphTemperature.showTemp3 = !historyGraphTemperature.showTemp3;
+                                historyGraphTemperature.requestPaint();
+                            }
+                        }
+                        RadioButton
+                        {
+                            id: selectTemp4
+                            text: "Temp4"
+                            checked: true
+
+
+                            onClicked:
+                            {
+                                historyGraphTemperature.showTemp4 = !historyGraphTemperature.showTemp4;
+                                historyGraphTemperature.requestPaint();
+                            }
+                        }
+                    }
+
+                    HistoryGraphTemperature {
+                        id: historyGraphTemperature
+                        anchors.bottom: graphsPlaceholder.top
+                        width: 300
+                        height: 220
+                        objectName: "historyGraphTemperature"
+
+                        Layout.fillWidth: true
+                        Layout.minimumWidth: 200
+                        Layout.preferredWidth: 400
+                        Layout.minimumHeight: 150
+
+                        graphVelocities: historyGraphVelocity
+
+                        graphTemperatures1: historyGraphTemperatures1
+                        graphTemperatures2: historyGraphTemperatures2
+                        graphTemperatures3: historyGraphTemperatures3
+                        graphTemperatures4: historyGraphTemperatures4
+                    }
+
+                    Item
+                    {
+                        id: graphsPlaceholder
+                        Layout.fillWidth: true
+                        Layout.fillHeight: true
+                        anchors.bottom: parent.bottom
+                    }
+                }
             }
-       }
+        }
     }
 }
 

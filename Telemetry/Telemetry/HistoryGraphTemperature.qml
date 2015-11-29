@@ -8,6 +8,11 @@ Canvas {
     property var graphTemperatures3;
     property var graphTemperatures4;
 
+    property bool showTemp1: true;
+    property bool showTemp2: true;
+    property bool showTemp3: true;
+    property bool showTemp4: true;
+
     onPaint: {
         var context = getContext("2d");
         context.reset();
@@ -42,10 +47,10 @@ Canvas {
         //  Ez is külön függvénybe került.
        drawDataset(context, graphVelocities, "transparent", 5.0);
 
-        drawDataset(context, graphTemperatures1, "red", 5.0);
-        drawDataset(context, graphTemperatures2, "green", 5.0);
-        drawDataset(context, graphTemperatures3, "blue", 5.0);
-        drawDataset(context, graphTemperatures4, "orange", 5.0);
+        if(showTemp1)drawDataset(context, graphTemperatures1, "red", 5.0);
+        if(showTemp2)drawDataset(context, graphTemperatures2, "green", 5.0);
+        if(showTemp3)drawDataset(context, graphTemperatures3, "blue", 5.0);
+        if(showTemp4)drawDataset(context, graphTemperatures4, "orange", 5.0);
 
         context.stroke();
     } // onPaint vége
@@ -72,7 +77,7 @@ Canvas {
         context.beginPath();
         context.lineWidth = 3;
         context.strokeStyle = strokeStyle;
-        context.moveTo(25, offset-datarow[0]);
+        context.moveTo(25, offset-verticalScaler * datarow[0]);
         // A vektoron végigmenve behúzzuk a grafikon szakaszait.
         for(var i=0; i<graphVelocities.length;i++)
         {

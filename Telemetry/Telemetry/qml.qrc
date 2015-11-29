@@ -2,6 +2,6 @@
     <qresource prefix="/">
         <file>main.qml</file>
         <file>MainForm.qml</file>
-        <file>HistoryGraph.qml</file>
+        <file>HistoryGraphTemperature.qml</file>
     </qresource>
 </RCC>
