@@ -6,7 +6,7 @@
 class State
 {
 private:
-    qint16 calcTemp(qint8 lower, qint8 upper);
+    qint16 calcTemp(quint8 lower, quint8 upper);
 public:
     Temperatures temps;
     Speeds speeds;

@@ -30,6 +30,11 @@
 #define ID_stop 17
 #define ID_self_check 18
 
+#define ID_disconnect 19
+#define ID_connect 20
+#define ID_HVAC_stopped 21
+
+
 #define no_of_params 8 //defines the number of parameters stored in State. temp1..4 + speed1..2
 
 
@@ -37,10 +42,10 @@ class Package
 {
 public:
     qint8 ID;
-    QVector<qint8> payload;
+    QVector<quint8> payload;
     Package();
     Package(QByteArray data);
-    Package(quint8 ID, qint32 data);
+    Package(quint8 ID, quint32 data);
     Package(const Package& other);
 };
 

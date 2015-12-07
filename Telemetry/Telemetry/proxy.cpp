@@ -3,6 +3,8 @@
 Proxy::Proxy(Communication& comm, StateHistory& stateHistory):comm(comm),currentState(),stateHistory(stateHistory)
 {
     std::cout << "Proxy constructor called" << std::endl;
+    disconnected = 1;
+    connect(&timer, SIGNAL(timeout()), this, SLOT(tick()));
 }
 
 Proxy::~Proxy()
@@ -19,8 +21,14 @@ void Proxy::dataReady()
     std::cout << "Slot called" << std::endl;
     Package package;
     package = comm.getData();
-
-    if(package.ID != 0 )
+    timer.start(timeout_in_sec*1000.0F);
+    if(!disconnected)
+    {
+    if(package.ID == ID_HVAC_stopped)
+    {
+        emit signalHVACStopped();
+    }
+    else if(package.ID != 0 )
     {
         if(currentState.param_set[package.ID-1] == 1)
         {
@@ -40,12 +48,37 @@ void Proxy::dataReady()
             }
         }
     }
+    }
 
 }
 
 void Proxy::sendCommand(qint8 pid_ID, qint32 data)
 {
+    if(pid_ID == ID_disconnect)
+    {
+        Package package(ID_stop,0);
+        this->disconnected = 1;
+        comm.sendData(package);
+        emit signalDisconnected();
+    }
+    else if(pid_ID == ID_connect)
+    {
+        Package package(ID_start,0);
+        this->disconnected = 0;
+        comm.sendData(package);
+        timer.start(timeout_in_sec*1000.0F);
+    }
+    else if(!(this->disconnected))
+    {
+        Package package(pid_ID,data);
+        comm.sendData(package);
+        timer.stop();
+    }
+}
 
-    Package package(pid_ID,data);
-    comm.sendData(package);
+void Proxy::tick()
+{
+    this->disconnected = 1;
+    timer.stop();
+    emit signalDisconnected();
 }
