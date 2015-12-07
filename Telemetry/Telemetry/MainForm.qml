@@ -161,6 +161,7 @@ Item {
 
             ColumnLayout
             {
+                id: columnLayout2
 
                 SetPID
                 {
@@ -172,6 +173,24 @@ Item {
                 {
                     id: temperatureSettingsID
                     Layout.preferredHeight: 100;
+                }
+
+                MeasuredValues
+                {
+                    id: measuredValuesID
+                    Layout.preferredHeight: 200;
+
+                    measuredTemp1: valueMeasuredTemp1
+                    measuredTemp2: valueMeasuredTemp2
+                    measuredTemp3: valueMeasuredTemp3
+                    measuredTemp4: valueMeasuredTemp4
+
+                    measuredSpeed1: valueMeasuredSpeed1
+                    measuredSpeed2: valueMeasuredSpeed2
+
+                    measuredActuator1: valueMeasuredActuator1
+                    measuredActuator2: valueMeasuredActuator2
+
                 }
 
             }

@@ -72,6 +72,8 @@ void GUI::stateHistoryUpdated()
     }
 
     State currentState = stateHistory.GetCurrentState();
+
+     // Send text message to QML side
     ostringstream stream;
     stream << "T1: " << currentState.temps.temp1 << " ";
     stream << "T2: " << currentState.temps.temp2 << " ";
@@ -89,6 +91,8 @@ void GUI::stateHistoryUpdated()
         Q_RETURN_ARG(QVariant, returnedValue),
         Q_ARG(QVariant, messageText));
 
+
+    // Send previous temp and speed values to QML side for the graphs
     QList<int> graphVelocities;
 
     for(int i=0; i<showStateNumber; i++)
@@ -96,7 +100,6 @@ void GUI::stateHistoryUpdated()
         graphVelocities.append(0);
     }
     qmlContext.setContextProperty(QStringLiteral("historyGraphVelocity"), QVariant::fromValue(graphVelocities));
-
 
     graphTemperatures1.clear();
     graphTemperatures2.clear();
@@ -127,6 +130,17 @@ void GUI::stateHistoryUpdated()
 
     emit historyContextUpdated();
 
+    // Send current measured values to QML for show the current measured values
+    qmlContext.setContextProperty(QStringLiteral("valueMeasuredTemp1"), QVariant::fromValue(currentState.temps.temp1));
+    qmlContext.setContextProperty(QStringLiteral("valueMeasuredTemp2"), QVariant::fromValue(currentState.temps.temp2));
+    qmlContext.setContextProperty(QStringLiteral("valueMeasuredTemp3"), QVariant::fromValue(currentState.temps.temp3));
+    qmlContext.setContextProperty(QStringLiteral("valueMeasuredTemp4"), QVariant::fromValue(currentState.temps.temp4));
+
+    qmlContext.setContextProperty(QStringLiteral("valueMeasuredSpeed1"), QVariant::fromValue(currentState.speeds.speed1));
+    qmlContext.setContextProperty(QStringLiteral("valueMeasuredSpeed2"), QVariant::fromValue(currentState.speeds.speed2));
+
+    qmlContext.setContextProperty(QStringLiteral("valueMeasuredActuator1"), QVariant::fromValue(currentState.acts.act1));
+    qmlContext.setContextProperty(QStringLiteral("valueMeasuredActuator2"), QVariant::fromValue(currentState.acts.act2));
 }
 
 void GUI::plotData(){
@@ -310,6 +324,9 @@ GUITester::GUITester(StateHistory &stateHistory) : stateHistory(stateHistory)
 
     speeds.speed1 = 0;
     speeds.speed2 = 1;
+
+    acts.act1 = 1;
+    acts.act2 = 2;
 }
 
 void GUITester::Start(float intervalSec)
@@ -333,6 +350,10 @@ void GUITester::tick()
     newState.temps.temp4 = temps.temp4 > 10 ? temps.temp4 = 0 : temps.temp4++;
     newState.speeds.speed1 = speeds.speed1 > 5 ? speeds.speed1 = 0 : speeds.speed1++;
     newState.speeds.speed2 = speeds.speed2 > 5 ? speeds.speed2 = 0 : speeds.speed2++;
+
+    newState.acts.act1 = acts.act1 > 64 ? acts.act1 = 1 : acts.act1 += 2;
+    newState.acts.act2 = acts.act2 > 64 ? acts.act2 = 1 : acts.act2 += 2;
+
     stateHistory.AddNewState(newState);
 
     emit stateHistoryUpdateSimulatorSignal();

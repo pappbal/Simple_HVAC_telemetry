@@ -28,6 +28,7 @@ private:
 
     Temperatures temps;
     Speeds speeds;
+    Actuators acts;
 
 private slots:
     /** A timer hívja meg, meghatározza a robot

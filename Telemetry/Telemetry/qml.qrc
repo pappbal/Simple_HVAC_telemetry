@@ -6,5 +6,6 @@
         <file>HistoryGraphSpeed.qml</file>
         <file>SetPID.qml</file>
         <file>TemperatureSettings.qml</file>
+        <file>MeasuredValues.qml</file>
     </qresource>
 </RCC>
