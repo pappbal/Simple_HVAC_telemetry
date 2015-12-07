@@ -30,7 +30,7 @@ Item {
             Layout.fillWidth: true
             ColumnLayout
             {
-                Layout.fillWidth: true
+                Layout.preferredWidth: 180
                 Text{ id: textMeasuredTemp1; text: "Temp1: " + measuredTemp1.toString(); }
                 Text{ id: textMeasuredTemp2; text: "Temp2: " + measuredTemp2.toString(); }
                 Text{ id: textMeasuredTemp3; text: "Temp3: " + measuredTemp3.toString(); }
@@ -39,6 +39,7 @@ Item {
 
             ColumnLayout
             {
+                Layout.preferredWidth: 180
                 Layout.fillWidth: true
                 Text{ id: textMeasuredSpeed1; text: "Speed1: " + measuredSpeed1.toString(); }
                 Text{ id: textMeasuredSpeed2; text: "Speed2: " + measuredSpeed2.toString(); }
