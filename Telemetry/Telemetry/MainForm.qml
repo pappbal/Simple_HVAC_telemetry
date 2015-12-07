@@ -19,6 +19,19 @@ Item {
     property alias buttonTemp3: temperatureSettingsID.buttonTemp3;
     property alias buttonTemp4: temperatureSettingsID.buttonTemp4;
 
+    property bool isRunning: false;
+    property bool isConnected: false;
+
+    function setIsRunning(value)
+    {
+        isRunning = value;
+    }
+
+    function setIsConnected(value)
+    {
+        isConnected= value;
+    }
+
     function showMessage(messageText)
     {
         eventLogModel.append({message: messageText});
@@ -38,62 +51,82 @@ Item {
                 id: columnLayout1
                 anchors.fill: parent
 
-                Button {
-                    id: startButton
+                RowLayout
+                {
+                    ColumnLayout
+                    {
+                        Button {
+                            id: startButton
 
-                    style: ButtonStyle {
-                        background: Rectangle {
-                            implicitWidth: 130
-                            implicitHeight: 40
-                            border.width: control.activeFocus ? 2 : 1
-                            border.color: "#888"
-                            radius: 4
-                            gradient: Gradient {
-                                GradientStop { position: 0 ; color: control.pressed ? "#0c0" : "#0e0" }
-                                GradientStop { position: 1 ; color: control.pressed ? "#0a0" : "#0c0" }
+                            style: ButtonStyle {
+                                background: Rectangle {
+                                    implicitWidth: 130
+                                    implicitHeight: 40
+                                    border.width: control.activeFocus ? 2 : 1
+                                    border.color: "#888"
+                                    radius: 4
+                                    gradient: Gradient {
+                                        GradientStop { position: 0 ; color: control.pressed ? "#0c0" : "#0e0" }
+                                        GradientStop { position: 1 ; color: control.pressed ? "#0a0" : "#0c0" }
+                                    }
+                                }
+
+                                label: Text
+                                {
+                                    color: "white"
+                                    text: "START"
+                                    anchors.centerIn: parent
+                                    horizontalAlignment: Text.AlignHCenter
+                                    verticalAlignment: Text.AlignVCenter
+                                    font.pointSize: 12
+                                    font.bold: true
+
+                                }
                             }
                         }
 
-                        label: Text
-                        {
-                            color: "white"
-                            text: "START"
-                            anchors.centerIn: parent
-                            horizontalAlignment: Text.AlignHCenter
-                            verticalAlignment: Text.AlignVCenter
-                            font.pointSize: 12
-                            font.bold: true
+                        Button {
+                            id: stopButton
+                            style: ButtonStyle {
+                                background: Rectangle {
+                                    implicitWidth: 130
+                                    implicitHeight: 40
+                                    border.width: control.activeFocus ? 2 : 1
+                                    border.color: "#888"
+                                    radius: 4
+                                    gradient: Gradient {
+                                        GradientStop { position: 0 ; color: control.pressed ? "#d00" : "#f00" }
+                                        GradientStop { position: 1 ; color: control.pressed ? "#b00" : "#d00" }
+                                    }
+                                }
 
-                        }
-                    }
-                }
-
-                Button {
-                    id: stopButton
-                    style: ButtonStyle {
-                        background: Rectangle {
-                            implicitWidth: 130
-                            implicitHeight: 40
-                            border.width: control.activeFocus ? 2 : 1
-                            border.color: "#888"
-                            radius: 4
-                            gradient: Gradient {
-                                GradientStop { position: 0 ; color: control.pressed ? "#d00" : "#f00" }
-                                GradientStop { position: 1 ; color: control.pressed ? "#b00" : "#d00" }
+                                label: Text
+                                {
+                                    color: "white"
+                                    text: "STOP"
+                                    anchors.centerIn: parent
+                                    horizontalAlignment: Text.AlignHCenter
+                                    verticalAlignment: Text.AlignVCenter
+                                    font.pointSize: 12
+                                    font.bold: true
+                                }
                             }
                         }
+                    }
 
-                        label: Text
+                    GroupBox
+                    {
+                        title: "Status"
+
+                        Layout.fillWidth: true
+
+                        ColumnLayout
                         {
-                            color: "white"
-                            text: "STOP"
-                            anchors.centerIn: parent
-                            horizontalAlignment: Text.AlignHCenter
-                            verticalAlignment: Text.AlignVCenter
-                            font.pointSize: 12
-                            font.bold: true
+                            Text{ Layout.fillHeight: true; text: isConnected ? "Connected" : "Disconnected" }
+                            Text{ Layout.fillHeight: true; text: isRunning ? "Running" : "Stopped" }
                         }
                     }
+
                 }
 
                 Text {

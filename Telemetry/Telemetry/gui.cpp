@@ -5,7 +5,7 @@
 
 using namespace std;
 
-GUI::GUI(QObject *rootObject, QQmlContext &qmlContext, StateHistory& stateHistory) : qmlContext(qmlContext), stateHistory(stateHistory)/*, tester(stateHistory)*/
+GUI::GUI(QObject *rootObject, QQmlContext &qmlContext, StateHistory& stateHistory) : qmlContext(qmlContext), stateHistory(stateHistory), tester(stateHistory)
 {
     mainWindowObject = findItemByName(rootObject, QString("ApplicationWindow"));
 
@@ -28,9 +28,9 @@ GUI::GUI(QObject *rootObject, QQmlContext &qmlContext, StateHistory& stateHistor
     QObject::connect(mainWindowObject, SIGNAL(setTemp3()),          this, SLOT(receiveSetTemp3Signal()));
     QObject::connect(mainWindowObject, SIGNAL(setTemp4()),          this, SLOT(receiveSetTemp4Signal()));
 
-    /*QObject::connect(&tester, SIGNAL(sendMessage(QString)),         this, SLOT(testMessage(QString)));
-    QObject::connect(&tester, SIGNAL(stateHistoryUpdateSimulatorSignal()), this, SLOT(stateHistoryUpdated()));*/
-   QObject::connect(&stateHistory, SIGNAL(newData()), this, SLOT(stateHistoryUpdated()));
+    QObject::connect(&tester, SIGNAL(sendMessage(QString)),         this, SLOT(testMessage(QString)));
+    QObject::connect(&tester, SIGNAL(stateHistoryUpdateSimulatorSignal()), this, SLOT(stateHistoryUpdated()));
+    QObject::connect(&stateHistory, SIGNAL(newData()), this, SLOT(stateHistoryUpdated()));
 
     ConnectQmlSignals(rootObject);
 }
@@ -142,6 +142,11 @@ void GUI::stateHistoryUpdated()
 
     qmlContext.setContextProperty(QStringLiteral("valueMeasuredActuator1"), QVariant::fromValue(currentState.acts.act1));
     qmlContext.setContextProperty(QStringLiteral("valueMeasuredActuator2"), QVariant::fromValue(currentState.acts.act2));
+
+    // Set status in QML
+    QVariant newState = true;
+    QMetaObject::invokeMethod(MainForm, "setIsRunning", Q_RETURN_ARG(QVariant, returnedValue), Q_ARG(QVariant, newState));
+    QMetaObject::invokeMethod(MainForm, "setIsConnected", Q_RETURN_ARG(QVariant, returnedValue), Q_ARG(QVariant, newState));
 }
 
 void GUI::stoppedSlot()
@@ -152,9 +157,10 @@ void GUI::stoppedSlot()
     auto MainForm = findItemByName("MainForm");
     QVariant returnedValue;
     QVariant messageText = message;
-    QMetaObject::invokeMethod(MainForm, "showMessage",
-        Q_RETURN_ARG(QVariant, returnedValue),
-        Q_ARG(QVariant, messageText));
+    QMetaObject::invokeMethod(MainForm, "showMessage", Q_RETURN_ARG(QVariant, returnedValue), Q_ARG(QVariant, messageText));
+
+    QVariant newState = false;
+    QMetaObject::invokeMethod(MainForm, "setIsRunning", Q_RETURN_ARG(QVariant, returnedValue), Q_ARG(QVariant, newState));
 }
 
 void GUI::disconnectedSlot()
@@ -165,9 +171,10 @@ void GUI::disconnectedSlot()
     auto MainForm = findItemByName("MainForm");
     QVariant returnedValue;
     QVariant messageText = message;
-    QMetaObject::invokeMethod(MainForm, "showMessage",
-        Q_RETURN_ARG(QVariant, returnedValue),
-        Q_ARG(QVariant, messageText));
+    QMetaObject::invokeMethod(MainForm, "showMessage", Q_RETURN_ARG(QVariant, returnedValue), Q_ARG(QVariant, messageText));
+
+    QVariant newState = false;
+    QMetaObject::invokeMethod(MainForm, "setIsConnected", Q_RETURN_ARG(QVariant, returnedValue), Q_ARG(QVariant, newState));
 }
 
 void GUI::plotData(){
@@ -192,9 +199,7 @@ void GUI::testMessage(QString message)
 
     QVariant returnedValue;
     QVariant messageText = message;
-    QMetaObject::invokeMethod(MainForm, "showMessage",
-        Q_RETURN_ARG(QVariant, returnedValue),
-        Q_ARG(QVariant, messageText));
+    QMetaObject::invokeMethod(MainForm, "showMessage", Q_RETURN_ARG(QVariant, returnedValue), Q_ARG(QVariant, messageText));
 }
 
 void GUI::receiveConnectSignal()
