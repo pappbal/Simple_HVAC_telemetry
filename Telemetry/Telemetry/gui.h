@@ -84,6 +84,10 @@ public slots:
     void plotData();
     void stateHistoryUpdated();
 
+    // From Proxy
+    void stoppedSlot();
+    void disconnectedSlot();
+
     // From QML
     void receiveConnectSignal();
     void receiveDisconnectSignal();

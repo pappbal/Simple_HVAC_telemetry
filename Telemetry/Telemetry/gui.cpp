@@ -144,6 +144,32 @@ void GUI::stateHistoryUpdated()
     qmlContext.setContextProperty(QStringLiteral("valueMeasuredActuator2"), QVariant::fromValue(currentState.acts.act2));
 }
 
+void GUI::stoppedSlot()
+{
+    string messageString = "Stopped";
+    QString message = QString::fromStdString(messageString);
+
+    auto MainForm = findItemByName("MainForm");
+    QVariant returnedValue;
+    QVariant messageText = message;
+    QMetaObject::invokeMethod(MainForm, "showMessage",
+        Q_RETURN_ARG(QVariant, returnedValue),
+        Q_ARG(QVariant, messageText));
+}
+
+void GUI::disconnectedSlot()
+{
+    string messageString = "Disconnected";
+    QString message = QString::fromStdString(messageString);
+
+    auto MainForm = findItemByName("MainForm");
+    QVariant returnedValue;
+    QVariant messageText = message;
+    QMetaObject::invokeMethod(MainForm, "showMessage",
+        Q_RETURN_ARG(QVariant, returnedValue),
+        Q_ARG(QVariant, messageText));
+}
+
 void GUI::plotData(){
     std::cout << "-----------INCOMING---------"    << std::endl;
     std::cout << "Deficient: " << (uint)stateHistory.stateContainer.end()->deficient << std::endl;
