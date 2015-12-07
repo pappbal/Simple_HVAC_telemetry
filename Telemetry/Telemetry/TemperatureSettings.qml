@@ -12,11 +12,6 @@ Item {
     property int setTemp3: 1;
     property int setTemp4: 1;
 
-    property int currentTemp1: 1;
-    property int currentTemp2: 1;
-    property int currentTemp3: 1;
-    property int currentTemp4: 1;
-
     property alias buttonTemp1: buttonTemp1;
     property alias buttonTemp2: buttonTemp2;
     property alias buttonTemp3: buttonTemp3;
@@ -74,7 +69,6 @@ Item {
                 }
 
                 Text{ id: setValueTemp1; text: "Current set: " + setTemp1.toString(); }
-                //Text{ id: currentValueTemp1; text: "Current value: " + currentTemp1.toString(); }
             }
 
             RowLayout
@@ -102,7 +96,6 @@ Item {
                 }
 
                 Text{ id: setValueTemp2; text: "Current set: " + setTemp2.toString(); }
-                //Text{ id: currentValueTemp2; text: "Current value: " + currentTemp2.toString(); }
             }
 
             RowLayout
@@ -130,7 +123,6 @@ Item {
                 }
 
                 Text{ id: setValueTemp3; text: "Current set: " + setTemp3.toString(); }
-                //Text{ id: currentValueTemp3; text: "Current value: " + currentTemp3.toString(); }
             }
 
             RowLayout
@@ -158,7 +150,6 @@ Item {
                 }
 
                 Text{ id: setValueTemp4; text: "Current set: " + setTemp4.toString(); }
-                //Text{ id: currentValueTemp4; text: "Current value: " + currentTemp4.toString(); }
             }
         }
     }

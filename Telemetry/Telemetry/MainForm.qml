@@ -40,9 +40,6 @@ Item {
 
                 Button {
                     id: startButton
-                    anchors.topMargin: 10
-                    anchors.margins: 5
-                    anchors.top: parent.top
 
                     style: ButtonStyle {
                         background: Rectangle {
@@ -73,10 +70,6 @@ Item {
 
                 Button {
                     id: stopButton
-                    anchors.top: startButton.bottom
-                    anchors.topMargin: 10
-                    anchors.margins: 30
-
                     style: ButtonStyle {
                         background: Rectangle {
                             implicitWidth: 130
@@ -106,21 +99,11 @@ Item {
                 Text {
                     id: messagesLabel
                     text: "Messages:"
-                    anchors.left: parent.left
-                    anchors.top: stopButton.bottom
-                    anchors.topMargin:30
-                    anchors.leftMargin: 5
                     font.bold: true
                 }
 
                 Rectangle{
                     Layout.fillHeight: true
-
-                    anchors.margins: 10
-                    anchors.top: messagesLabel.bottom
-                    anchors.bottom: parent.bottom
-                    anchors.bottomMargin: 0
-
                     implicitWidth: 340
 
                     color: "white"
@@ -208,13 +191,10 @@ Item {
 
                 ColumnLayout
                 {
-                    anchors.fill: parent
                     RowLayout
                     {
                         id: tempRadioButtons
                         Layout.fillWidth: true
-
-                        anchors.bottom: historyGraphTemperature.top
 
                         RadioButton
                         {
@@ -271,7 +251,6 @@ Item {
 
                     HistoryGraphTemperature {
                         id: historyGraphTemperature
-                        anchors.bottom: speeds.top
                         width: 300
                         height: 220
                         objectName: "historyGraphTemperature"
@@ -334,7 +313,6 @@ Item {
 
                     HistoryGraphSpeed {
                         id: historyGraphSpeed
-                        anchors.bottom: graphsPlaceholder.top
                         width: 300
                         height: 220
                         objectName: "historyGraphSpeed"
@@ -355,7 +333,6 @@ Item {
                         id: graphsPlaceholder
                         Layout.fillWidth: true
                         Layout.fillHeight: true
-                        anchors.bottom: parent.bottom
                     }
                 }
             }
