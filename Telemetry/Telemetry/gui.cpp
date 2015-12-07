@@ -309,7 +309,7 @@ int GUI::getValueFromQML(const QString &itemName, const char *invokeMethodName)
     return value;
 }
 
-void GUI::stoppedSlot()
+/*void GUI::stoppedSlot()
 {
     std::cout << "HVAC stopped" << std::endl;
     //TODO
@@ -321,7 +321,7 @@ void GUI::disconnectedSlot()
     std::cout << "Disconnected" << std::endl;
     //TODO
     // write stuff to the message box or anywhere on GUI
-}
+}*/
 
 
 QQuickItem* GUI::findItemByName(const QString& name)
