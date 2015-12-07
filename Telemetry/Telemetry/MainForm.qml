@@ -14,6 +14,11 @@ Item {
     property alias buttonI: setPid.buttonI
     property alias buttonD: setPid.buttonD
 
+    property alias buttonTemp1: temperatureSettingsID.buttonTemp1;
+    property alias buttonTemp2: temperatureSettingsID.buttonTemp2;
+    property alias buttonTemp3: temperatureSettingsID.buttonTemp3;
+    property alias buttonTemp4: temperatureSettingsID.buttonTemp4;
+
     function showMessage(messageText)
     {
         eventLogModel.append({message: messageText});
@@ -283,14 +288,6 @@ Item {
                         graphTemperatures3: historyGraphTemperatures3
                         graphTemperatures4: historyGraphTemperatures4
                     }
-
-//                    Item
-//                    {
-//                        id: graphsPlaceholder
-//                        Layout.fillWidth: true
-//                        Layout.fillHeight: true
-//                        anchors.bottom: parent.bottom
-//                    }
                 }
             }
 

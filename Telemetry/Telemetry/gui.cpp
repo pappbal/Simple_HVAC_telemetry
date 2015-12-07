@@ -23,6 +23,10 @@ GUI::GUI(QObject *rootObject, QQmlContext &qmlContext, StateHistory& stateHistor
     QObject::connect(mainWindowObject, SIGNAL(setPSignal()),        this, SLOT(receiveSetPSignal()));
     QObject::connect(mainWindowObject, SIGNAL(setISignal()),        this, SLOT(receiveSetISignal()));
     QObject::connect(mainWindowObject, SIGNAL(setDSignal()),        this, SLOT(receiveSetDSignal()));
+    QObject::connect(mainWindowObject, SIGNAL(setTemp1()),          this, SLOT(receiveSetTemp1Signal()));
+    QObject::connect(mainWindowObject, SIGNAL(setTemp2()),          this, SLOT(receiveSetTemp2Signal()));
+    QObject::connect(mainWindowObject, SIGNAL(setTemp3()),          this, SLOT(receiveSetTemp3Signal()));
+    QObject::connect(mainWindowObject, SIGNAL(setTemp4()),          this, SLOT(receiveSetTemp4Signal()));
 
     QObject::connect(&tester, SIGNAL(sendMessage(QString)),         this, SLOT(testMessage(QString)));
     QObject::connect(&tester, SIGNAL(stateHistoryUpdateSimulatorSignal()), this, SLOT(stateHistoryUpdated()));
@@ -232,6 +236,86 @@ void GUI::receiveSetDSignal()
 
     int valueD = returnedValue.toInt();
     qDebug() << "New D value:" << valueD;
+}
+
+void GUI::receiveSetTemp1Signal()
+{
+    qDebug() << "GUI: setTemp1 signal received";
+
+    auto tempSettings = findItemByName("temperatureSettings");
+
+    if(tempSettings == nullptr)
+    {
+        qDebug() << "temperatureSettings not found";
+        return;
+    }
+
+    QVariant returnedValue;
+    QMetaObject::invokeMethod(tempSettings, "getTemp1",
+        Q_RETURN_ARG(QVariant, returnedValue));
+
+    int valueTemp1 = returnedValue.toInt();
+    qDebug() << "New temp1 set value:" << valueTemp1;
+}
+
+void GUI::receiveSetTemp2Signal()
+{
+    qDebug() << "GUI: setTemp2 signal received";
+
+    auto tempSettings = findItemByName("temperatureSettings");
+
+    if(tempSettings == nullptr)
+    {
+        qDebug() << "temperatureSettings not found";
+        return;
+    }
+
+    QVariant returnedValue;
+    QMetaObject::invokeMethod(tempSettings, "getTemp2",
+        Q_RETURN_ARG(QVariant, returnedValue));
+
+    int valueTemp2 = returnedValue.toInt();
+    qDebug() << "New temp1 set value:" << valueTemp2;
+}
+
+void GUI::receiveSetTemp3Signal()
+{
+    qDebug() << "GUI: setTemp3 signal received";
+
+    auto tempSettings = findItemByName("temperatureSettings");
+
+    if(tempSettings == nullptr)
+    {
+        qDebug() << "temperatureSettings not found";
+        return;
+    }
+
+    QVariant returnedValue;
+    QMetaObject::invokeMethod(tempSettings, "getTemp3",
+        Q_RETURN_ARG(QVariant, returnedValue));
+
+    int valueTemp3 = returnedValue.toInt();
+    qDebug() << "New temp1 set value:" << valueTemp3;
+}
+
+void GUI::receiveSetTemp4Signal()
+{
+    qDebug() << "GUI: setTemp4 signal received";
+
+    auto tempSettings = findItemByName("temperatureSettings");
+
+    if(tempSettings == nullptr)
+    {
+        qDebug() << "temperatureSettings not found";
+        return;
+    }
+
+    QVariant returnedValue;
+    QMetaObject::invokeMethod(tempSettings, "getTemp4",
+        Q_RETURN_ARG(QVariant, returnedValue));
+
+    int valueTemp4 = returnedValue.toInt();
+    qDebug() << "New temp1 set value:" << valueTemp4;
 }
 
 QQuickItem* GUI::findItemByName(const QString& name)

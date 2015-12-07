@@ -34,14 +34,11 @@ Item {
     {
 
         title: "Set controller parameters"
-        implicitWidth: 450;
+        implicitWidth: 585;
 
         ColumnLayout
         {
             id: teszt
-            anchors.top: parent.top
-            anchors.fill: parent
-            anchors.margins: 10
             RowLayout
             {
                 Text{ id: textP; text: "P:";}
@@ -51,9 +48,6 @@ Item {
 
                     implicitWidth: 100
 
-                    anchors.left: textP.right
-                    anchors.leftMargin: 7
-
                     horizontalAlignment: TextInput.AlignRight
 
                     inputMethodHints: Qt.ImhDigitsOnly
@@ -61,9 +55,6 @@ Item {
 
                 Button {
                     id: buttonP
-
-                    anchors.left: textFieldP.right
-                    anchors.leftMargin: 5
 
                     text: "Set"
 
@@ -73,7 +64,7 @@ Item {
                     }
                 }
 
-                Text{ anchors.left: buttonP.right; anchors.leftMargin: 10; id: currentValueP; text: "Current value: " + parameterP.toString(); }
+                Text{ id: currentValueP; text: "Current value: " + parameterP.toString(); }
             }
 
             RowLayout
@@ -85,9 +76,6 @@ Item {
 
                     implicitWidth: 100
 
-                    anchors.left: textI.right
-                    anchors.leftMargin: 5
-
                     horizontalAlignment: TextInput.AlignRight
 
                     inputMethodHints: Qt.ImhDigitsOnly
@@ -95,9 +83,6 @@ Item {
 
                 Button {
                     id: buttonI
-
-                    anchors.left: textFieldI.right
-                    anchors.leftMargin: 5
 
                     text: "Set"
 
@@ -107,7 +92,7 @@ Item {
                     }
                 }
 
-                Text{ anchors.left: buttonI.right; anchors.leftMargin: 10; id: currentValueI; text: "Current value: " + parameterI.toString(); }
+                Text{ id: currentValueI; text: "Current value: " + parameterI.toString(); }
             }
 
             RowLayout
@@ -119,9 +104,6 @@ Item {
 
                     implicitWidth: 100
 
-                    anchors.left: textD.right
-                    anchors.leftMargin: 5
-
                     horizontalAlignment: TextInput.AlignRight
 
                     inputMethodHints: Qt.ImhDigitsOnly
@@ -129,9 +111,6 @@ Item {
 
                 Button {
                     id: buttonD
-
-                    anchors.left: textFieldD.right
-                    anchors.leftMargin: 5
 
                     text: "Set"
 
@@ -141,7 +120,7 @@ Item {
                     }
                 }
 
-                Text{ anchors.left: buttonD.right; anchors.leftMargin: 10; id: currentValueD; text: "Current value: " + parameterD.toString(); }
+                Text{ id: currentValueD; text: "Current value: " + parameterD.toString(); }
             }
         }
     }

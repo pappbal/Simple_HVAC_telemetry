@@ -44,14 +44,11 @@ Item {
 
     GroupBox
     {
-
         title: "Temperature settings"
+        implicitWidth: 585;
 
         ColumnLayout
         {
-            anchors.top: parent.top
-            anchors.fill: parent
-            anchors.margins: 10
             RowLayout
             {
                 Text{ id: textTemp1; text: "Temp1:";}
@@ -61,9 +58,6 @@ Item {
 
                     implicitWidth: 100
 
-                    anchors.left: textTemp1.right
-                    anchors.leftMargin: 7
-
                     horizontalAlignment: TextInput.AlignRight
 
                     inputMethodHints: Qt.ImhDigitsOnly
@@ -72,9 +66,6 @@ Item {
                 Button {
                     id: buttonTemp1
 
-                    anchors.left: textFieldTemp1.right
-                    anchors.leftMargin: 5
-
                     text: "Set"
 
                     onClicked: {
@@ -82,7 +73,8 @@ Item {
                     }
                 }
 
-                Text{ anchors.left: buttonTemp1.right; anchors.leftMargin: 10; id: currentValueTemp1; text: "Current value: " + currentTemp1.toString(); }
+                Text{ id: setValueTemp1; text: "Current set: " + setTemp1.toString(); }
+                //Text{ id: currentValueTemp1; text: "Current value: " + currentTemp1.toString(); }
             }
 
             RowLayout
@@ -94,9 +86,6 @@ Item {
 
                     implicitWidth: 100
 
-                    anchors.left: textTemp2.right
-                    anchors.leftMargin: 7
-
                     horizontalAlignment: TextInput.AlignRight
 
                     inputMethodHints: Qt.ImhDigitsOnly
@@ -105,9 +94,6 @@ Item {
                 Button {
                     id: buttonTemp2
 
-                    anchors.left: textFieldTemp2.right
-                    anchors.leftMargin: 5
-
                     text: "Set"
 
                     onClicked: {
@@ -115,7 +101,8 @@ Item {
                     }
                 }
 
-                Text{ anchors.left: buttonTemp2.right; anchors.leftMargin: 10; id: currentValueTemp2; text: "Current value: " + currentTemp2.toString(); }
+                Text{ id: setValueTemp2; text: "Current set: " + setTemp2.toString(); }
+                //Text{ id: currentValueTemp2; text: "Current value: " + currentTemp2.toString(); }
             }
 
             RowLayout
@@ -127,9 +114,6 @@ Item {
 
                     implicitWidth: 100
 
-                    anchors.left: textTemp3.right
-                    anchors.leftMargin: 7
-
                     horizontalAlignment: TextInput.AlignRight
 
                     inputMethodHints: Qt.ImhDigitsOnly
@@ -138,9 +122,6 @@ Item {
                 Button {
                     id: buttonTemp3
 
-                    anchors.left: textFieldTemp3.right
-                    anchors.leftMargin: 5
-
                     text: "Set"
 
                     onClicked: {
@@ -148,7 +129,8 @@ Item {
                     }
                 }
 
-                Text{ anchors.left: buttonTemp3.right; anchors.leftMargin: 10; id: currentValueTemp3; text: "Current value: " + currentTemp3.toString(); }
+                Text{ id: setValueTemp3; text: "Current set: " + setTemp3.toString(); }
+                //Text{ id: currentValueTemp3; text: "Current value: " + currentTemp3.toString(); }
             }
 
             RowLayout
@@ -160,9 +142,6 @@ Item {
 
                     implicitWidth: 100
 
-                    anchors.left: textTemp4.right
-                    anchors.leftMargin: 7
-
                     horizontalAlignment: TextInput.AlignRight
 
                     inputMethodHints: Qt.ImhDigitsOnly
@@ -171,9 +150,6 @@ Item {
                 Button {
                     id: buttonTemp4
 
-                    anchors.left: textFieldTemp4.right
-                    anchors.leftMargin: 5
-
                     text: "Set"
 
                     onClicked: {
@@ -181,7 +157,8 @@ Item {
                     }
                 }
 
-                Text{ anchors.left: buttonTemp4.right; anchors.leftMargin: 10; id: currentValueTemp4; text: "Current value: " + currentTemp4.toString(); }
+                Text{ id: setValueTemp4; text: "Current set: " + setTemp4.toString(); }
+                //Text{ id: currentValueTemp4; text: "Current value: " + currentTemp4.toString(); }
             }
         }
     }

@@ -89,6 +89,10 @@ public slots:
     void receiveSetPSignal();
     void receiveSetISignal();
     void receiveSetDSignal();
+    void receiveSetTemp1Signal();
+    void receiveSetTemp2Signal();
+    void receiveSetTemp3Signal();
+    void receiveSetTemp4Signal();
 
     // From GUITester
     void testMessage(QString message);

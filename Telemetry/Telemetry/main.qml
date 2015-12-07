@@ -5,7 +5,7 @@ import QtQuick.Dialogs 1.2
 
 ApplicationWindow {
     title: qsTr("Telemetry")
-    width: 1300
+    width: 1400
     height: 600
     visible: true
 
@@ -19,6 +19,11 @@ ApplicationWindow {
     signal setPSignal();
     signal setISignal();
     signal setDSignal();
+
+    signal setTemp1();
+    signal setTemp2();
+    signal setTemp3();
+    signal setTemp4();
 
     menuBar: MenuBar {
         Menu {
@@ -45,5 +50,10 @@ ApplicationWindow {
         buttonP.onClicked: setPSignal();
         buttonI.onClicked: setISignal();
         buttonD.onClicked: setDSignal();
+
+        buttonTemp1.onClicked: setTemp1();
+        buttonTemp2.onClicked: setTemp2();
+        buttonTemp3.onClicked: setTemp3();
+        buttonTemp4.onClicked: setTemp4();
     }
 }
