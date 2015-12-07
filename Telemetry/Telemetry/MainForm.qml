@@ -55,62 +55,14 @@ Item {
                 {
                     ColumnLayout
                     {
-                        Button {
+                        StartButton
+                        {
                             id: startButton
-
-                            style: ButtonStyle {
-                                background: Rectangle {
-                                    implicitWidth: 130
-                                    implicitHeight: 40
-                                    border.width: control.activeFocus ? 2 : 1
-                                    border.color: "#888"
-                                    radius: 4
-                                    gradient: Gradient {
-                                        GradientStop { position: 0 ; color: control.pressed ? "#0c0" : "#0e0" }
-                                        GradientStop { position: 1 ; color: control.pressed ? "#0a0" : "#0c0" }
-                                    }
-                                }
-
-                                label: Text
-                                {
-                                    color: "white"
-                                    text: "START"
-                                    anchors.centerIn: parent
-                                    horizontalAlignment: Text.AlignHCenter
-                                    verticalAlignment: Text.AlignVCenter
-                                    font.pointSize: 12
-                                    font.bold: true
-
-                                }
-                            }
                         }
 
-                        Button {
+                        StopButton
+                        {
                             id: stopButton
-                            style: ButtonStyle {
-                                background: Rectangle {
-                                    implicitWidth: 130
-                                    implicitHeight: 40
-                                    border.width: control.activeFocus ? 2 : 1
-                                    border.color: "#888"
-                                    radius: 4
-                                    gradient: Gradient {
-                                        GradientStop { position: 0 ; color: control.pressed ? "#d00" : "#f00" }
-                                        GradientStop { position: 1 ; color: control.pressed ? "#b00" : "#d00" }
-                                    }
-                                }
-
-                                label: Text
-                                {
-                                    color: "white"
-                                    text: "STOP"
-                                    anchors.centerIn: parent
-                                    horizontalAlignment: Text.AlignHCenter
-                                    verticalAlignment: Text.AlignVCenter
-                                    font.pointSize: 12
-                                    font.bold: true
-                                }
-                            }
                         }
                     }
 
@@ -303,14 +255,14 @@ Item {
 
                     HistoryGraphTemperature {
                         id: historyGraphTemperature
-                        width: 300
-                        height: 220
+
                         objectName: "historyGraphTemperature"
 
                         Layout.fillWidth: true
                         Layout.minimumWidth: 200
                         Layout.preferredWidth: 400
                         Layout.minimumHeight: 150
+                        Layout.preferredHeight: 250
 
                         graphVelocities: historyGraphVelocity
 
@@ -365,26 +317,79 @@ Item {
 
                     HistoryGraphSpeed {
                         id: historyGraphSpeed
-                        width: 300
-                        height: 220
+
                         objectName: "historyGraphSpeed"
 
                         Layout.fillWidth: true
                         Layout.minimumWidth: 200
                         Layout.preferredWidth: 400
                         Layout.minimumHeight: 150
+                        Layout.preferredHeight: 270
 
                         graphVelocities: historyGraphVelocity
 
                         graphSpeed1: historyGraphSpeeds1
                         graphSpeed2: historyGraphSpeeds2
                     }
+                }
+            }
 
-                    Item
+            GroupBox
+            {
+                title: "Actuators"
+                id: actuators
+
+                ColumnLayout
+                {
+                    RowLayout
                     {
-                        id: graphsPlaceholder
+                        id: actuatorRadioButtons
                         Layout.fillWidth: true
-                        Layout.fillHeight: true
+
+                        anchors.bottom: historyGraphTemperature.top
+
+                        RadioButton
+                        {
+                            id: selectAct1
+                            text: "Speed1"
+                            checked: true
+
+                            onClicked:
+                            {
+                                historyGraphActuator.showSpeed1 = !historyGraphActuator.showSpeed1;
+                                historyGraphActuator.requestPaint();
+                            }
+                        }
+                        RadioButton
+                        {
+                            id: selectAct2
+                            text: "Speed2"
+                            checked: true
+
+
+                            onClicked:
+                            {
+                                historyGraphActuator.showSpeed2 = !historyGraphActuator.showSpeed2;
+                                historyGraphActuator.requestPaint();
+                            }
+                        }
+                    }
+
+                    HistoryGraphActuator {
+                        id: historyGraphActuator
+
+                        objectName: "historyGraphActuator"
+
+                        Layout.fillWidth: true
+                        Layout.minimumWidth: 200
+                        Layout.preferredWidth: 400
+                        Layout.minimumHeight: 150
+                        Layout.preferredHeight: 270
+
+                        graphVelocities: historyGraphVelocity
+
+                        graphAct1: historyGraphAct1
+                        graphAct2: historyGraphAct2
                     }
                 }
             }

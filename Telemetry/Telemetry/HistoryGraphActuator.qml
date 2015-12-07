@@ -3,15 +3,11 @@ import QtQuick 2.0
 Canvas {
     property var graphVelocities;
 
-    property var graphTemperatures1;
-    property var graphTemperatures2;
-    property var graphTemperatures3;
-    property var graphTemperatures4;
+    property var graphAct1;
+    property var graphAct2;
 
-    property bool showTemp1: true;
-    property bool showTemp2: true;
-    property bool showTemp3: true;
-    property bool showTemp4: true;
+    property bool showAct1: true;
+    property bool showAct2: true;
 
     onPaint: {
         var context = getContext("2d");
@@ -32,6 +28,7 @@ Canvas {
         drawHorizontalLine(context, 30.0, "black", 5.0)
         drawHorizontalLine(context, 35.0, "black", 5.0)
         drawHorizontalLine(context, 40.0, "black", 5.0)
+        drawHorizontalLine(context, 45.0, "black", 5.0)
 
         context.font="normal 12px sans-serif";
         context.strokeText("0", 3, height - 20 - 2);
@@ -43,16 +40,15 @@ Canvas {
         context.strokeText("30", 3, height - 20 - 2 - 5 * 30);
         context.strokeText("35", 3, height - 20 - 2 - 5 * 35);
         context.strokeText("40", 3, height - 20 - 2 - 5 * 40);
+        context.strokeText("45", 3, height - 20 - 2 - 5 * 45);
 
 
         // Az adatsorok megrajzolása (a graphTimestamps értékét jelenleg nem használjuk).
         //  Ez is külön függvénybe került.
        drawDataset(context, graphVelocities, "transparent", 5.0);
 
-        if(showTemp1)drawDataset(context, graphTemperatures1, "red", 5.0);
-        if(showTemp2)drawDataset(context, graphTemperatures2, "green", 5.0);
-        if(showTemp3)drawDataset(context, graphTemperatures3, "blue", 5.0);
-        if(showTemp4)drawDataset(context, graphTemperatures4, "orange", 5.0);
+        if(showSpeed1)drawDataset(context, graphSpeed1, "red", 5.0);
+        if(showSpeed2)drawDataset(context, graphSpeed2, "green", 5.0);
 
         context.stroke();
     } // onPaint vége

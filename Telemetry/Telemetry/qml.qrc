@@ -7,5 +7,8 @@
         <file>SetPID.qml</file>
         <file>TemperatureSettings.qml</file>
         <file>MeasuredValues.qml</file>
+        <file>StartButton.qml</file>
+        <file>StopButton.qml</file>
+        <file>HistoryGraphActuator.qml</file>
     </qresource>
 </RCC>
