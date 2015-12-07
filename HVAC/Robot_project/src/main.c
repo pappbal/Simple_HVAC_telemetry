@@ -25,8 +25,8 @@ int main(void) {
 	Set_Serial_send_receive_time();
 
 
-	Set_setpoint_1(25);
-	Set_setpoint_3(25);
+	Set_setpoint_1(100);
+	Set_setpoint_3(100);
 
 	enable_fan_group(1);
 	enable_fan_group(2);

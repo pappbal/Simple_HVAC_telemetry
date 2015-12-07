@@ -47,11 +47,11 @@ uint8_t WORK = 0;
 
 
 uint8_t set_value[5];
-uint32_t measured_value1 = 0, measured_value2 = 0;
-uint32_t measured_value11 = 0, measured_value22 = 0;
+uint32_t measured_value11 = 0, measured_value12 = 0;
+uint32_t measured_value31 = 0, measured_value32 = 0;
 uint32_t CaptureNumber1 = 0;
 uint32_t CaptureNumber3 = 0;
-uint32_t Capture = 0;
+uint32_t Capture1 = 0;
 uint32_t Capture3 = 0;
 uint32_t Fan_1_frequency = 0;
 uint32_t Fan_3_frequency = 0;
@@ -152,19 +152,19 @@ void TIM5_IRQHandler(void) {
 		Fan_1_frequency_previous = Fan_1_frequency;
 		TIM_ClearITPendingBit(TIM5, TIM_IT_CC2);
 		if (CaptureNumber1 == 0) {
-			measured_value1 = TIM_GetCapture2(TIM5);
+			measured_value11 = TIM_GetCapture2(TIM5);
 			CaptureNumber1 = 1;
 		} else if (CaptureNumber1 == 1) {
-			measured_value2 = TIM_GetCapture2(TIM5);
-			if (measured_value2 > measured_value1) {
-				Capture = (measured_value2 - measured_value1);
-			} else if (measured_value2 < measured_value1) {
-				Capture = ((TIM5->ARR - measured_value1) + measured_value2);
+			measured_value12 = TIM_GetCapture2(TIM5);
+			if (measured_value12 > measured_value11) {
+				Capture1 = (measured_value12 - measured_value11);
+			} else if (measured_value12 < measured_value11) {
+				Capture1 = ((TIM5->ARR - measured_value11) + measured_value12);
 			}
-			Fan_1_frequency = ((84000000 / 16800) / 2) / Capture;
+			Fan_1_frequency = ((84000000 / 16800) / 2) / Capture1;
 			CaptureNumber1 = 0;
-			if (Fan_1_frequency > 50)
-				Fan_1_frequency = Fan_1_frequency_previous;
+			if (Fan_1_frequency > 50 || Fan_1_frequency <= 13) Fan_1_frequency = Fan_1_frequency_previous;
+
 		}
 	}
 
@@ -172,19 +172,19 @@ void TIM5_IRQHandler(void) {
 		Fan_3_frequency_previous = Fan_3_frequency;
 		TIM_ClearITPendingBit(TIM5, TIM_IT_CC4);
 		if (CaptureNumber3 == 0) {
-			measured_value11 = TIM_GetCapture4(TIM5);
+			measured_value31 = TIM_GetCapture4(TIM5);
 			CaptureNumber3 = 1;
 		} else if (CaptureNumber3 == 1) {
-			measured_value22 = TIM_GetCapture4(TIM5);
-			if (measured_value22 > measured_value11) {
-				Capture3 = (measured_value22 - measured_value11);
-			} else if (measured_value22 < measured_value11) {
-				Capture3 = ((TIM5->ARR - measured_value11) + measured_value22);
+			measured_value32 = TIM_GetCapture4(TIM5);
+			if (measured_value32 > measured_value31) {
+				Capture3 = (measured_value32 - measured_value31);
+			} else if (measured_value32 < measured_value31) {
+				Capture3 = ((TIM5->ARR - measured_value31) + measured_value32);
 			}
 			Fan_3_frequency = ((84000000 / 16800) / 2) / Capture3;
 			CaptureNumber3 = 0;
-			if (Fan_3_frequency > 50)
-				Fan_3_frequency = Fan_3_frequency_previous;
+			if (Fan_3_frequency > 50 || Fan_3_frequency <= 13) Fan_3_frequency = Fan_3_frequency_previous;
+
 		}
 	}
 
@@ -237,22 +237,28 @@ void TIM7_IRQHandler(void) {
 				uint8_t message_temperature[temperature_message_length];
 
 				//Sending temperature 1 data
+				temperature = 0;
 				temperature = get_temperature(1);
 				construct_temperature_message(message_temperature,temperature,ID_temp1);
 				Send_data(message_temperature,temperature_message_length);
 
 				//Sending temperature 2 data
+				temperature = 0;
 				temperature = get_temperature(2);
+				//temperature = 0;
 				construct_temperature_message(message_temperature,temperature,ID_temp2);
 				Send_data(message_temperature,temperature_message_length);
 
 				//Sending temperature 3 data
+				temperature = 0;
 				temperature = get_temperature(3);
 				construct_temperature_message(message_temperature,temperature,ID_temp3);
 				Send_data(message_temperature,temperature_message_length);
 
 				//Sending temperature 4 data
+				temperature = 0;
 				temperature = get_temperature(4);
+				//temperature = 0;
 				construct_temperature_message(message_temperature,temperature,ID_temp4);
 				Send_data(message_temperature,temperature_message_length);
 
@@ -268,10 +274,18 @@ void TIM7_IRQHandler(void) {
 
 				uint8_t message_frequency[fan_frequency_message_length];
 				// Sending frequency of Fan 1
+				if(Fan_1_frequency == Fan_1_frequency_previous && Fan_1_frequency < 15) {
+					Fan_1_frequency = 0;
+					Fan_1_frequency_previous = 0;
+				}
 				construct_fan_frequency_message(message_frequency,Fan_1_frequency,ID_freq1);
 				Send_data(message_frequency,fan_frequency_message_length);
 
 				// Sending frequency of Fan 3
+				if(Fan_3_frequency == Fan_3_frequency_previous && Fan_3_frequency < 15) {
+					Fan_3_frequency = 0;
+					Fan_3_frequency_previous = 0;
+				}
 				construct_fan_frequency_message(message_frequency,Fan_3_frequency,ID_freq3);
 				Send_data(message_frequency,fan_frequency_message_length);
 
@@ -293,6 +307,12 @@ void TIM7_IRQHandler(void) {
 				// Sending PWM of fan 3
 				construct_fan_PWM_message(message_PWM,Fan_3_PWM,ID_fan_3_PWM);
 				Send_data(message_PWM,fan_PWM_message_length);
+			}
+			else {
+				//If sending out data is not allowed, send halted message continuously
+				uint8_t message_Halted[halted_message_length];
+				construct_halt_message(message_Halted);
+				Send_data(message_Halted,halted_message_length);
 			}
 
 
@@ -329,14 +349,29 @@ void TIM7_IRQHandler(void) {
 	}
 }
 
+uint8_t set_vent = 1;
+uint16_t temp = 0;
 
 // Setting PWM of the fans
 void TIM2_IRQHandler(void) {
 	if (TIM_GetITStatus(TIM2, TIM_IT_Update) == SET) {
 		TIM_ClearITPendingBit(TIM2, TIM_IT_Update);
 		if(WORK == 1) {
-			set_ventillator_PWM(1, 100 * PID_Controller(&setpoint_1, get_temperature(1), &error_previous_1, &actual_error_1, &P_1, &I_1, &D_1, Fan_1_PWM));
-			set_ventillator_PWM(3, 100 * PID_Controller(&setpoint_3, get_temperature(3), &error_previous_3, &actual_error_3, &P_3, &I_3, &D_3, Fan_3_PWM));
+
+			//if(set_vent == 1){
+				temp = get_temperature(1);
+				set_ventillator_PWM(1, 100 * PID_Controller(&setpoint_1, temp, &error_previous_1, &actual_error_1, &P_1, &I_1, &D_1, Fan_1_PWM));
+
+				//get_temperature(2);
+				//get_temperature(4);
+				set_vent = 3;
+			//}
+			//else if(set_vent == 3){
+				temp = get_temperature(3);
+				//temp = get_temperature(2);
+				set_ventillator_PWM(3, 100 * PID_Controller(&setpoint_3, temp, &error_previous_3, &actual_error_3, &P_3, &I_3, &D_3, Fan_3_PWM));
+				set_vent = 1;
+			//}
 		}
 		else {
 			set_ventillator_PWM(1,0);

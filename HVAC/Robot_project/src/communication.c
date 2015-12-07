@@ -86,7 +86,7 @@ void Set_Serial_send_receive_time(){
 	NVIC_InitTypeDef NVIC_InitStructure;
 	RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM7, ENABLE);
 	TIM_InitStructure.TIM_Period = 41999;
-	TIM_InitStructure.TIM_Prescaler = 1999;
+	TIM_InitStructure.TIM_Prescaler = 199;//1999;
 	TIM_InitStructure.TIM_CounterMode = TIM_CounterMode_Up;
 	TIM_TimeBaseInit(TIM7, &TIM_InitStructure);
 	TIM_ITConfig(TIM7, TIM_IT_Update, ENABLE);
@@ -139,6 +139,16 @@ void construct_fan_PWM_message(uint8_t * message,uint32_t PWM, uint8_t header){
 
 }
 
+void construct_halt_message(uint8_t * message){
+	message[0] = START; //START
+	message[1] = ID_halted; //HEADER
+	message[2] = 1; //Length
+	message[3] = 0; //Length
+	message[4] = 0; //Length
+	message[5] = 0; //Length
+	message[6] = (uint8_t)0; // A dummy data byte
+}
+
 void Parse_message(uint8_t header,uint8_t* data){
 
 	switch(header){
@@ -159,7 +169,7 @@ void Parse_message(uint8_t header,uint8_t* data){
 	break;
 
 	case ID_req_temp2:
-
+		Set_setpoint_2((double)*data);
 	break;
 
 	case ID_req_temp3:
@@ -167,7 +177,7 @@ void Parse_message(uint8_t header,uint8_t* data){
 	break;
 
 	case ID_req_temp4:
-
+		Set_setpoint_4((double)*data);
 	break;
 
 	case ID_start:
@@ -181,6 +191,11 @@ void Parse_message(uint8_t header,uint8_t* data){
 
 	case ID_stop:
 		WORK = 0;
+		actual_error_1 = 0; actual_error_2 = 0; actual_error_3 = 0; actual_error_4 = 0;
+		P_1 = 0; P_2 = 0; P_3 = 0; P_4 = 0;
+		I_1 = 0; I_2 = 0; I_3 = 0; I_4 = 0;
+		D_1 = 0; D_2 = 0; D_3 = 0; D_4 = 0;
+		error_previous_1 = 0; error_previous_2 = 0; error_previous_3 = 0; error_previous_4 = 0;
 	break;
 
 	case ID_self_check:
