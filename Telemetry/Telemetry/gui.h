@@ -55,7 +55,7 @@ private:
 
     QQmlContext &qmlContext;
 
-    GUITester tester;
+    //GUITester tester;
 
     const unsigned showStateNumber = 40;
     QList<double> graphTemperatures1;

@@ -9,7 +9,7 @@
 
 
 
-//to indicators
+//to indicatorsfd
 #define ID_temp1 1
 #define ID_temp2 2
 #define ID_temp3 3

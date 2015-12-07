@@ -1,11 +1,11 @@
 #include <gui.h>
 #include <iostream>
 #include <sstream>
+#include "application.h"
 
 using namespace std;
 
-GUI::GUI(QObject *rootObject, QQmlContext &qmlContext, StateHistory& stateHistory)
-    : qmlContext(qmlContext), stateHistory(stateHistory), tester(stateHistory)
+GUI::GUI(QObject *rootObject, QQmlContext &qmlContext, StateHistory& stateHistory) : qmlContext(qmlContext), stateHistory(stateHistory)/*, tester(stateHistory)*/
 {
     mainWindowObject = findItemByName(rootObject, QString("ApplicationWindow"));
 
@@ -28,8 +28,9 @@ GUI::GUI(QObject *rootObject, QQmlContext &qmlContext, StateHistory& stateHistor
     QObject::connect(mainWindowObject, SIGNAL(setTemp3()),          this, SLOT(receiveSetTemp3Signal()));
     QObject::connect(mainWindowObject, SIGNAL(setTemp4()),          this, SLOT(receiveSetTemp4Signal()));
 
-    QObject::connect(&tester, SIGNAL(sendMessage(QString)),         this, SLOT(testMessage(QString)));
-    QObject::connect(&tester, SIGNAL(stateHistoryUpdateSimulatorSignal()), this, SLOT(stateHistoryUpdated()));
+    /*QObject::connect(&tester, SIGNAL(sendMessage(QString)),         this, SLOT(testMessage(QString)));
+    QObject::connect(&tester, SIGNAL(stateHistoryUpdateSimulatorSignal()), this, SLOT(stateHistoryUpdated()));*/
+   QObject::connect(&stateHistory, SIGNAL(newData()), this, SLOT(stateHistoryUpdated()));
 
     ConnectQmlSignals(rootObject);
 }
@@ -183,13 +184,15 @@ void GUI::receiveDisconnectSignal()
 void GUI::receiveStartSignal()
 {
     qDebug() << "GUI: startSignal received";
-    tester.Start(1);
+    //tester.Start(1);
+    sendSignal(ID_start,0);
 }
 
 void GUI::receiveStopSignal()
 {
     qDebug() << "GUI: stopSignal received";
-    tester.Stop();
+    //tester.Stop();
+    sendSignal(ID_stop,0);
 }
 
 void GUI::receiveSetPSignal()
@@ -226,6 +229,8 @@ void GUI::receiveSetTemp1Signal()
     int valueTemp1 = getValueFromQML("temperatureSettings", "getTemp1");
 
     qDebug() << "New temp1 set value:" << valueTemp1;
+
+    sendSignal(ID_req_temp1,valueTemp1);
 }
 
 void GUI::receiveSetTemp2Signal()
@@ -233,8 +238,10 @@ void GUI::receiveSetTemp2Signal()
     qDebug() << "GUI: setTemp2 received";
 
     int valueTemp2 = getValueFromQML("temperatureSettings", "getTemp2");
-    ;
+
     qDebug() << "New temp1 set value:" << valueTemp2;
+
+    sendSignal(ID_req_temp2,valueTemp2);
 }
 
 void GUI::receiveSetTemp3Signal()
@@ -244,6 +251,7 @@ void GUI::receiveSetTemp3Signal()
     int valueTemp3 = getValueFromQML("temperatureSettings", "getTemp3");
 
     qDebug() << "New temp1 set value:" << valueTemp3;
+    sendSignal(ID_req_temp3,valueTemp3);
 }
 
 void GUI::receiveSetTemp4Signal()
@@ -253,6 +261,7 @@ void GUI::receiveSetTemp4Signal()
     int valueTemp4 = getValueFromQML("temperatureSettings", "getTemp4");
 
     qDebug() << "New temp1 set value:" << valueTemp4;
+     sendSignal(ID_req_temp4,valueTemp4);
 }
 
 int GUI::getValueFromQML(const QString &itemName, const char *invokeMethodName)
