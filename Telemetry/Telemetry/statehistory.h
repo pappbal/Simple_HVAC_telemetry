@@ -6,7 +6,7 @@
 class State
 {
 private:
-    qint16 calcTemp(qint8 lower, qint8 upper);
+    double calcTemp(quint8 lower, quint8 upper);
 public:
     Temperatures temps;
     Speeds speeds;
@@ -31,9 +31,15 @@ class StateHistory : public QObject
 
 public:
     QVector<State> stateContainer;
-   StateHistory();
-   // ~StateHistory();
+    StateHistory();
+    // ~StateHistory();
     void append(State &state);
+
+    void AddNewState(State &newState) { stateContainer.push_back(newState); }
+    State GetCurrentState() const { return stateContainer.back(); }
+    unsigned GetSize() const { return stateContainer.size(); }
+    QVector<State>::const_iterator End() const {return stateContainer.end(); }
+
 signals:
     void newData();
 };

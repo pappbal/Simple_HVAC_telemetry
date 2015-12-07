@@ -1,0 +1,11 @@
+<RCC>
+    <qresource prefix="/">
+        <file>main.qml</file>
+        <file>MainForm.qml</file>
+        <file>HistoryGraphTemperature.qml</file>
+        <file>HistoryGraphSpeed.qml</file>
+        <file>SetPID.qml</file>
+        <file>TemperatureSettings.qml</file>
+        <file>MeasuredValues.qml</file>
+    </qresource>
+</RCC>

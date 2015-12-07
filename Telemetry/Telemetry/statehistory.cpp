@@ -12,7 +12,6 @@ State::State()
 //move constructor
 State::State(State&& other)
 {
-    std::cout << "Moving resource: State" << std::endl;
     this->temps = other.temps;
     this->speeds = other.speeds;
     this->deficient = other.deficient;
@@ -25,7 +24,6 @@ State::State(State&& other)
 
 State::State(const State& other)
 {
-    std::cout << "Copying resource: State" << std::endl;
     this->temps = other.temps;
     this->speeds = other.speeds;
     this->deficient = other.deficient;
@@ -112,13 +110,12 @@ void State::setParam(Package package) //ebben allapitom meg, hogy milyen ID es h
         break;
         default:
             std::cout << "ERROR: Undefined package ID: %d, package dropped." << std::endl;
-            //TODO also send the message for the GUI!!!
+            //TODO also send the message for the GUI
     }
 
-    //TODO set timestamp?
 }
 
-qint16 State::calcTemp(qint8 lower, qint8 upper)
+double State::calcTemp(quint8 lower, quint8 upper)
 {
     qint16 temp_raw = (((qint16)upper) << 8) + (qint16)lower;
     return 0.0625 * (double)(temp_raw >> 3);
