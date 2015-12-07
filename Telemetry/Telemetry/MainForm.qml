@@ -182,6 +182,8 @@ Item {
                     title: "Temperatures column diagram"
                     Layout.fillHeight: true
                     Layout.fillWidth: true
+                    Layout.preferredWidth: 585
+                    Layout.preferredHeight: 200
                     ColumnDiagramTemperature{
                         id: columnDiagramTempID
                         Layout.preferredHeight: 100
@@ -366,7 +368,7 @@ Item {
 
                             onClicked:
                             {
-                                historyGraphActuator.showSpeed1 = !historyGraphActuator.showSpeed1;
+                                historyGraphActuator.showAct1 = !historyGraphActuator.showAct1;
                                 historyGraphActuator.requestPaint();
                             }
                         }
@@ -379,7 +381,7 @@ Item {
 
                             onClicked:
                             {
-                                historyGraphActuator.showSpeed2 = !historyGraphActuator.showSpeed2;
+                                historyGraphActuator.showAct2 = !historyGraphActuator.showAct2;
                                 historyGraphActuator.requestPaint();
                             }
                         }

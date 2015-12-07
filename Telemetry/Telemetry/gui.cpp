@@ -56,6 +56,16 @@ void GUI::ConnectQmlSignals(QObject *rootObject)
     {
         qDebug() << "GUI ERROR: historyGraphSpeed not found in QML";
     }
+
+    QQuickItem *historyGraphActuator = findItemByName(rootObject, QString("historyGraphActuator"));
+    if (historyGraphActuator)
+    {
+        QObject::connect(this, SIGNAL(historyContextUpdated()), historyGraphActuator, SLOT(requestPaint()));
+    }
+    else
+    {
+        qDebug() << "GUI ERROR: historyGraphActuator not found in QML";
+    }
 }
 
 void GUI::sendSignal(qint8 pid_ID, qint32 data) //for debug to emit signal to Proxy
@@ -73,8 +83,6 @@ void GUI::stateHistoryUpdated()
     }
 
     State currentState = stateHistory.GetCurrentState();
-    cout << "Act1: " << currentState.acts.act1 << endl;
-    cout << "Act2: " << currentState.acts.act2 << endl;
 
      // Send text message to QML side
     ostringstream stream;
@@ -110,6 +118,8 @@ void GUI::stateHistoryUpdated()
     graphTemperatures4.clear();
     graphSpeeds1.clear();
     graphSpeeds2.clear();
+    graphActuators1.clear();
+    graphActuators2.clear();
     unsigned lastElementsNum = stateHistory.GetSize() > showStateNumber ? showStateNumber : stateHistory.GetSize();
     auto it = stateHistory.End() - lastElementsNum;
     for(; it != stateHistory.End(); it++)
@@ -121,6 +131,9 @@ void GUI::stateHistoryUpdated()
 
         graphSpeeds1.append(it->speeds.speed1);
         graphSpeeds2.append(it->speeds.speed2);
+
+        graphActuators1.append(it->acts.act1 / 2);
+        graphActuators2.append(it->acts.act2 / 2);
     }
 
     qmlContext.setContextProperty(QStringLiteral("historyGraphTemperatures1"), QVariant::fromValue(graphTemperatures1));
@@ -130,6 +143,9 @@ void GUI::stateHistoryUpdated()
 
     qmlContext.setContextProperty(QStringLiteral("historyGraphSpeeds1"), QVariant::fromValue(graphSpeeds1));
     qmlContext.setContextProperty(QStringLiteral("historyGraphSpeeds2"), QVariant::fromValue(graphSpeeds2));
+
+    qmlContext.setContextProperty(QStringLiteral("historyGraphAct1"), QVariant::fromValue(graphActuators1));
+    qmlContext.setContextProperty(QStringLiteral("historyGraphAct2"), QVariant::fromValue(graphActuators2));
 
     emit historyContextUpdated();
 

@@ -66,6 +66,9 @@ private:
     QList<int> graphSpeeds1;
     QList<int> graphSpeeds2;
 
+    QList<int> graphActuators1;
+    QList<int> graphActuators2;
+
     int getValueFromQML(const QString& itemName, const char *invokeMethodName);
 
 public:
