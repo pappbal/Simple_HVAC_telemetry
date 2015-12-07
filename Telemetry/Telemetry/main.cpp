@@ -26,6 +26,7 @@ int main(int argc, char *argv[])
     StateHistory stateHistory;
     Proxy proxy(serial_Communication,stateHistory);
 
+    Q_ASSERT_X(!engine.rootObjects().empty(), "QML error", "Error in the QML file");
 
     GUI gui(engine.rootObjects()[0], *engine.rootContext(), stateHistory);
 

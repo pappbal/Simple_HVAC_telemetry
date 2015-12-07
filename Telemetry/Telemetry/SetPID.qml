@@ -30,80 +30,88 @@ Item {
         return parameterD;
     }
 
-
-    ColumnLayout
+    GroupBox
     {
-        RowLayout
+
+        title: "Set controller parameters"
+        implicitWidth: 450;
+
+        ColumnLayout
         {
-            Text{ id: textP; text: "P:";}
+            id: teszt
+            anchors.top: parent.top
+            anchors.fill: parent
+            anchors.margins: 10
+            RowLayout
+            {
+                Text{ id: textP; text: "P:";}
 
-            TextField {
-                id: textFieldP
+                TextField {
+                    id: textFieldP
 
-                implicitWidth: 100
+                    implicitWidth: 100
 
-                anchors.left: textP.right
-                anchors.leftMargin: 7
+                    anchors.left: textP.right
+                    anchors.leftMargin: 7
 
-                horizontalAlignment: TextInput.AlignRight
+                    horizontalAlignment: TextInput.AlignRight
 
-                inputMethodHints: Qt.ImhDigitsOnly
-            }
-
-            Button {
-                id: buttonP
-
-                anchors.left: textFieldP.right
-                anchors.leftMargin: 5
-
-                text: "Set"
-
-                onClicked: {
-                    //eventLogModel.append( { message: messageTextField.text, colorCode: "grey" } );
-                    parameterP = textFieldP.text;
-                    textFieldP.text = "";
+                    inputMethodHints: Qt.ImhDigitsOnly
                 }
-            }
 
-            Text{ anchors.left: buttonP.right; anchors.leftMargin: 10; id: currentValueP; text: "Current value: " + parameterP.toString(); }
-        }
+                Button {
+                    id: buttonP
 
-        RowLayout
-        {
-            Text{ id: textI; text: "I: "; }
+                    anchors.left: textFieldP.right
+                    anchors.leftMargin: 5
 
-            TextField {
-                id: textFieldI
+                    text: "Set"
 
-                implicitWidth: 100
-
-                anchors.left: textI.right
-                anchors.leftMargin: 5
-
-                horizontalAlignment: TextInput.AlignRight
-
-                inputMethodHints: Qt.ImhDigitsOnly
-            }
-
-            Button {
-                id: buttonI
-
-                anchors.left: textFieldI.right
-                anchors.leftMargin: 5
-
-                text: "Set"
-
-                onClicked: {
-                    parameterI = textFieldI.text;
-                    textFieldI.text = "";
+                    onClicked: {
+                        parameterP = textFieldP.text;
+                        textFieldP.text = "";
+                    }
                 }
+
+                Text{ anchors.left: buttonP.right; anchors.leftMargin: 10; id: currentValueP; text: "Current value: " + parameterP.toString(); }
             }
 
-            Text{ anchors.left: buttonI.right; anchors.leftMargin: 10; id: currentValueI; text: "Current value: " + parameterI.toString(); }
-        }
+            RowLayout
+            {
+                Text{ id: textI; text: "I: "; }
 
-        RowLayout
-        {
+                TextField {
+                    id: textFieldI
+
+                    implicitWidth: 100
+
+                    anchors.left: textI.right
+                    anchors.leftMargin: 5
+
+                    horizontalAlignment: TextInput.AlignRight
+
+                    inputMethodHints: Qt.ImhDigitsOnly
+                }
+
+                Button {
+                    id: buttonI
+
+                    anchors.left: textFieldI.right
+                    anchors.leftMargin: 5
+
+                    text: "Set"
+
+                    onClicked: {
+                        parameterI = textFieldI.text;
+                        textFieldI.text = "";
+                    }
+                }
+
+                Text{ anchors.left: buttonI.right; anchors.leftMargin: 10; id: currentValueI; text: "Current value: " + parameterI.toString(); }
+            }
+
+            RowLayout
+            {
                 Text{ id: textD; text: "D:"; }
 
                 TextField {
@@ -134,6 +142,7 @@ Item {
                 }
 
                 Text{ anchors.left: buttonD.right; anchors.leftMargin: 10; id: currentValueD; text: "Current value: " + parameterD.toString(); }
+            }
         }
     }
 }

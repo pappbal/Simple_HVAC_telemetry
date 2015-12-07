@@ -173,17 +173,19 @@ Item {
 
             ColumnLayout
             {
-                anchors.fill: parent
-                anchors.left: parent.left
-                anchors.right: parent.right
-                width: 50
 
                 SetPID
                 {
-                    anchors.fill: parent
-
                     id: setPid
+                    Layout.preferredHeight: 150;
                 }
+
+                TemperatureSettings
+                {
+                    id: temperatureSettingsID
+                    Layout.preferredHeight: 100;
+                }
+
             }
         }
 
@@ -201,6 +203,7 @@ Item {
 
                 ColumnLayout
                 {
+                    anchors.fill: parent
                     RowLayout
                     {
                         id: tempRadioButtons
