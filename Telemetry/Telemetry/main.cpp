@@ -35,6 +35,9 @@ int main(int argc, char *argv[])
 
     QObject::connect(&stateHistory, SIGNAL(newData()),&gui, SLOT(plotData()));
 
+    QObject::connect(&proxy, SIGNAL(signalDisconnected()), &gui, SLOT(disconnectedSlot()));
+    QObject::connect(&proxy, SIGNAL(signalHVACStopped()), &gui, SLOT(stoppedSlot()));
+
 
 //    gui.signalCommand(16,1);
 //    gui.signalCommand(12,40);

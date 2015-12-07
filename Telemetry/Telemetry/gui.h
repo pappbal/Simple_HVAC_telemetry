@@ -103,6 +103,8 @@ public slots:
 
     // From GUITester
     void testMessage(QString message);
+
+
 };
 
 #endif // GUI

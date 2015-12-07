@@ -207,11 +207,13 @@ void GUI::testMessage(QString message)
 void GUI::receiveConnectSignal()
 {
     qDebug() << "GUI: connectSignal received";
+    sendSignal(ID_connect,0);
 }
 
 void GUI::receiveDisconnectSignal()
 {
     qDebug() << "GUI: disconnectSignal received";
+    sendSignal(ID_disconnect,0);
 }
 
 void GUI::receiveStartSignal()
@@ -313,6 +315,21 @@ int GUI::getValueFromQML(const QString &itemName, const char *invokeMethodName)
     int value = returnedValue.toInt();
     return value;
 }
+
+/*void GUI::stoppedSlot()
+{
+    std::cout << "HVAC stopped" << std::endl;
+    //TODO
+    // write stuff to the message box or anywhere on GUI
+}
+
+void GUI::disconnectedSlot()
+{
+    std::cout << "Disconnected" << std::endl;
+    //TODO
+    // write stuff to the message box or anywhere on GUI
+}*/
+
 
 QQuickItem* GUI::findItemByName(const QString& name)
 {

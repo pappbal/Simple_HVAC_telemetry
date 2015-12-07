@@ -50,7 +50,7 @@ void tc77_pin_config(void) {
 	GPIO_InitStrucure.GPIO_Speed = GPIO_Speed_2MHz;
 	GPIO_InitStrucure.GPIO_PuPd = GPIO_PuPd_NOPULL;
 	GPIO_InitStrucure.GPIO_OType = GPIO_OType_PP;
-	GPIO_Init(GPIOC, &GPIO_InitStrucure);
+	GPIO_Init(GPIOA, &GPIO_InitStrucure);
 	GPIO_SetBits(GPIOA, GPIO_Pin_15 );
 
 	// SPI2 beállítása
