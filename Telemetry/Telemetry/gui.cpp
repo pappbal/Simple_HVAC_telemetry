@@ -158,164 +158,104 @@ void GUI::testMessage(QString message)
 
 void GUI::receiveConnectSignal()
 {
-    qDebug() << "Connect";
+    qDebug() << "GUI: connectSignal received";
 }
 
 void GUI::receiveDisconnectSignal()
 {
-    qDebug() << "Disconnect";
+    qDebug() << "GUI: disconnectSignal received";
 }
 
 void GUI::receiveStartSignal()
 {
-    qDebug() << "Start";
+    qDebug() << "GUI: startSignal received";
     tester.Start(1);
 }
 
 void GUI::receiveStopSignal()
 {
-    qDebug() << "Stop";
+    qDebug() << "GUI: stopSignal received";
     tester.Stop();
 }
 
 void GUI::receiveSetPSignal()
 {
-    qDebug() << "Set P";
+    qDebug() << "GUI: setPSignal received";
 
-    auto setPID = findItemByName("setPID");
+    int valueP = getValueFromQML("setPID", "getP");
 
-    if(setPID == nullptr)
-    {
-        qDebug() << "setPID not found";
-        return;
-    }
-
-    QVariant returnedValue;
-    QMetaObject::invokeMethod(setPID, "getP",
-        Q_RETURN_ARG(QVariant, returnedValue));
-
-    int valueP = returnedValue.toInt();
     qDebug() << "New P value:" << valueP;
 }
 
 void GUI::receiveSetISignal()
 {
-    qDebug() << "Set I";
+   qDebug() << "GUI: setISignal received";
 
-    auto setPID = findItemByName("setPID");
+    int valueI = getValueFromQML("setPID", "getI");
 
-    if(setPID == nullptr)
-    {
-        qDebug() << "setPID not found";
-        return;
-    }
-
-    QVariant returnedValue;
-    QMetaObject::invokeMethod(setPID, "getI",
-        Q_RETURN_ARG(QVariant, returnedValue));
-
-    int valueI = returnedValue.toInt();
     qDebug() << "New I value:" << valueI;
 }
 
 void GUI::receiveSetDSignal()
 {
-    qDebug() << "Set D";
+    qDebug() << "GUI: setDSignal received";
 
-    auto setPID = findItemByName("setPID");
+    int valueD = getValueFromQML("setPID", "getD");
 
-    if(setPID == nullptr)
-    {
-        qDebug() << "setPID not found";
-        return;
-    }
-
-    QVariant returnedValue;
-    QMetaObject::invokeMethod(setPID, "getD",
-        Q_RETURN_ARG(QVariant, returnedValue));
-
-    int valueD = returnedValue.toInt();
     qDebug() << "New D value:" << valueD;
 }
 
 void GUI::receiveSetTemp1Signal()
 {
-    qDebug() << "GUI: setTemp1 signal received";
+    qDebug() << "GUI: setTemp1 received";
 
-    auto tempSettings = findItemByName("temperatureSettings");
+    int valueTemp1 = getValueFromQML("temperatureSettings", "getTemp1");
 
-    if(tempSettings == nullptr)
-    {
-        qDebug() << "temperatureSettings not found";
-        return;
-    }
-
-    QVariant returnedValue;
-    QMetaObject::invokeMethod(tempSettings, "getTemp1",
-        Q_RETURN_ARG(QVariant, returnedValue));
-
-    int valueTemp1 = returnedValue.toInt();
     qDebug() << "New temp1 set value:" << valueTemp1;
 }
 
 void GUI::receiveSetTemp2Signal()
 {
-    qDebug() << "GUI: setTemp2 signal received";
+    qDebug() << "GUI: setTemp2 received";
 
-    auto tempSettings = findItemByName("temperatureSettings");
-
-    if(tempSettings == nullptr)
-    {
-        qDebug() << "temperatureSettings not found";
-        return;
-    }
-
-    QVariant returnedValue;
-    QMetaObject::invokeMethod(tempSettings, "getTemp2",
-        Q_RETURN_ARG(QVariant, returnedValue));
-
-    int valueTemp2 = returnedValue.toInt();
+    int valueTemp2 = getValueFromQML("temperatureSettings", "getTemp2");
+    ;
     qDebug() << "New temp1 set value:" << valueTemp2;
 }
 
 void GUI::receiveSetTemp3Signal()
 {
-    qDebug() << "GUI: setTemp3 signal received";
+    qDebug() << "GUI: setTemp3 received";
 
-    auto tempSettings = findItemByName("temperatureSettings");
+    int valueTemp3 = getValueFromQML("temperatureSettings", "getTemp3");
 
-    if(tempSettings == nullptr)
-    {
-        qDebug() << "temperatureSettings not found";
-        return;
-    }
-
-    QVariant returnedValue;
-    QMetaObject::invokeMethod(tempSettings, "getTemp3",
-        Q_RETURN_ARG(QVariant, returnedValue));
-
-    int valueTemp3 = returnedValue.toInt();
     qDebug() << "New temp1 set value:" << valueTemp3;
 }
 
 void GUI::receiveSetTemp4Signal()
 {
-    qDebug() << "GUI: setTemp4 signal received";
+    qDebug() << "GUI: setTemp4 received";
 
-    auto tempSettings = findItemByName("temperatureSettings");
+    int valueTemp4 = getValueFromQML("temperatureSettings", "getTemp4");
 
-    if(tempSettings == nullptr)
+    qDebug() << "New temp1 set value:" << valueTemp4;
+}
+
+int GUI::getValueFromQML(const QString &itemName, const char *invokeMethodName)
+{
+    auto item = findItemByName(itemName);
+
+    if(item == nullptr)
     {
         qDebug() << "temperatureSettings not found";
-        return;
+        return 0;
     }
 
     QVariant returnedValue;
-    QMetaObject::invokeMethod(tempSettings, "getTemp4",
-        Q_RETURN_ARG(QVariant, returnedValue));
+    QMetaObject::invokeMethod(item, invokeMethodName, Q_RETURN_ARG(QVariant, returnedValue));
 
-    int valueTemp4 = returnedValue.toInt();
-    qDebug() << "New temp1 set value:" << valueTemp4;
+    int value = returnedValue.toInt();
+    return value;
 }
 
 QQuickItem* GUI::findItemByName(const QString& name)
