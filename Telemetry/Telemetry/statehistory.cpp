@@ -115,7 +115,7 @@ void State::setParam(Package package) //ebben allapitom meg, hogy milyen ID es h
 
 }
 
-qint16 State::calcTemp(quint8 lower, quint8 upper)
+double State::calcTemp(quint8 lower, quint8 upper)
 {
     qint16 temp_raw = (((qint16)upper) << 8) + (qint16)lower;
     return 0.0625 * (double)(temp_raw >> 3);

@@ -6,7 +6,7 @@
 class State
 {
 private:
-    qint16 calcTemp(quint8 lower, quint8 upper);
+    double calcTemp(quint8 lower, quint8 upper);
 public:
     Temperatures temps;
     Speeds speeds;
