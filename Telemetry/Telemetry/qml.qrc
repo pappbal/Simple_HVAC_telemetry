@@ -10,5 +10,6 @@
         <file>StartButton.qml</file>
         <file>StopButton.qml</file>
         <file>HistoryGraphActuator.qml</file>
+        <file>ColumnDiagramTemperature.qml</file>
     </qresource>
 </RCC>

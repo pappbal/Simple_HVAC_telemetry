@@ -163,7 +163,7 @@ Item {
                 MeasuredValues
                 {
                     id: measuredValuesID
-                    Layout.preferredHeight: 200;
+                    Layout.preferredHeight: 120;
 
                     measuredTemp1: valueMeasuredTemp1
                     measuredTemp2: valueMeasuredTemp2
@@ -175,7 +175,17 @@ Item {
 
                     measuredActuator1: valueMeasuredActuator1
                     measuredActuator2: valueMeasuredActuator2
+                }
 
+                GroupBox
+                {
+                    title: "Temperatures column diagram"
+                    Layout.fillHeight: true
+                    Layout.fillWidth: true
+                    ColumnDiagramTemperature{
+                        id: columnDiagramTempID
+                        Layout.preferredHeight: 100
+                    }
                 }
 
             }
@@ -351,7 +361,7 @@ Item {
                         RadioButton
                         {
                             id: selectAct1
-                            text: "Speed1"
+                            text: "Actuator1"
                             checked: true
 
                             onClicked:
@@ -363,7 +373,7 @@ Item {
                         RadioButton
                         {
                             id: selectAct2
-                            text: "Speed2"
+                            text: "Actuator2"
                             checked: true
 
 
