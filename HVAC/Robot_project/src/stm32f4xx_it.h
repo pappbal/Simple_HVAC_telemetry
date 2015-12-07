@@ -36,11 +36,11 @@
 #include "stm32f4xx.h"
 
 extern uint8_t set_value[5];
-extern uint32_t measured_value1, measured_value2;
-extern uint32_t measured_value11, measured_value22;
+extern uint32_t measured_value11, measured_value12;
+extern uint32_t measured_value31, measured_value32;
 extern uint32_t CaptureNumber1;
 extern uint32_t CaptureNumber3;
-extern uint32_t Capture;
+extern uint32_t Capture1;
 extern uint32_t Capture3;
 extern uint32_t Fan_1_frequency;
 extern uint32_t TIM5Freq3;
@@ -87,11 +87,13 @@ extern uint8_t WORK;
 #define ID_start 16
 #define ID_stop 17
 #define ID_self_check 18
+#define ID_halted 21
 
 //Message length
 #define temperature_message_length 8
 #define fan_frequency_message_length 7
 #define fan_PWM_message_length 7
+#define halted_message_length 7
 
 #ifdef __cplusplus
 }

@@ -14,6 +14,7 @@ uint8_t Get_data(uint8_t* data);
 void construct_temperature_message(uint8_t * message,uint16_t temperature, uint8_t header);
 void construct_fan_frequency_message(uint8_t * message,uint32_t frequency, uint8_t header);
 void construct_fan_PWM_message(uint8_t * message,uint32_t PWM, uint8_t header);
+void construct_halt_message(uint8_t * message);
 void Parse_message(uint8_t header,uint8_t* data);
 void Set_Serial_send_receive_time();
 
