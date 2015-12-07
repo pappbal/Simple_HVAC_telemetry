@@ -56,17 +56,17 @@ void Proxy::sendCommand(qint8 pid_ID, qint32 data)
 {
     if(pid_ID == ID_disconnect)
     {
-        Package package(ID_stop,0);
+        //Package package(ID_stop,0);
         this->disconnected = 1;
-        comm.sendData(package);
+        //comm.sendData(package);
         emit signalDisconnected();
         timer.stop();
     }
     else if(pid_ID == ID_connect)
     {
-        Package package(ID_start,0);
+       // Package package(ID_start,0);
         this->disconnected = 0;
-        comm.sendData(package);
+       // comm.sendData(package);
         timer.start(timeout_in_sec*1000.0F);
     }
     else if(!(this->disconnected))
