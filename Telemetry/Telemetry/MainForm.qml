@@ -166,13 +166,13 @@ Item {
                 SetPID
                 {
                     id: setPid
-                    Layout.preferredHeight: 150;
+                    Layout.preferredHeight: 125;
                 }
 
                 TemperatureSettings
                 {
                     id: temperatureSettingsID
-                    Layout.preferredHeight: 100;
+                    Layout.preferredHeight: 160;
                 }
 
                 MeasuredValues
