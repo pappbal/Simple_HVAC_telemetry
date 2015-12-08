@@ -189,7 +189,7 @@ Item {
                         id: columnDiagramTempID
 
                         width: 565
-                        height: 500
+                        height: 300//500
 
                     }
                 }

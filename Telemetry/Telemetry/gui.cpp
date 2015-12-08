@@ -254,14 +254,14 @@ void GUI::receiveDisconnectSignal()
 void GUI::receiveStartSignal()
 {
     qDebug() << "GUI: startSignal received";
-    //tester.Start(1);
+    tester.Start(1);
     sendSignal(ID_start,0);
 }
 
 void GUI::receiveStopSignal()
 {
     qDebug() << "GUI: stopSignal received";
-    //tester.Stop();
+    tester.Stop();
     sendSignal(ID_stop,0);
 }
 
