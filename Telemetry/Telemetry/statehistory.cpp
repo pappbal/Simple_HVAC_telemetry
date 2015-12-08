@@ -16,6 +16,7 @@ State::State(State&& other)
     this->speeds = other.speeds;
     this->deficient = other.deficient;
     this->param_set = other.param_set;
+    this->acts = other.acts;
     //other.temps = nullptr;
    // other.speeds = nullptr;
     other.deficient = 0;
@@ -28,6 +29,7 @@ State::State(const State& other)
     this->speeds = other.speeds;
     this->deficient = other.deficient;
     this->param_set = other.param_set;
+    this->acts = other.acts;
 }
 
 //move assignment operator
@@ -46,6 +48,7 @@ State& State::operator=(State&& other)
          this->speeds = other.speeds;
          this->deficient = other.deficient;
          this->param_set = other.param_set;
+         this->acts = other.acts;
 
          // Release the data pointer from the source object so that
          // the destructor does not free the memory multiple times.
@@ -72,6 +75,7 @@ State& State::operator=(const State& other)
          speeds = other.speeds;
          deficient = other.deficient;
          param_set = other.param_set;
+         acts = other.acts;
 
       }
       return *this;

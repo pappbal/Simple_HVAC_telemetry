@@ -104,9 +104,7 @@ public slots:
     // From GUITester
     void testMessage(QString message);
 
-    //For Proxy to signal disconnection and stop mode
-    void stoppedSlot();
-    void disconnectedSlot();
+
 };
 
 #endif // GUI

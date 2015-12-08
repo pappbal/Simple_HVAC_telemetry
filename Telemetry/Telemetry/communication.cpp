@@ -63,6 +63,7 @@ void Communication::sendData(Package package){
 
     unsigned char start = 0xff; // START character
 
+    data_stream_out.clear();
     data_stream_out.append(start); // Append start chaarcter to the beginning of the array
     QDataStream stream(&data_stream_out,QIODevice::ReadWrite); // Redirect the stream into the QByteArray
     stream.setByteOrder(QDataStream::LittleEndian); // Set endianness according to the HVAC
