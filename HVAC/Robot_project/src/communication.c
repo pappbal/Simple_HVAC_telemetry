@@ -86,7 +86,7 @@ void Set_Serial_send_receive_time(){
 	NVIC_InitTypeDef NVIC_InitStructure;
 	RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM7, ENABLE);
 	TIM_InitStructure.TIM_Period = 41999;
-	TIM_InitStructure.TIM_Prescaler = 199;//1999;
+	TIM_InitStructure.TIM_Prescaler = 449; // 0,25sec //999; // 0,5 sec //1999; //1 sec
 	TIM_InitStructure.TIM_CounterMode = TIM_CounterMode_Up;
 	TIM_TimeBaseInit(TIM7, &TIM_InitStructure);
 	TIM_ITConfig(TIM7, TIM_IT_Update, ENABLE);
@@ -135,7 +135,7 @@ void construct_fan_PWM_message(uint8_t * message,uint32_t PWM, uint8_t header){
 	message[3] = 0; //Length
 	message[4] = 0; //Length
 	message[5] = 0; //Length
-	message[6] = (uint8_t)PWM; // PWM, casting it to uint8_t, it is enough now
+	message[6] = (uint8_t)(PWM/10); // PWM, casting it to uint8_t, it is enough now, divide by 10, in this case tha value varies from 0 to 100, good for present it on the GUI
 
 }
 
