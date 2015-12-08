@@ -1,5 +1,9 @@
 #include <statehistory.h>
 
+/**
+ * @brief State::State
+ * Constructor for the State class. Deficient state is default. Not deficient is set when every datafield is set.
+ */
 State::State()
 {
     deficient = 1;
@@ -9,7 +13,11 @@ State::State()
 
 
 
-//move constructor
+/**
+ * @brief State::State
+ * Move constructor for the State class. Implemented but not used.
+ * @param other
+ */
 State::State(State&& other)
 {
     this->temps = other.temps;
@@ -23,6 +31,11 @@ State::State(State&& other)
     other.param_set.clear();
 }
 
+/**
+ * @brief State::State
+ * Copy constructor of the State class.
+ * @param other
+ */
 State::State(const State& other)
 {
     this->temps = other.temps;
@@ -32,45 +45,38 @@ State::State(const State& other)
     this->acts = other.acts;
 }
 
-//move assignment operator
+/**
+ * @brief State::operator =
+ * Move assignment operator for the State class. Implemented but not used.
+ * @param other
+ * @return
+ */
 State& State::operator=(State&& other)
 {
     if (this != &other)
       {
-         // Free the existing resource.
-         //delete temps;
-         //delete speeds;
-         //delete[] param_set;
-
-         // Copy the data pointer and its length from the
-         // source object.
          this->temps = other.temps;
          this->speeds = other.speeds;
          this->deficient = other.deficient;
          this->param_set = other.param_set;
          this->acts = other.acts;
 
-         // Release the data pointer from the source object so that
-         // the destructor does not free the memory multiple times.
-         //other.temps = nullptr;
-         //other.speeds = nullptr;
          other.deficient = 0;
          other.param_set.clear();
       }
       return *this;
 }
 
+/**
+ * @brief State::operator =
+ * Assignment operator for the State class.
+ * @param other
+ * @return
+ */
 State& State::operator=(const State& other)
 {
     if (this != &other)
       {
-         // Free the existing resource.
-         //delete temps;
-         //delete speeds;
-         //delete &param_set;
-
-         // Copy the data pointer and its length from the
-         // source object.
          temps = other.temps;
          speeds = other.speeds;
          deficient = other.deficient;
@@ -82,8 +88,12 @@ State& State::operator=(const State& other)
 }
 
 
-
-void State::setParam(Package package) //ebben allapitom meg, hogy milyen ID es hogy ez alapjan melyik mezot irom.
+/**
+ * @brief State::setParam
+ * Based on the ID of the inbound package, the relevant datafield in State is set accordingly.
+ * @param package - inbound package from Communication
+ */
+void State::setParam(Package package)
 {
     param_set[package.ID-1] = (unsigned char)1;
     switch(package.ID)
@@ -119,12 +129,25 @@ void State::setParam(Package package) //ebben allapitom meg, hogy milyen ID es h
 
 }
 
+/**
+ * @brief State::calcTemp
+ * Calculates the temperature in Celsius from the two bytes of raw data.
+ * @param lower - lower byte of the datafield
+ * @param upper - upper byte of the datafield
+ * @return
+ */
 double State::calcTemp(quint8 lower, quint8 upper)
 {
     qint16 temp_raw = (((qint16)upper) << 8) + (qint16)lower;
     return 0.0625 * (double)(temp_raw >> 3);
 }
 
+/**
+ * @brief State::readyToSend
+ * Checks if the state is ready to put the history or not, based on deficiency.
+ * If the paramater is alredy set by previous package, deficient State is appanded.
+ * @return 1 if ready 0 if not
+ */
 int State::readyToSend()
 {
     qint32 sum = 0;
@@ -141,6 +164,10 @@ int State::readyToSend()
         return 0;
 }
 
+/**
+ * @brief State::reset
+ * Resets the values of the current state after it is copied to the history.
+ */
 void State::reset()
 {
     temps.reset();
@@ -153,17 +180,19 @@ void State::reset()
 }
 
 /*******************************************************/
-
+/**
+ * @brief StateHistory::StateHistory
+ * Constructor for the StateHistory class.
+ */
 StateHistory::StateHistory():stateContainer(0)
 {
 }
 
-
-/*StateHistory::~StateHistory()
-{
-//TODO
-}*/
-
+/**
+ * @brief StateHistory::append
+ * Appends the current state to stateHistory and signals GUI about new data
+ * @param state - current state to append
+ */
 void StateHistory::append(State& state)
 {
     State* stateToStore = new State(state);

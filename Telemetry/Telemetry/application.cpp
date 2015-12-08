@@ -1,5 +1,11 @@
 #include <application.h>
 
+
+/**
+ * @brief Package::Package
+ * Construct a  package from a byte array. First byte must be the ID.
+ * @param data
+ */
 Package::Package(QByteArray data)
 {
     if(data != NULL)
@@ -20,6 +26,12 @@ Package::Package(QByteArray data)
     }
 }
 
+/**
+ * @brief Package::Package
+ * Constructs a package from an explicit ID and a data field of 32 bits.
+ * @param ID - ID to send via the Communication
+ * @param data - Data to send
+ */
 Package::Package(quint8 ID, quint32 data)
 {
     this->ID = ID;
@@ -31,31 +43,55 @@ Package::Package(quint8 ID, quint32 data)
     this -> payload[3] = data >> 24;
 }
 
+/**
+ * @brief Package::Package
+ * Copy constructor
+ * @param other - Reference to the object to copy
+ */
 Package::Package(const Package& other)
 {
     this->ID = other.ID;
     this->payload = other.payload;
 }
 
+/**
+ * @brief Package::Package
+ * Constructor
+ */
 Package::Package()
 {
     //this->ID = 0;
     //this->payload = NULL;
 }
 
+/**
+ * @brief operator <<
+ * Serializing package to stream into communication
+ * @param out - the stream to use
+ * @param package - package to serialize
+ * @return  - the stream
+ */
 QDataStream& operator<<(QDataStream& out, const Package& package)
 {
     out << package.ID << package.payload;
     return out;
 }
 
-
+/**
+ * @brief Temperatures::reset
+ * Resets all the temperatures to zero.
+ */
 void Temperatures::reset()
 {
     temp1 = temp2 = temp3 = temp4 = 0;
 }
 
-
+/**
+ * @brief Temperatures::operator =
+ * Move assignment operator. Implemented but not used.
+ * @param other
+ * @return
+ */
 Temperatures& Temperatures::operator=(Temperatures&& other)
 {
     if (this != &other)
@@ -73,6 +109,12 @@ Temperatures& Temperatures::operator=(Temperatures&& other)
     return *this;
 }
 
+/**
+ * @brief Temperatures::operator =
+ * Assignment operator for Temperatures. Implemented but not used
+ * @param other
+ * @return
+ */
 Temperatures& Temperatures::operator=(const Temperatures& other)
 {
     if (this != &other)
@@ -86,11 +128,21 @@ Temperatures& Temperatures::operator=(const Temperatures& other)
     return *this;
 }
 
+/**
+ * @brief Speeds::reset
+ * Resets the speed values to zero.
+ */
 void Speeds::reset()
 {
     speed1 = speed2 = 0;
 }
 
+/**
+ * @brief Speeds::operator =
+ * Move assignment operator for Speeds. Implemented but not used.
+ * @param other
+ * @return
+ */
 Speeds& Speeds::operator=(Speeds&& other)
 {
     if(this != &other)
@@ -103,6 +155,12 @@ Speeds& Speeds::operator=(Speeds&& other)
     return *this;
 }
 
+/**
+ * @brief Speeds::operator =
+ * Assignment operator for Speeds.
+ * @param other
+ * @return
+ */
 Speeds& Speeds::operator=(const Speeds& other)
 {
     if(this != &other)
@@ -113,10 +171,21 @@ Speeds& Speeds::operator=(const Speeds& other)
     return *this;
 }
 
+/**
+ * @brief Actuators::reset
+ * Resets the actuator values to zero.
+ */
 void Actuators::reset()
 {
     act1 = act2 = 0;
 }
+
+/**
+ * @brief Actuators::operator =
+ * Move assignment operator for Actuators. Implemented but not used.
+ * @param other
+ * @return
+ */
 Actuators& Actuators::operator=(Actuators&& other)
 {
     if(this != &other)
@@ -129,6 +198,12 @@ Actuators& Actuators::operator=(Actuators&& other)
     return *this;
 }
 
+/**
+ * @brief Actuators::operator =
+ * Assignment operator for Actuators.
+ * @param other
+ * @return
+ */
 Actuators& Actuators::operator=(const Actuators& other)
 {
     if(this != &other)
