@@ -92,31 +92,53 @@ void GUI::stateHistoryUpdated()
         return;
     }
 
+    auto MainForm = findItemByName("MainForm");
+
     State currentState = stateHistory.GetCurrentState();
 
      // Send text message to QML side
-    ostringstream stream;
-    stream << "T1: " << currentState.temps.temp1 << " ";
-    stream << "T2: " << currentState.temps.temp2 << " ";
-    stream << "T3: " << currentState.temps.temp3 << " ";
-    stream << "T4: " << currentState.temps.temp4 << " ";
-    stream << "S1: " << currentState.speeds.speed1 << " ";
-    stream << "S2: " << currentState.speeds.speed2 << " ";
-    string messageString = stream.str();
-    QString message = QString::fromStdString(messageString);
-
-    auto MainForm = findItemByName("MainForm");
+    string messageString;
+    QString message;
     QVariant returnedValue;
-    QVariant messageText = message;
-    QMetaObject::invokeMethod(MainForm, "showMessage",
-        Q_RETURN_ARG(QVariant, returnedValue),
-        Q_ARG(QVariant, messageText));
+    QVariant messageText;
+
+    ostringstream streamTemp;
+    streamTemp<< "Temperatures: ";
+    streamTemp << currentState.temps.temp1 << ", ";
+    streamTemp << currentState.temps.temp2 << ", ";
+    streamTemp << currentState.temps.temp3 << ", ";
+    streamTemp << currentState.temps.temp4;
+
+    messageString = streamTemp.str();
+    message = QString::fromStdString(messageString);
+    messageText = message;
+    QMetaObject::invokeMethod(MainForm, "showMessage", Q_RETURN_ARG(QVariant, returnedValue), Q_ARG(QVariant, messageText));
+
+    ostringstream streamSpeed;
+    streamSpeed << "Speeds: ";
+    streamSpeed << currentState.speeds.speed1 << ", ";
+    streamSpeed << currentState.speeds.speed2;
+
+    messageString = streamSpeed.str();
+    message = QString::fromStdString(messageString);
+    messageText = message;
+    QMetaObject::invokeMethod(MainForm, "showMessage", Q_RETURN_ARG(QVariant, returnedValue), Q_ARG(QVariant, messageText));
+
+    ostringstream streamActuator;
+    streamActuator << "Actuators: ";
+    streamActuator << currentState.acts.act1 << ", ";
+    streamActuator << currentState.acts.act2;
+
+    messageString = streamActuator.str();
+    message = QString::fromStdString(messageString);
+    messageText = message;
+    QMetaObject::invokeMethod(MainForm, "showMessage", Q_RETURN_ARG(QVariant, returnedValue), Q_ARG(QVariant, messageText));
 
 
     // Send previous temp and speed values to QML side for the graphs
     QList<int> graphVelocities;
 
-    for(int i=0; i<showStateNumber; i++)
+    for(int i = 0; i < showStateNumber; i++)
     {
         graphVelocities.append(0);
     }
@@ -156,8 +178,6 @@ void GUI::stateHistoryUpdated()
 
     qmlContext.setContextProperty(QStringLiteral("historyGraphAct1"), QVariant::fromValue(graphActuators1));
     qmlContext.setContextProperty(QStringLiteral("historyGraphAct2"), QVariant::fromValue(graphActuators2));
-
-    //emit historyContextUpdated();
 
     // Send current measured values to QML for show the current measured values
     qmlContext.setContextProperty(QStringLiteral("valueMeasuredTemp1"), QVariant::fromValue(currentState.temps.temp1));

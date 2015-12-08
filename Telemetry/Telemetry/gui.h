@@ -57,7 +57,7 @@ private:
 
     GUITester tester;
 
-    const unsigned showStateNumber = 40;
+    const unsigned showStateNumber = 80;
     QList<double> graphTemperatures1;
     QList<double> graphTemperatures2;
     QList<double> graphTemperatures3;
