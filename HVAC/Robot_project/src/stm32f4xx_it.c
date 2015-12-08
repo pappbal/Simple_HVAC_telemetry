@@ -213,16 +213,15 @@ uint32_t length;
 
 uint8_t data_byte_count = 0;
 uint8_t data[2];
+volatile uint16_t temperature = 0;
 
-// Sending out data regulary ~ 1 sec period
+// Sending out data regulary ~ 0,25 sec period
 void TIM7_IRQHandler(void) {
 	if (TIM_GetITStatus(TIM7, TIM_IT_Update) == SET) {
 			TIM_ClearITPendingBit(TIM7, TIM_IT_Update);
 
-			uint16_t temperature = 0;
+
 			uint8_t received_data;
-
-
 			// Sending out data if client started the system
 			if(WORK == 1) {
 
@@ -349,7 +348,6 @@ void TIM7_IRQHandler(void) {
 	}
 }
 
-uint8_t set_vent = 1;
 uint16_t temp = 0;
 
 // Setting PWM of the fans
@@ -358,20 +356,12 @@ void TIM2_IRQHandler(void) {
 		TIM_ClearITPendingBit(TIM2, TIM_IT_Update);
 		if(WORK == 1) {
 
-			//if(set_vent == 1){
 				temp = get_temperature(1);
 				set_ventillator_PWM(1, 100 * PID_Controller(&setpoint_1, temp, &error_previous_1, &actual_error_1, &P_1, &I_1, &D_1, Fan_1_PWM));
 
-				//get_temperature(2);
-				//get_temperature(4);
-				set_vent = 3;
-			//}
-			//else if(set_vent == 3){
 				temp = get_temperature(3);
-				//temp = get_temperature(2);
 				set_ventillator_PWM(3, 100 * PID_Controller(&setpoint_3, temp, &error_previous_3, &actual_error_3, &P_3, &I_3, &D_3, Fan_3_PWM));
-				set_vent = 1;
-			//}
+
 		}
 		else {
 			set_ventillator_PWM(1,0);
