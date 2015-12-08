@@ -1,23 +1,43 @@
 #include <proxy.h>
 
+
+/**
+ * @brief Proxy::Proxy
+ * Constructor of Proxy
+ * @param comm - reference to the Communication object
+ * @param stateHistory - reference to the StateHistory object
+ *
+ * The disconnected flag indicates disconnection by default. User must connect before using any functionality.
+ */
 Proxy::Proxy(Communication& comm, StateHistory& stateHistory):comm(comm),currentState(),stateHistory(stateHistory)
 {
     std::cout << "Proxy constructor called" << std::endl;
     disconnected = 1;
+
     connect(&timer, SIGNAL(timeout()), this, SLOT(tick()));
 }
 
+/**
+ * @brief Proxy::~Proxy
+ * Destructor of Proxy
+ */
 Proxy::~Proxy()
 {
     std::cout << "Proxy destructor called" << std::endl;
 }
 
+/**
+ * @brief Proxy::dataReady
+ * Gets the data from Communication. One type at a time.
+ *
+ * called by Communication class via a signal (slot)
+ * One data field at once, e.g. temp1
+ * Must assemble current state, identify packages by IDs (defined)
+ * When ready, put to state history (which alerts GUI)
+ */
 void Proxy::dataReady()
 {
-    //called by Communication class via a signal
-    //One data field at one, e.g. temp1
-    //Must assemble current state, identify packages by IDs (defined)
-    //When ready, put to state history (which alerts GUI)
+
     std::cout << "Slot called" << std::endl;
     Package package;
     package = comm.getData();
@@ -52,6 +72,14 @@ void Proxy::dataReady()
 
 }
 
+/**
+ * @brief Proxy::sendCommand
+ * Connects and disconnects. If connected, sends the command to the Communication class.
+ * Restarts the 5 sec timer, to indicate online connection
+ *
+ * @param pid_ID - the ID to send the packet with
+ * @param data - data to send the packet with
+ */
 void Proxy::sendCommand(qint8 pid_ID, qint32 data)
 {
     if(pid_ID == ID_disconnect)
@@ -77,6 +105,11 @@ void Proxy::sendCommand(qint8 pid_ID, qint32 data)
     }
 }
 
+/**
+ * @brief Proxy::tick
+ * Slot for the timer of 5 secs. If timer signals, communication is disconnected.
+ * Signals GUI for disconnection.
+ */
 void Proxy::tick()
 {
     this->disconnected = 1;

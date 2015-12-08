@@ -7,6 +7,14 @@
 #define timeout_in_sec 5
 
 
+/**
+ * @brief The Proxy class
+ * Represents the functionality of the controller. Makes the communication transparent to the GUI.
+ *
+ * Handles connection and disconnection, creates outbound packages.
+ * Stores the incoming data in stateHistory
+ * Stores the current state (and collects packages into it untill full or deficient.)
+ */
 class Proxy : public QObject
 {
     Q_OBJECT
@@ -21,7 +29,15 @@ public:
 
     ~Proxy();
 signals:
+    /**
+     * @brief signalDisconnected
+     * Signals GUI about disconnected signal
+     */
     void signalDisconnected();
+    /**
+     * @brief signalHVACStopped
+     * Signals GUI that HVAC is sending "Stopped" messages
+     */
     void signalHVACStopped();
 public slots:
     void dataReady(); //slot for communication. Called on new incoming packet.
