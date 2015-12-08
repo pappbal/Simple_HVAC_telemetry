@@ -7,9 +7,9 @@ Item {
 
     objectName: "setPID"
 
-    property int parameterP: 1;
+    property int parameterP: 5;
     property int parameterI: 1;
-    property int parameterD: 1;
+    property int parameterD: 3;
 
     property alias buttonP: buttonP;
     property alias buttonI: buttonI;
