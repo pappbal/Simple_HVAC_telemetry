@@ -66,6 +66,16 @@ void GUI::ConnectQmlSignals(QObject *rootObject)
     {
         qDebug() << "GUI ERROR: historyGraphActuator not found in QML";
     }
+
+    QQuickItem *columnDiagTemp = findItemByName(rootObject, QString("columnDiagTemp"));
+    if (columnDiagTemp)
+    {
+        QObject::connect(this, SIGNAL(historyContextUpdated()), columnDiagTemp, SLOT(requestPaint()));
+    }
+    else
+    {
+        qDebug() << "GUI ERROR: columnDagTemp not found in QML";
+    }
 }
 
 void GUI::sendSignal(qint8 pid_ID, qint32 data) //for debug to emit signal to Proxy
@@ -147,7 +157,7 @@ void GUI::stateHistoryUpdated()
     qmlContext.setContextProperty(QStringLiteral("historyGraphAct1"), QVariant::fromValue(graphActuators1));
     qmlContext.setContextProperty(QStringLiteral("historyGraphAct2"), QVariant::fromValue(graphActuators2));
 
-    emit historyContextUpdated();
+    //emit historyContextUpdated();
 
     // Send current measured values to QML for show the current measured values
     qmlContext.setContextProperty(QStringLiteral("valueMeasuredTemp1"), QVariant::fromValue(currentState.temps.temp1));
@@ -165,6 +175,15 @@ void GUI::stateHistoryUpdated()
     QVariant newState = true;
     QMetaObject::invokeMethod(MainForm, "setIsRunning", Q_RETURN_ARG(QVariant, returnedValue), Q_ARG(QVariant, newState));
     QMetaObject::invokeMethod(MainForm, "setIsConnected", Q_RETURN_ARG(QVariant, returnedValue), Q_ARG(QVariant, newState));
+
+    auto ColumnDiagTemp = findItemByName("columnDiagTemp");
+    QMetaObject::invokeMethod(ColumnDiagTemp, "setColumnTemps", Q_RETURN_ARG(QVariant, returnedValue),
+                              Q_ARG(QVariant, currentState.temps.temp1),
+                              Q_ARG(QVariant, currentState.temps.temp2),
+                              Q_ARG(QVariant, currentState.temps.temp3),
+                              Q_ARG(QVariant, currentState.temps.temp4));
+
+    emit historyContextUpdated();
 }
 
 void GUI::stoppedSlot()
@@ -235,14 +254,14 @@ void GUI::receiveDisconnectSignal()
 void GUI::receiveStartSignal()
 {
     qDebug() << "GUI: startSignal received";
-    tester.Start(1);
+    //tester.Start(1);
     sendSignal(ID_start,0);
 }
 
 void GUI::receiveStopSignal()
 {
     qDebug() << "GUI: stopSignal received";
-    tester.Stop();
+    //tester.Stop();
     sendSignal(ID_stop,0);
 }
 
@@ -331,21 +350,6 @@ int GUI::getValueFromQML(const QString &itemName, const char *invokeMethodName)
     int value = returnedValue.toInt();
     return value;
 }
-
-/*void GUI::stoppedSlot()
-{
-    std::cout << "HVAC stopped" << std::endl;
-    //TODO
-    // write stuff to the message box or anywhere on GUI
-}
-
-void GUI::disconnectedSlot()
-{
-    std::cout << "Disconnected" << std::endl;
-    //TODO
-    // write stuff to the message box or anywhere on GUI
-}*/
-
 
 QQuickItem* GUI::findItemByName(const QString& name)
 {

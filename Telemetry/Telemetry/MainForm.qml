@@ -29,7 +29,7 @@ Item {
 
     function setIsConnected(value)
     {
-        isConnected= value;
+        isConnected = value;
     }
 
     function showMessage(messageText)
@@ -185,8 +185,12 @@ Item {
                     Layout.preferredWidth: 585
                     Layout.preferredHeight: 200
                     ColumnDiagramTemperature{
+                        objectName: "columnDiagTemp"
                         id: columnDiagramTempID
-                        Layout.preferredHeight: 100
+
+                        width: 565
+                        height: 500
+
                     }
                 }
 
