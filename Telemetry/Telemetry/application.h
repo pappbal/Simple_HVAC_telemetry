@@ -9,7 +9,7 @@
 
 
 
-//to indicatorsfd
+//to indicators
 #define ID_temp1 1
 #define ID_temp2 2
 #define ID_temp3 3
@@ -38,6 +38,12 @@
 #define no_of_params 8 //defines the number of parameters stored in State. temp1..4 + speed1..2
 
 
+/**
+* @brief The Package class
+* This class defines a format for a Package received from and sent to the Communication class.
+* IDs are defined to send to the controller. The payload is a QVector of quint8 which is serialized by the Comm.
+*
+*/
 class Package
 {
 public:
@@ -53,6 +59,10 @@ QDataStream& operator<<(QDataStream& out, const Package& package);
 
 /*---------------------------------------------------------------------*/
 
+/**
+ * @brief The Temperatures class
+ * Class for the 4 measured temperatures. Will be the part of the State.
+ */
 class Temperatures
 {
 public:
@@ -70,7 +80,10 @@ public:
 
 
 /*---------------------------------------------------------------------*/
-
+/**
+ * @brief The Speeds class
+ * Class for the 2 measured speed values. Will be the part of the State.
+ */
 class Speeds
 {
 public:
@@ -84,6 +97,10 @@ public:
 
 /*---------------------------------------------------------------------*/
 
+/**
+ * @brief The Actuators class
+ * Class for the 2 measured actutor signal values. Will be the part of the State.
+ */
 class Actuators
 {
 public:
