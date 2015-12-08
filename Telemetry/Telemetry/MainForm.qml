@@ -74,8 +74,8 @@ Item {
 
                         ColumnLayout
                         {
-                            Text{ Layout.fillHeight: true; text: isConnected ? "Connected" : "Disconnected" }
-                            Text{ Layout.fillHeight: true; text: isRunning ? "Running" : "Stopped" }
+                            Text{ Layout.fillHeight: true; font.bold: true; color: isConnected ? "green" : "red"; text: isConnected ? "Connected" : "Disconnected" }
+                            Text{ Layout.fillHeight: true; font.bold: true; color: isRunning ? "green" : "red"; text: isRunning ? "Running" : "Stopped" }
                         }
                     }
 
@@ -138,72 +138,63 @@ Item {
             }
         }
 
-        GroupBox
+        ColumnLayout
         {
-            id: middleGroup
-            Layout.fillHeight: true
-            Layout.fillWidth: true
+            id: columnLayout2
 
-            ColumnLayout
+            Item
             {
-                id: columnLayout2
-
-                SetPID
-                {
-                    id: setPid
-                    Layout.preferredHeight: 125;
-                }
-
-                TemperatureSettings
-                {
-                    id: temperatureSettingsID
-                    Layout.preferredHeight: 160;
-                }
-
-                MeasuredValues
-                {
-                    id: measuredValuesID
-                    Layout.preferredHeight: 120;
-
-                    measuredTemp1: valueMeasuredTemp1
-                    measuredTemp2: valueMeasuredTemp2
-                    measuredTemp3: valueMeasuredTemp3
-                    measuredTemp4: valueMeasuredTemp4
-
-                    measuredSpeed1: valueMeasuredSpeed1
-                    measuredSpeed2: valueMeasuredSpeed2
-
-                    measuredActuator1: valueMeasuredActuator1
-                    measuredActuator2: valueMeasuredActuator2
-                }
-
-                GroupBox
-                {
-                    title: "Temperatures column diagram"
-                    Layout.fillHeight: true
-                    Layout.fillWidth: true
-                    Layout.preferredWidth: 585
-                    Layout.preferredHeight: 200
-                    ColumnDiagramTemperature{
-                        objectName: "columnDiagTemp"
-                        id: columnDiagramTempID
-
-                        width: 565
-                        height: 300//500
-
-                    }
-                }
-
+                Layout.preferredHeight: 10;
             }
+
+            SetPID
+            {
+                id: setPid
+                Layout.preferredHeight: 161;
+            }
+
+            TemperatureSettings
+            {
+                id: temperatureSettingsID
+                Layout.preferredHeight: 195;
+            }
+
+            MeasuredValues
+            {
+                id: measuredValuesID
+                Layout.preferredHeight: 150;
+
+                measuredTemp1: valueMeasuredTemp1
+                measuredTemp2: valueMeasuredTemp2
+                measuredTemp3: valueMeasuredTemp3
+                measuredTemp4: valueMeasuredTemp4
+
+                measuredSpeed1: valueMeasuredSpeed1
+                measuredSpeed2: valueMeasuredSpeed2
+
+                measuredActuator1: valueMeasuredActuator1
+                measuredActuator2: valueMeasuredActuator2
+            }
+
+            GroupBox
+            {
+                title: "Temperatures column diagram"
+
+                ColumnDiagramTemperature{
+                    objectName: "columnDiagTemp"
+                    id: columnDiagramTempID
+
+                    width: 565
+                    height: 300//500
+
+                }
+            }
+
         }
 
         ColumnLayout
         {
             id: rightColumn
-            anchors.right: parent.right
-            anchors.top: parent.top
-            anchors.bottom: parent.bottom
-            anchors.left: middleGroup.right
 
             GroupBox
             {
@@ -275,9 +266,7 @@ Item {
                         objectName: "historyGraphTemperature"
 
                         Layout.fillWidth: true
-                        Layout.minimumWidth: 200
-                        Layout.preferredWidth: 400
-                        Layout.minimumHeight: 150
+                        Layout.preferredWidth: 800
                         Layout.preferredHeight: 250
 
                         graphVelocities: historyGraphVelocity
@@ -337,9 +326,7 @@ Item {
                         objectName: "historyGraphSpeed"
 
                         Layout.fillWidth: true
-                        Layout.minimumWidth: 200
-                        Layout.preferredWidth: 400
-                        Layout.minimumHeight: 150
+                        Layout.preferredWidth: 800
                         Layout.preferredHeight: 270
 
                         graphVelocities: historyGraphVelocity
@@ -397,9 +384,7 @@ Item {
                         objectName: "historyGraphActuator"
 
                         Layout.fillWidth: true
-                        Layout.minimumWidth: 200
-                        Layout.preferredWidth: 400
-                        Layout.minimumHeight: 150
+                        Layout.preferredWidth: 800
                         Layout.preferredHeight: 270
 
                         graphVelocities: historyGraphVelocity
