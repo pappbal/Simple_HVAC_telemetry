@@ -78,11 +78,6 @@ void GUI::ConnectQmlSignals(QObject *rootObject)
     }
 }
 
-void GUI::sendSignal(qint8 pid_ID, qint32 data) //for debug to emit signal to Proxy
-{
-    emit signalCommand(pid_ID,data);
-}
-
 void GUI::stateHistoryUpdated()
 {
     qDebug() << "GUI: slot stateHistorySignal received a signal";
@@ -262,27 +257,27 @@ void GUI::testMessage(QString message)
 void GUI::receiveConnectSignal()
 {
     qDebug() << "GUI: connectSignal received";
-    sendSignal(ID_connect,0);
+    emit signalCommand(ID_connect,0);
 }
 
 void GUI::receiveDisconnectSignal()
 {
     qDebug() << "GUI: disconnectSignal received";
-    sendSignal(ID_disconnect,0);
+    emit signalCommand(ID_disconnect,0);
 }
 
 void GUI::receiveStartSignal()
 {
     qDebug() << "GUI: startSignal received";
     //tester.Start(1);
-    sendSignal(ID_start,0);
+    emit signalCommand(ID_start,0);
 }
 
 void GUI::receiveStopSignal()
 {
     qDebug() << "GUI: stopSignal received";
     //tester.Stop();
-    sendSignal(ID_stop,0);
+    emit signalCommand(ID_stop,0);
 }
 
 void GUI::receiveSetPSignal()
@@ -290,6 +285,7 @@ void GUI::receiveSetPSignal()
     qDebug() << "GUI: setPSignal received";
 
     int valueP = getValueFromQML("setPID", "getP");
+    emit signalCommand(ID_pid_p, valueP);
 
     qDebug() << "New P value:" << valueP;
 }
@@ -299,6 +295,7 @@ void GUI::receiveSetISignal()
    qDebug() << "GUI: setISignal received";
 
     int valueI = getValueFromQML("setPID", "getI");
+    emit signalCommand(ID_pid_i, valueI);
 
     qDebug() << "New I value:" << valueI;
 }
@@ -308,6 +305,7 @@ void GUI::receiveSetDSignal()
     qDebug() << "GUI: setDSignal received";
 
     int valueD = getValueFromQML("setPID", "getD");
+    emit signalCommand(ID_pid_d, valueD);
 
     qDebug() << "New D value:" << valueD;
 }
@@ -320,7 +318,7 @@ void GUI::receiveSetTemp1Signal()
 
     qDebug() << "New temp1 set value:" << valueTemp1;
 
-    sendSignal(ID_req_temp1,valueTemp1);
+    emit signalCommand(ID_req_temp1, valueTemp1);
 }
 
 void GUI::receiveSetTemp2Signal()
@@ -331,7 +329,7 @@ void GUI::receiveSetTemp2Signal()
 
     qDebug() << "New temp1 set value:" << valueTemp2;
 
-    sendSignal(ID_req_temp2,valueTemp2);
+    emit signalCommand(ID_req_temp2, valueTemp2);
 }
 
 void GUI::receiveSetTemp3Signal()
@@ -341,7 +339,8 @@ void GUI::receiveSetTemp3Signal()
     int valueTemp3 = getValueFromQML("temperatureSettings", "getTemp3");
 
     qDebug() << "New temp1 set value:" << valueTemp3;
-    sendSignal(ID_req_temp3,valueTemp3);
+
+    emit signalCommand(ID_req_temp3, valueTemp3);
 }
 
 void GUI::receiveSetTemp4Signal()
@@ -351,7 +350,7 @@ void GUI::receiveSetTemp4Signal()
     int valueTemp4 = getValueFromQML("temperatureSettings", "getTemp4");
 
     qDebug() << "New temp1 set value:" << valueTemp4;
-     sendSignal(ID_req_temp4,valueTemp4);
+    emit signalCommand(ID_req_temp4, valueTemp4);
 }
 
 int GUI::getValueFromQML(const QString &itemName, const char *invokeMethodName)
