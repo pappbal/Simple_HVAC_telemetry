@@ -1,0 +1,10 @@
+digraph "C:/Workspace" {
+  compound=true
+  node [ fontsize="10", fontname="Helvetica"];
+  edge [ labelfontsize="10", labelfontname="Helvetica"];
+  subgraph clusterdir_f243a7a7d497212ea32570f02ce73440 {
+    graph [ bgcolor="#eeeeff", pencolor="black", label="" URL="dir_f243a7a7d497212ea32570f02ce73440.html"];
+    dir_f243a7a7d497212ea32570f02ce73440 [shape=plaintext label="Workspace"];
+    dir_a733cff363c34944410d1d344514aee4 [shape=box label="Simple_HVAC_telemetry" color="red" fillcolor="white" style="filled" URL="dir_a733cff363c34944410d1d344514aee4.html"];
+  }
+}

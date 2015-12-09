@@ -10,7 +10,48 @@
 #include <QString>
 #include <QQmlContext>
 #include <QList>
-
+/*! \mainpage Overview
+ *
+ * \section Introduction
+ * This is the introduction.
+ * \image html image_full.png
+ * 
+ *
+ * \section HVAC
+ * This is the section of the embedded HVAC node
+ * 
+ * \section Communication
+ * This is the overview of the Communication mechanism
+ * \image html image_communication.png
+ *
+ *
+ 
+ * \section Representation
+ * This is the overview of the robot representation
+ * The actual state of the robot is contained in the State class.
+ * The state contains Temperatures, Speeds and Actuators classes for the values sent by the node in the currentState.
+ * Whenever a State is full (all values are collected) or deficient (for some reason the node have not sent any of them)
+ * it is appended to its container, the StateHistory. When a new State is appended the Proxy signals the GUI via newData().
+ * 
+ * On the sending side, the Proxy provides one funcion - sendCommand(ID,data) to send an integer data to the node with predefined IDs.
+ * For details on the communication mechanism, refer to the previous sections.
+ *
+ * The Proxy is also responsible for handling connection and disconnection. Whenever it is set to be disconnected, it discards any data
+ * coming from the node, and also any command coming from the GUI (except for Connect command).
+ * The Proxy also signals disconnection to the GUI via signalDisconnected. It has a 5 sec timeout counter, if no data is incoming, it disconnects
+ * and sends the signal. (If the node is stopped, it is not handled as disconnection, since the node is sending NodeStopped messages.)
+ *
+ * The class diagram of the node representation is as follows:
+ * \image html image_robot_representation.png
+ *
+ *
+ *
+ 
+ * \section Sequences
+ * TODO: Sequence diagrams!!!!!!!
+ * etc...
+ */
+ 
 class GUITester : public QObject
 {
     Q_OBJECT

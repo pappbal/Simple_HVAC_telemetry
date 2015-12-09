@@ -1,0 +1,9 @@
+digraph "Proxy::Proxy"
+{
+  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
+  node [fontname="Helvetica",fontsize="10",shape=record];
+  rankdir="LR";
+  Node1 [label="Proxy::Proxy",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black"];
+  Node1 -> Node2 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node2 [label="Proxy::tick",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_proxy.html#ac58a41536e56a591109c4c07293166e8",tooltip="Proxy::tick Slot for the timer of 5 secs. If timer signals, communication is disconnected. Signals GUI for disconnection. "];
+}

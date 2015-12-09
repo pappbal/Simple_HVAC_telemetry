@@ -1,0 +1,19 @@
+digraph "Graphical Class Hierarchy"
+{
+  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
+  node [fontname="Helvetica",fontsize="10",shape=record];
+  rankdir="LR";
+  Node1 [label="QObject",height=0.2,width=0.4,color="grey75", fillcolor="white", style="filled"];
+  Node1 -> Node2 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node2 [label="Communication",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_communication.html",tooltip="The Communication class Base communication class, protocol specific communication classes are inherit..."];
+  Node2 -> Node3 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node3 [label="Serial_Communication",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_serial___communication.html",tooltip="The Serial_Communication class Protocol specific class with specific functions. "];
+  Node1 -> Node4 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node4 [label="GUI",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_g_u_i.html"];
+  Node1 -> Node5 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node5 [label="GUITester",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_g_u_i_tester.html"];
+  Node1 -> Node6 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node6 [label="Proxy",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_proxy.html",tooltip="The Proxy class Represents the functionality of the controller. Makes the communication transparent t..."];
+  Node1 -> Node7 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node7 [label="StateHistory",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_state_history.html",tooltip="The StateHistory class Contains the history of the controller. All states are pushed to the container..."];
+}
