@@ -1,0 +1,34 @@
+digraph "GUI::signalCommand"
+{
+  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
+  node [fontname="Helvetica",fontsize="10",shape=record];
+  rankdir="LR";
+  Node1 [label="GUI::signalCommand",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black"];
+  Node1 -> Node2 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node2 [label="GUI::sendSignal",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_g_u_i.html#a0b7149809a096de2f515563f3e34e39c"];
+  Node2 -> Node3 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node3 [label="GUI::receiveConnectSignal",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_g_u_i.html#aae7d06a8383bd9ef7a865a8fd928db8a"];
+  Node3 -> Node4 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node4 [label="GUI::GUI",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_g_u_i.html#a35d5fc00149b54cd5a44adf42c7aba80"];
+  Node2 -> Node5 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node5 [label="GUI::receiveDisconnectSignal",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_g_u_i.html#a9d62ae03c821a735d3593a438db35162"];
+  Node5 -> Node4 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node2 -> Node6 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node6 [label="GUI::receiveStartSignal",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_g_u_i.html#a7de844a9e424473b5ad463bfa11bbb0e"];
+  Node6 -> Node4 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node2 -> Node7 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node7 [label="GUI::receiveStopSignal",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_g_u_i.html#aac7927a4be8991e32743222943db7bdb"];
+  Node7 -> Node4 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node2 -> Node8 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node8 [label="GUI::receiveSetTemp1Signal",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_g_u_i.html#afdf22089d724466959d8856681c71bfa"];
+  Node8 -> Node4 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node2 -> Node9 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node9 [label="GUI::receiveSetTemp2Signal",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_g_u_i.html#a0e1764751934629e673f13a7be772362"];
+  Node9 -> Node4 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node2 -> Node10 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node10 [label="GUI::receiveSetTemp3Signal",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_g_u_i.html#ac34f9645b5e751a9eedd07ee294e688c"];
+  Node10 -> Node4 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node2 -> Node11 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node11 [label="GUI::receiveSetTemp4Signal",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_g_u_i.html#a5c5b5adafd8e2876ec75c033374c3e50"];
+  Node11 -> Node4 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+}

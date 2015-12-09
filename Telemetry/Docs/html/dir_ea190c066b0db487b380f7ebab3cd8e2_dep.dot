@@ -1,0 +1,13 @@
+digraph "C:/Workspace/Simple_HVAC_telemetry/Telemetry" {
+  compound=true
+  node [ fontsize="10", fontname="Helvetica"];
+  edge [ labelfontsize="10", labelfontname="Helvetica"];
+  subgraph clusterdir_a733cff363c34944410d1d344514aee4 {
+    graph [ bgcolor="#ddddee", pencolor="black", label="Simple_HVAC_telemetry" fontname="Helvetica", fontsize="10", URL="dir_a733cff363c34944410d1d344514aee4.html"]
+  subgraph clusterdir_ea190c066b0db487b380f7ebab3cd8e2 {
+    graph [ bgcolor="#eeeeff", pencolor="black", label="" URL="dir_ea190c066b0db487b380f7ebab3cd8e2.html"];
+    dir_ea190c066b0db487b380f7ebab3cd8e2 [shape=plaintext label="Telemetry"];
+    dir_524db600a90a36c3aa07792d521f0656 [shape=box label="Telemetry" color="black" fillcolor="white" style="filled" URL="dir_524db600a90a36c3aa07792d521f0656.html"];
+  }
+  }
+}

@@ -1,0 +1,32 @@
+digraph "C:/Workspace/Simple_HVAC_telemetry/Telemetry/Telemetry/application.h"
+{
+  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
+  node [fontname="Helvetica",fontsize="10",shape=record];
+  Node1 [label="C:/Workspace/Simple\l_HVAC_telemetry/Telemetry\l/Telemetry/application.h",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black"];
+  Node1 -> Node2 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node2 [label="C:/Workspace/Simple\l_HVAC_telemetry/Telemetry\l/Telemetry/application.cpp",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$application_8cpp.html"];
+  Node1 -> Node3 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node3 [label="C:/Workspace/Simple\l_HVAC_telemetry/Telemetry\l/Telemetry/communication.h",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$communication_8h.html"];
+  Node3 -> Node4 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node4 [label="C:/Workspace/Simple\l_HVAC_telemetry/Telemetry\l/Telemetry/communication.cpp",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$communication_8cpp.html"];
+  Node3 -> Node5 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node5 [label="C:/Workspace/Simple\l_HVAC_telemetry/Telemetry\l/Telemetry/main.cpp",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$main_8cpp.html"];
+  Node3 -> Node6 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node6 [label="C:/Workspace/Simple\l_HVAC_telemetry/Telemetry\l/Telemetry/proxy.h",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$proxy_8h.html"];
+  Node6 -> Node5 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node6 -> Node7 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node7 [label="C:/Workspace/Simple\l_HVAC_telemetry/Telemetry\l/Telemetry/proxy.cpp",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$proxy_8cpp.html"];
+  Node1 -> Node8 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node8 [label="C:/Workspace/Simple\l_HVAC_telemetry/Telemetry\l/Telemetry/gui.cpp",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$gui_8cpp.html"];
+  Node1 -> Node9 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node9 [label="C:/Workspace/Simple\l_HVAC_telemetry/Telemetry\l/Telemetry/gui.h",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$gui_8h.html"];
+  Node9 -> Node8 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node9 -> Node5 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node1 -> Node10 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node10 [label="C:/Workspace/Simple\l_HVAC_telemetry/Telemetry\l/Telemetry/statehistory.h",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$statehistory_8h.html"];
+  Node10 -> Node9 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node10 -> Node5 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node10 -> Node6 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node10 -> Node11 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node11 [label="C:/Workspace/Simple\l_HVAC_telemetry/Telemetry\l/Telemetry/statehistory.cpp",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$statehistory_8cpp.html"];
+}
