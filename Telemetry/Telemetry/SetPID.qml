@@ -7,13 +7,18 @@ Item {
 
     objectName: "setPID"
 
-    property int parameterP: 1;
+    property int parameterP: 5;
     property int parameterI: 1;
-    property int parameterD: 1;
+    property int parameterD: 3;
 
     property alias buttonP: buttonP;
     property alias buttonI: buttonI;
     property alias buttonD: buttonD;
+
+    property int labelWidth: 100;
+    property int textFieldWidth: 100;
+    property int gapWidth: 20;
+    property int gapAfterLabel: 4;
 
     function getP()
     {
@@ -39,14 +44,19 @@ Item {
         ColumnLayout
         {
             id: teszt
+            anchors.fill: parent
+            anchors.margins: 10
+
             RowLayout
             {
-                Text{ id: textP; text: "P:";}
+                Text{ id: textP; Layout.preferredWidth: labelWidth; font.bold: true; horizontalAlignment: Text.AlignRight; text: "Parameter P:";}
+
+                Item{ Layout.preferredWidth: gapAfterLabel}
 
                 TextField {
                     id: textFieldP
 
-                    implicitWidth: 100
+                    implicitWidth: textFieldWidth
 
                     horizontalAlignment: TextInput.AlignRight
 
@@ -64,17 +74,21 @@ Item {
                     }
                 }
 
-                Text{ id: currentValueP; text: "Current value: " + parameterP.toString(); }
+                Item{ Layout.preferredWidth: gapWidth}
+
+                Text{ id: currentValueP; text: "Current set: " + parameterP.toString(); }
             }
 
             RowLayout
             {
-                Text{ id: textI; text: "I: "; }
+                Text{ id: textI; Layout.preferredWidth: labelWidth; font.bold: true; horizontalAlignment: Text.AlignRight; text: "Parameter I: "; }
+
+                Item{ Layout.preferredWidth: gapAfterLabel}
 
                 TextField {
                     id: textFieldI
 
-                    implicitWidth: 100
+                    implicitWidth: textFieldWidth
 
                     horizontalAlignment: TextInput.AlignRight
 
@@ -92,17 +106,21 @@ Item {
                     }
                 }
 
-                Text{ id: currentValueI; text: "Current value: " + parameterI.toString(); }
+                Item{ Layout.preferredWidth: gapWidth}
+
+                Text{ id: currentValueI; text: "Current set: " + parameterI.toString(); }
             }
 
             RowLayout
             {
-                Text{ id: textD; text: "D:"; }
+                Text{ id: textD; Layout.preferredWidth: labelWidth; font.bold: true; horizontalAlignment: Text.AlignRight; text: "Parameter D:"; }
+
+                Item{ Layout.preferredWidth: gapAfterLabel}
 
                 TextField {
                     id: textFieldD
 
-                    implicitWidth: 100
+                    implicitWidth: textFieldWidth
 
                     horizontalAlignment: TextInput.AlignRight
 
@@ -120,7 +138,9 @@ Item {
                     }
                 }
 
-                Text{ id: currentValueD; text: "Current value: " + parameterD.toString(); }
+                Item{ Layout.preferredWidth: gapWidth}
+
+                Text{ id: currentValueD; text: "Current set: " + parameterD.toString(); }
             }
         }
     }

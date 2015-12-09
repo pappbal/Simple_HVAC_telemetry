@@ -5,7 +5,7 @@
 
 using namespace std;
 
-GUI::GUI(QObject *rootObject, QQmlContext &qmlContext, StateHistory& stateHistory) : qmlContext(qmlContext), stateHistory(stateHistory)/*, tester(stateHistory)*/
+GUI::GUI(QObject *rootObject, QQmlContext &qmlContext, StateHistory& stateHistory) : qmlContext(qmlContext), stateHistory(stateHistory), tester(stateHistory)
 {
     mainWindowObject = findItemByName(rootObject, QString("ApplicationWindow"));
 
@@ -28,9 +28,9 @@ GUI::GUI(QObject *rootObject, QQmlContext &qmlContext, StateHistory& stateHistor
     QObject::connect(mainWindowObject, SIGNAL(setTemp3()),          this, SLOT(receiveSetTemp3Signal()));
     QObject::connect(mainWindowObject, SIGNAL(setTemp4()),          this, SLOT(receiveSetTemp4Signal()));
 
-    /*QObject::connect(&tester, SIGNAL(sendMessage(QString)),         this, SLOT(testMessage(QString)));
-    QObject::connect(&tester, SIGNAL(stateHistoryUpdateSimulatorSignal()), this, SLOT(stateHistoryUpdated()));*/
-   QObject::connect(&stateHistory, SIGNAL(newData()), this, SLOT(stateHistoryUpdated()));
+    QObject::connect(&tester, SIGNAL(sendMessage(QString)),         this, SLOT(testMessage(QString)));
+    QObject::connect(&tester, SIGNAL(stateHistoryUpdateSimulatorSignal()), this, SLOT(stateHistoryUpdated()));
+    QObject::connect(&stateHistory, SIGNAL(newData()), this, SLOT(stateHistoryUpdated()));
 
     ConnectQmlSignals(rootObject);
 }
@@ -56,6 +56,26 @@ void GUI::ConnectQmlSignals(QObject *rootObject)
     {
         qDebug() << "GUI ERROR: historyGraphSpeed not found in QML";
     }
+
+    QQuickItem *historyGraphActuator = findItemByName(rootObject, QString("historyGraphActuator"));
+    if (historyGraphActuator)
+    {
+        QObject::connect(this, SIGNAL(historyContextUpdated()), historyGraphActuator, SLOT(requestPaint()));
+    }
+    else
+    {
+        qDebug() << "GUI ERROR: historyGraphActuator not found in QML";
+    }
+
+    QQuickItem *columnDiagTemp = findItemByName(rootObject, QString("columnDiagTemp"));
+    if (columnDiagTemp)
+    {
+        QObject::connect(this, SIGNAL(historyContextUpdated()), columnDiagTemp, SLOT(requestPaint()));
+    }
+    else
+    {
+        qDebug() << "GUI ERROR: columnDagTemp not found in QML";
+    }
 }
 
 void GUI::sendSignal(qint8 pid_ID, qint32 data) //for debug to emit signal to Proxy
@@ -72,31 +92,53 @@ void GUI::stateHistoryUpdated()
         return;
     }
 
+    auto MainForm = findItemByName("MainForm");
+
     State currentState = stateHistory.GetCurrentState();
 
      // Send text message to QML side
-    ostringstream stream;
-    stream << "T1: " << currentState.temps.temp1 << " ";
-    stream << "T2: " << currentState.temps.temp2 << " ";
-    stream << "T3: " << currentState.temps.temp3 << " ";
-    stream << "T4: " << currentState.temps.temp4 << " ";
-    stream << "S1: " << currentState.speeds.speed1 << " ";
-    stream << "S2: " << currentState.speeds.speed2 << " ";
-    string messageString = stream.str();
-    QString message = QString::fromStdString(messageString);
-
-    auto MainForm = findItemByName("MainForm");
+    string messageString;
+    QString message;
     QVariant returnedValue;
-    QVariant messageText = message;
-    QMetaObject::invokeMethod(MainForm, "showMessage",
-        Q_RETURN_ARG(QVariant, returnedValue),
-        Q_ARG(QVariant, messageText));
+    QVariant messageText;
+
+    ostringstream streamTemp;
+    streamTemp<< "Temperatures: ";
+    streamTemp << currentState.temps.temp1 << ", ";
+    streamTemp << currentState.temps.temp2 << ", ";
+    streamTemp << currentState.temps.temp3 << ", ";
+    streamTemp << currentState.temps.temp4;
+
+    messageString = streamTemp.str();
+    message = QString::fromStdString(messageString);
+    messageText = message;
+    QMetaObject::invokeMethod(MainForm, "showMessage", Q_RETURN_ARG(QVariant, returnedValue), Q_ARG(QVariant, messageText));
+
+    ostringstream streamSpeed;
+    streamSpeed << "Speeds: ";
+    streamSpeed << currentState.speeds.speed1 << ", ";
+    streamSpeed << currentState.speeds.speed2;
+
+    messageString = streamSpeed.str();
+    message = QString::fromStdString(messageString);
+    messageText = message;
+    QMetaObject::invokeMethod(MainForm, "showMessage", Q_RETURN_ARG(QVariant, returnedValue), Q_ARG(QVariant, messageText));
+
+    ostringstream streamActuator;
+    streamActuator << "Actuators: ";
+    streamActuator << currentState.acts.act1 << ", ";
+    streamActuator << currentState.acts.act2;
+
+    messageString = streamActuator.str();
+    message = QString::fromStdString(messageString);
+    messageText = message;
+    QMetaObject::invokeMethod(MainForm, "showMessage", Q_RETURN_ARG(QVariant, returnedValue), Q_ARG(QVariant, messageText));
 
 
     // Send previous temp and speed values to QML side for the graphs
     QList<int> graphVelocities;
 
-    for(int i=0; i<showStateNumber; i++)
+    for(int i = 0; i < showStateNumber; i++)
     {
         graphVelocities.append(0);
     }
@@ -108,6 +150,8 @@ void GUI::stateHistoryUpdated()
     graphTemperatures4.clear();
     graphSpeeds1.clear();
     graphSpeeds2.clear();
+    graphActuators1.clear();
+    graphActuators2.clear();
     unsigned lastElementsNum = stateHistory.GetSize() > showStateNumber ? showStateNumber : stateHistory.GetSize();
     auto it = stateHistory.End() - lastElementsNum;
     for(; it != stateHistory.End(); it++)
@@ -119,6 +163,9 @@ void GUI::stateHistoryUpdated()
 
         graphSpeeds1.append(it->speeds.speed1);
         graphSpeeds2.append(it->speeds.speed2);
+
+        graphActuators1.append(it->acts.act1 / 2);
+        graphActuators2.append(it->acts.act2 / 2);
     }
 
     qmlContext.setContextProperty(QStringLiteral("historyGraphTemperatures1"), QVariant::fromValue(graphTemperatures1));
@@ -129,7 +176,8 @@ void GUI::stateHistoryUpdated()
     qmlContext.setContextProperty(QStringLiteral("historyGraphSpeeds1"), QVariant::fromValue(graphSpeeds1));
     qmlContext.setContextProperty(QStringLiteral("historyGraphSpeeds2"), QVariant::fromValue(graphSpeeds2));
 
-    emit historyContextUpdated();
+    qmlContext.setContextProperty(QStringLiteral("historyGraphAct1"), QVariant::fromValue(graphActuators1));
+    qmlContext.setContextProperty(QStringLiteral("historyGraphAct2"), QVariant::fromValue(graphActuators2));
 
     // Send current measured values to QML for show the current measured values
     qmlContext.setContextProperty(QStringLiteral("valueMeasuredTemp1"), QVariant::fromValue(currentState.temps.temp1));
@@ -142,6 +190,20 @@ void GUI::stateHistoryUpdated()
 
     qmlContext.setContextProperty(QStringLiteral("valueMeasuredActuator1"), QVariant::fromValue(currentState.acts.act1));
     qmlContext.setContextProperty(QStringLiteral("valueMeasuredActuator2"), QVariant::fromValue(currentState.acts.act2));
+
+    // Set status in QML
+    QVariant newState = true;
+    QMetaObject::invokeMethod(MainForm, "setIsRunning", Q_RETURN_ARG(QVariant, returnedValue), Q_ARG(QVariant, newState));
+    QMetaObject::invokeMethod(MainForm, "setIsConnected", Q_RETURN_ARG(QVariant, returnedValue), Q_ARG(QVariant, newState));
+
+    auto ColumnDiagTemp = findItemByName("columnDiagTemp");
+    QMetaObject::invokeMethod(ColumnDiagTemp, "setColumnTemps", Q_RETURN_ARG(QVariant, returnedValue),
+                              Q_ARG(QVariant, currentState.temps.temp1),
+                              Q_ARG(QVariant, currentState.temps.temp2),
+                              Q_ARG(QVariant, currentState.temps.temp3),
+                              Q_ARG(QVariant, currentState.temps.temp4));
+
+    emit historyContextUpdated();
 }
 
 void GUI::stoppedSlot()
@@ -152,9 +214,10 @@ void GUI::stoppedSlot()
     auto MainForm = findItemByName("MainForm");
     QVariant returnedValue;
     QVariant messageText = message;
-    QMetaObject::invokeMethod(MainForm, "showMessage",
-        Q_RETURN_ARG(QVariant, returnedValue),
-        Q_ARG(QVariant, messageText));
+    QMetaObject::invokeMethod(MainForm, "showMessage", Q_RETURN_ARG(QVariant, returnedValue), Q_ARG(QVariant, messageText));
+
+    QVariant newState = false;
+    QMetaObject::invokeMethod(MainForm, "setIsRunning", Q_RETURN_ARG(QVariant, returnedValue), Q_ARG(QVariant, newState));
 }
 
 void GUI::disconnectedSlot()
@@ -165,9 +228,10 @@ void GUI::disconnectedSlot()
     auto MainForm = findItemByName("MainForm");
     QVariant returnedValue;
     QVariant messageText = message;
-    QMetaObject::invokeMethod(MainForm, "showMessage",
-        Q_RETURN_ARG(QVariant, returnedValue),
-        Q_ARG(QVariant, messageText));
+    QMetaObject::invokeMethod(MainForm, "showMessage", Q_RETURN_ARG(QVariant, returnedValue), Q_ARG(QVariant, messageText));
+
+    QVariant newState = false;
+    QMetaObject::invokeMethod(MainForm, "setIsConnected", Q_RETURN_ARG(QVariant, returnedValue), Q_ARG(QVariant, newState));
 }
 
 void GUI::plotData(){
@@ -192,9 +256,7 @@ void GUI::testMessage(QString message)
 
     QVariant returnedValue;
     QVariant messageText = message;
-    QMetaObject::invokeMethod(MainForm, "showMessage",
-        Q_RETURN_ARG(QVariant, returnedValue),
-        Q_ARG(QVariant, messageText));
+    QMetaObject::invokeMethod(MainForm, "showMessage", Q_RETURN_ARG(QVariant, returnedValue), Q_ARG(QVariant, messageText));
 }
 
 void GUI::receiveConnectSignal()
@@ -308,21 +370,6 @@ int GUI::getValueFromQML(const QString &itemName, const char *invokeMethodName)
     int value = returnedValue.toInt();
     return value;
 }
-
-/*void GUI::stoppedSlot()
-{
-    std::cout << "HVAC stopped" << std::endl;
-    //TODO
-    // write stuff to the message box or anywhere on GUI
-}
-
-void GUI::disconnectedSlot()
-{
-    std::cout << "Disconnected" << std::endl;
-    //TODO
-    // write stuff to the message box or anywhere on GUI
-}*/
-
 
 QQuickItem* GUI::findItemByName(const QString& name)
 {

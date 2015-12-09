@@ -5,8 +5,8 @@ import QtQuick.Dialogs 1.2
 
 ApplicationWindow {
     title: qsTr("Telemetry")
-    width: 1400
-    height: 600
+    width: 1800
+    height: 985
     visible: true
 
     objectName: "ApplicationWindow"

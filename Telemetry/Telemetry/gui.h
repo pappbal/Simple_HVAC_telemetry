@@ -96,9 +96,9 @@ private:
 
     QQmlContext &qmlContext;
 
-    //GUITester tester;
+    GUITester tester;
 
-    const unsigned showStateNumber = 40;
+    const unsigned showStateNumber = 80;
     QList<double> graphTemperatures1;
     QList<double> graphTemperatures2;
     QList<double> graphTemperatures3;
@@ -106,6 +106,9 @@ private:
 
     QList<int> graphSpeeds1;
     QList<int> graphSpeeds2;
+
+    QList<int> graphActuators1;
+    QList<int> graphActuators2;
 
     int getValueFromQML(const QString& itemName, const char *invokeMethodName);
 

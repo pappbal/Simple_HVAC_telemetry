@@ -19,6 +19,19 @@ Item {
     property alias buttonTemp3: temperatureSettingsID.buttonTemp3;
     property alias buttonTemp4: temperatureSettingsID.buttonTemp4;
 
+    property bool isRunning: false;
+    property bool isConnected: false;
+
+    function setIsRunning(value)
+    {
+        isRunning = value;
+    }
+
+    function setIsConnected(value)
+    {
+        isConnected = value;
+    }
+
     function showMessage(messageText)
     {
         eventLogModel.append({message: messageText});
@@ -38,62 +51,34 @@ Item {
                 id: columnLayout1
                 anchors.fill: parent
 
-                Button {
-                    id: startButton
-
-                    style: ButtonStyle {
-                        background: Rectangle {
-                            implicitWidth: 130
-                            implicitHeight: 40
-                            border.width: control.activeFocus ? 2 : 1
-                            border.color: "#888"
-                            radius: 4
-                            gradient: Gradient {
-                                GradientStop { position: 0 ; color: control.pressed ? "#0c0" : "#0e0" }
-                                GradientStop { position: 1 ; color: control.pressed ? "#0a0" : "#0c0" }
-                            }
+                RowLayout
+                {
+                    ColumnLayout
+                    {
+                        StartButton
+                        {
+                            id: startButton
                         }
 
-                        label: Text
+                        StopButton
                         {
-                            color: "white"
-                            text: "START"
-                            anchors.centerIn: parent
-                            horizontalAlignment: Text.AlignHCenter
-                            verticalAlignment: Text.AlignVCenter
-                            font.pointSize: 12
-                            font.bold: true
-
+                            id: stopButton
                         }
                     }
-                }
 
-                Button {
-                    id: stopButton
-                    style: ButtonStyle {
-                        background: Rectangle {
-                            implicitWidth: 130
-                            implicitHeight: 40
-                            border.width: control.activeFocus ? 2 : 1
-                            border.color: "#888"
-                            radius: 4
-                            gradient: Gradient {
-                                GradientStop { position: 0 ; color: control.pressed ? "#d00" : "#f00" }
-                                GradientStop { position: 1 ; color: control.pressed ? "#b00" : "#d00" }
-                            }
-                        }
+                    GroupBox
+                    {
+                        title: "Status"
 
-                        label: Text
+                        Layout.fillWidth: true
+
+                        ColumnLayout
                         {
-                            color: "white"
-                            text: "STOP"
-                            anchors.centerIn: parent
-                            horizontalAlignment: Text.AlignHCenter
-                            verticalAlignment: Text.AlignVCenter
-                            font.pointSize: 12
-                            font.bold: true
+                            Text{ Layout.fillHeight: true; font.bold: true; color: isConnected ? "green" : "red"; text: isConnected ? "Connected" : "Disconnected" }
+                            Text{ Layout.fillHeight: true; font.bold: true; color: isRunning ? "green" : "red"; text: isRunning ? "Running" : "Stopped" }
                         }
                     }
+
                 }
 
                 Text {
@@ -153,56 +138,63 @@ Item {
             }
         }
 
-        GroupBox
+        ColumnLayout
         {
-            id: middleGroup
-            Layout.fillHeight: true
-            Layout.fillWidth: true
+            id: columnLayout2
 
-            ColumnLayout
+            Item
             {
-                id: columnLayout2
-
-                SetPID
-                {
-                    id: setPid
-                    Layout.preferredHeight: 125;
-                }
-
-                TemperatureSettings
-                {
-                    id: temperatureSettingsID
-                    Layout.preferredHeight: 160;
-                }
-
-                MeasuredValues
-                {
-                    id: measuredValuesID
-                    Layout.preferredHeight: 200;
-
-                    measuredTemp1: valueMeasuredTemp1
-                    measuredTemp2: valueMeasuredTemp2
-                    measuredTemp3: valueMeasuredTemp3
-                    measuredTemp4: valueMeasuredTemp4
-
-                    measuredSpeed1: valueMeasuredSpeed1
-                    measuredSpeed2: valueMeasuredSpeed2
-
-                    measuredActuator1: valueMeasuredActuator1
-                    measuredActuator2: valueMeasuredActuator2
-
-                }
-
+                Layout.preferredHeight: 10;
             }
+
+            SetPID
+            {
+                id: setPid
+                Layout.preferredHeight: 161;
+            }
+
+            TemperatureSettings
+            {
+                id: temperatureSettingsID
+                Layout.preferredHeight: 195;
+            }
+
+            MeasuredValues
+            {
+                id: measuredValuesID
+                Layout.preferredHeight: 150;
+
+                measuredTemp1: valueMeasuredTemp1
+                measuredTemp2: valueMeasuredTemp2
+                measuredTemp3: valueMeasuredTemp3
+                measuredTemp4: valueMeasuredTemp4
+
+                measuredSpeed1: valueMeasuredSpeed1
+                measuredSpeed2: valueMeasuredSpeed2
+
+                measuredActuator1: valueMeasuredActuator1
+                measuredActuator2: valueMeasuredActuator2
+            }
+
+            GroupBox
+            {
+                title: "Temperatures column diagram"
+
+                ColumnDiagramTemperature{
+                    objectName: "columnDiagTemp"
+                    id: columnDiagramTempID
+
+                    width: 565
+                    height: 300//500
+
+                }
+            }
+
         }
 
         ColumnLayout
         {
             id: rightColumn
-            anchors.right: parent.right
-            anchors.top: parent.top
-            anchors.bottom: parent.bottom
-            anchors.left: middleGroup.right
 
             GroupBox
             {
@@ -270,14 +262,12 @@ Item {
 
                     HistoryGraphTemperature {
                         id: historyGraphTemperature
-                        width: 300
-                        height: 220
+
                         objectName: "historyGraphTemperature"
 
                         Layout.fillWidth: true
-                        Layout.minimumWidth: 200
-                        Layout.preferredWidth: 400
-                        Layout.minimumHeight: 150
+                        Layout.preferredWidth: 800
+                        Layout.preferredHeight: 250
 
                         graphVelocities: historyGraphVelocity
 
@@ -332,26 +322,75 @@ Item {
 
                     HistoryGraphSpeed {
                         id: historyGraphSpeed
-                        width: 300
-                        height: 220
+
                         objectName: "historyGraphSpeed"
 
                         Layout.fillWidth: true
-                        Layout.minimumWidth: 200
-                        Layout.preferredWidth: 400
-                        Layout.minimumHeight: 150
+                        Layout.preferredWidth: 800
+                        Layout.preferredHeight: 270
 
                         graphVelocities: historyGraphVelocity
 
                         graphSpeed1: historyGraphSpeeds1
                         graphSpeed2: historyGraphSpeeds2
                     }
+                }
+            }
 
-                    Item
+            GroupBox
+            {
+                title: "Actuators"
+                id: actuators
+
+                ColumnLayout
+                {
+                    RowLayout
                     {
-                        id: graphsPlaceholder
+                        id: actuatorRadioButtons
                         Layout.fillWidth: true
-                        Layout.fillHeight: true
+
+                        anchors.bottom: historyGraphTemperature.top
+
+                        RadioButton
+                        {
+                            id: selectAct1
+                            text: "Actuator1"
+                            checked: true
+
+                            onClicked:
+                            {
+                                historyGraphActuator.showAct1 = !historyGraphActuator.showAct1;
+                                historyGraphActuator.requestPaint();
+                            }
+                        }
+                        RadioButton
+                        {
+                            id: selectAct2
+                            text: "Actuator2"
+                            checked: true
+
+
+                            onClicked:
+                            {
+                                historyGraphActuator.showAct2 = !historyGraphActuator.showAct2;
+                                historyGraphActuator.requestPaint();
+                            }
+                        }
+                    }
+
+                    HistoryGraphActuator {
+                        id: historyGraphActuator
+
+                        objectName: "historyGraphActuator"
+
+                        Layout.fillWidth: true
+                        Layout.preferredWidth: 800
+                        Layout.preferredHeight: 270
+
+                        graphVelocities: historyGraphVelocity
+
+                        graphAct1: historyGraphAct1
+                        graphAct2: historyGraphAct2
                     }
                 }
             }

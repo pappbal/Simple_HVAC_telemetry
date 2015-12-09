@@ -27,6 +27,20 @@ Canvas {
         drawHorizontalLine(context, 25.0, "black", 5.0)
         drawHorizontalLine(context, 30.0, "black", 5.0)
         drawHorizontalLine(context, 35.0, "black", 5.0)
+        drawHorizontalLine(context, 40.0, "black", 5.0)
+        drawHorizontalLine(context, 45.0, "black", 5.0)
+
+        context.font="normal 12px sans-serif";
+        context.strokeText("0", 3, height - 20 - 2);
+        context.strokeText("5", 3, height - 20 - 2 - 5 * 5);
+        context.strokeText("10", 3, height - 20 - 2 - 5 * 10);
+        context.strokeText("15", 3, height - 20 - 2 - 5 * 15);
+        context.strokeText("20", 3, height - 20 - 2 - 5 * 20);
+        context.strokeText("25", 3, height - 20 - 2 - 5 * 25);
+        context.strokeText("30", 3, height - 20 - 2 - 5 * 30);
+        context.strokeText("35", 3, height - 20 - 2 - 5 * 35);
+        context.strokeText("40", 3, height - 20 - 2 - 5 * 40);
+        context.strokeText("45", 3, height - 20 - 2 - 5 * 45);
 
 
         // Az adatsorok megrajzolása (a graphTimestamps értékét jelenleg nem használjuk).
