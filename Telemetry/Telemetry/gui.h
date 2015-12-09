@@ -13,7 +13,20 @@
 /*! \mainpage Overview
  *
  * \section Introduction
- * This is the introduction.
+ *
+ * This is a diagnostic application for the embedded HVAC node. Requirements for this application are the follows: show
+ * measured temperature values, measured fan speed values and actuator values for diagnostic purposes, and let the user define the controller parameters
+ * (P, I, D) and temperature setpoints, as well as start and stop the temperature controlling.
+ *
+ * All current values (temperatures, speeds, actuators) are visible on the user interface in text format. In case of current temperature values
+ * a column diagram is shown as well to make it more expressive. Prevoius values of temperatures, speeds and actuators displayed on three
+ * history graphs: one for the temperatures, one for the speeds, and one for the actuator values. Display can be switched on / switched off for
+ * each value by checking / unchecking radio buttons. The user interface also informs the user about the state of the connection to the device
+ * (which can be "Connected" or "Unconnected") and about the state of the device itself (which can be "Running" or "Stopped").
+ *
+ * File menu serves to connect or unconnect the device. Start and Stop buttons placed on the graphical user interface to start and stop the teperature controlling.
+ * Textfields are provided to set P, I, D parameters and temperature setpoints. The new values will be sent to the device only if the corresponding Set button is pushed.
+ *
  * \image html image_full.png
  * 
  *
