@@ -82,115 +82,108 @@ signals:
 };
 
 /**
- * @brief Ez az osztály teremt kapcsolatot a QML-ben megírt grafikus felhasználó felület és a program többi része között.
- *
- * Konstruktorában referenciát kap az eszköz jelenlegi és múltbéli állapotait leíró StateHistory típusú objektumra.
- * Amennyiben frissül az eszköz állapota, a referált StateHistory objektum emittál egy jelzést (newData()),
- * amelyre a GUI osztály konstruktora feliratkoztatja a konstruált GUI objektumot (stateHistoryUpdated()).
- * A jelzés elkapásával értesül a GUI arról, hogy a felhasználói felületen kijelzett adatokat (mért értkek, állapot) frissíteni kell.
- * A legfrissebb állapot értékei és a korábbi állapotok értékei is lekérhetőek a StateHistory-ra vonatkozó referencián keresztül.
- *
- * Az eszközt reprezentáló Proxy osztály felé egy signal és két slot jelenti az interfészt.
- * A signalCommand() szignál küldi el a felhasználótól érkező parancs kódját és paraméterét, erre a jelzésre a Proxy feliratkozik.
- * A stoppedSlot() slot-on keresztül tudja jelzni a Proxy, hogy az eszközön nem fut a szabályozás. A felhasználói felületen ennek megflelően frissól az állapot.
- * A disconnectedSlot()-on keresztül tudja jelezni a Proxy, hogy nem kapcsolódik az eszközhöz. A felhasználói felületen ennek megflelően frissól az állapot.
- *
- * Ezen kívül egy szignál és számos slot szolgál a QML oldallal való kommunikációra.
+ * @brief Represents a link between QML and other parts of the program.
  */
 
 class GUI : public QObject
 {
     Q_OBJECT
 private:
-    /** Konstans referencia az eszköz jelenlegi és korábbi állapotait tartalmazó StateHistory objektumra. */
+    /** Constant reference to a StateHistory object */
     const StateHistory& stateHistory;
 
-    /** @brief Segédfüggvény QML elemek rekurzív megkeresésére.
-     *  @param name Az objectName (QML elemek tulajdonsága), amit keresünk.
+    /** @brief Finds a QML item in a recursive way
+     *  @param name Item's objectName (QML property)
+     *  @return Pointer to the item, nullptr if not found
      */
     QQuickItem* findItemByName(const QString& name);
 
-    /** @brief Segédfüggvény QML elemek rekurzív megkeresésére.
-     *  @param rootObject A QML gyökérelem, amivel a keresést kezdjük.
-     *  @param name Az objectName (QML elemek tulajdonsága), amit keresünk.
+    /** @brief Finds a QML item in a recursive way
+     *  @param rootObject Starting element of the search
+     *  @param name Item's objectName (QML property)
+     *  @return Pointer to the item, nullptr if not found
      */
     QQuickItem* findItemByName(QObject *rootObject, const QString& name);
 
-    /** @brief Segédfüggvény QML elemek rekurzív megkeresésére.
-     *  A FindItemByName(QObject *rootObject, const QString& name) használja.
-     *  @param nodes Azon node-ok listája, melyekben (rekurzívan) az adott nevű elemet keressük.
-     *  @param name  Az objectName (QML elemek tulajdonsága), amit keresünk.
+    /** @brief Finds a QML item in a recursive way
+     *
+     *  Used by FindItemByName(QObject *rootObject, const QString& name)
+     *
+     *  @param nodes List of nodes in which the search will be done
+     *  @param name Item's objectName (QML property)
+     *  @param rootObject Starting element of the searching
+     *  @return Pointer to the item, nullptr if not found
      */
     QQuickItem* findItemByName(QList<QObject*> nodes, const QString& name);
 
-    /** Főablak objektum */
+    /** Main window object */
     QQuickItem* mainWindowObject;
 
-    /** QML környezet */
+    /** QML context object */
     QQmlContext &qmlContext;
 
     // TODO: remove
     GUITester tester;
 
-    /** Az időgrafikonokon kijelzett értékek száma.
-     *  Ennyi darab visszamenőleges érték kerül elküldésre a QML-nek az idődiagramok megrajzolásához */
+    /** Number of shown values on history graphs
+     *  Last showStateNumber number of values (temperatures, speeds and actuators) will be send to the history graphs to show them
+     */
     const unsigned showStateNumber = 80;
 
-    /** Az 1. hőmérő elküldendő múltbéli értékeit tartalmazó vektor. */
+    /** Vector for first temperature sensor's last showStateNumber number of values */
     QList<double> graphTemperatures1;
 
-    /** A 2. hőmérő elküldendő múltbéli értékeit tartalmazó vektor. */
+    /** Vector for second temperature sensor's last showStateNumber number of values */
     QList<double> graphTemperatures2;
 
-    /** A 3. hőmérő elküldendő múltbéli értékeit tartalmazó vektor. */
+    /** Vector for third temperature sensor's last showStateNumber number of values */
     QList<double> graphTemperatures3;
 
-    /** A 4. hőmérő elküldendő múltbéli értékeit tartalmazó vektor. */
+    /** Vector for fourth temperature sensor's last showStateNumber number of values */
     QList<double> graphTemperatures4;
 
-    /** Az 1. ventillátor-sebesség elküldendő múltbéli értékeit tartalmazó vektor. */
+    /** Vector for first fan's last showStateNumber number of speed values */
     QList<int> graphSpeeds1;
 
-    /** A 2. ventillátor-sebesség elküldendő múltbéli értékeit tartalmazó vektor. */
+    /** Vector for second fan's last showStateNumber number of speed values */
     QList<int> graphSpeeds2;
 
-    /** Az 1. beavatkozó elküldendő múltbéli értékeit tartalmazó vektor. */
+    /** Vector for first fan's last showStateNumber number of actuator values */
     QList<int> graphActuators1;
 
-    /** A 2. beavatkozó elküldendő múltbéli értékeit tartalmazó vektor. */
+    /** Vector for second fan's last showStateNumber number of actuator values */
     QList<int> graphActuators2;
 
-    /** @brief QML vezérlőben tárolt adat lekérdezésére.
+    /** @brief Gets an integer value stored in a QML control
      *
-     *  A felhasználó által beállított célhőmérsékletek és szabályozó paraméterek (PID) lekérdezésére szolgál.
+     *  Used for the query of user defined values (temperature setpoints and controller parameters).
      *
-     * @param itemName A QML vezérlő objectName tulajdonsága (hőmérsékletekhez "temperatureSettings", PID paraméterekhez "setPID")
-     * @param invokeMethodName Az itemName vezérlő meghívni kívánt függvénye, amely visszaadja a kért adatot
-     * @return A lekérdezett adat
+     * @param itemName QML control's objectName property ( "temperatureSettings" in case of temperature setpoint values and "setPID" in case of controller parameter values)
+     * @param invokeMethodName Name of control itemName's function which returns the needed value
+     * @return Integer value stored in the given QML control
      */
     int getValueFromQML(const QString& itemName, const char *invokeMethodName);
 
 public:
-    /** @brief Konstruktor
-     *  @param rootObject Gyökérobjektum
-     *  @param qmlContext QML környezet objektuma
-     *  @param stateHistory Az eszköz jelenlegi és korábbi állapotait tároló objektum
+    /** @brief Constructor
+     *  @param rootObject Root object
+     *  @param qmlContext QML context object
+     *  @param stateHistory StateHistory object
      */
     GUI(QObject *rootObject, QQmlContext& qmlContext, StateHistory& stateHistory);
 
-    /** @brief Beregisztrálja a historyContextUpdated szignált a QML Canvas elemeihez
-     *  @param rootObject Gyökérobjektum
+    /** @brief Connects signal historyContextUpdated to QML Canvas items' onPaint functions
+     *  @param rootObject Root object
      *  @see historyContextUpdated()
      */
     void ConnectQmlSignals(QObject *rootObject);
 
 signals:
-    /** @brief A felhasználótól érkezett parancs jelzése a többi programrész felé.
+    /** @brief Sends a user command which received from QML
      *
-     *  @param pid_ID Parancs azonosító (lehetséges értékeihez ld. application.h konstansait)
-     *  @param data A parancshoz tartozó érték (pl. beállított hőmérsékletérték)
+     *  @param pid_ID Command ID (see application.h for the proper values)
+     *  @param data Command parameter
      *
-     *  @see stateHistoryUpdated()
      *  @see receiveConnectSignal()
      *  @see receiveDisconnectSignal()
      *  @see receiveStartSignal()
@@ -202,15 +195,16 @@ signals:
      *  @see receiveSetTemp2Signal()
      *  @see receiveSetTemp3Signal()
      *  @see receiveSetTemp4Signal()
+     *
+     *  @note Proxy must be connected to this signal to get notified about user inputs
      */
     void signalCommand(qint8 pid_ID, qint32 data);
 
-    /** Jelzés a QML Canvas vezérlőinek, hogy rajzolják újra magukat.
+    /** @brief Signal towards QML Canvas items to draw themselves
      *
-     *  Hatására frissülnek a hőmérsékletek, ventillátor-sebességek és beavatkozók idődiagramjai,
-     *  valamint a hőmérsékletek oszlopdiagramja.
-     *  Az esemény beregisztrálását a ConnectQmlSignals metódus végzi el.
-     *  Ezt a jelzést stateHistoryUpdated() metódus váltja ki.
+     *  After this signal the history graphs and column diagram will be refreshed on the user interface.
+     *  Connected to QML side by method ConnectQmlSignals.
+     *  Emitted by method stateHistoryUpdated.
      *
      *  @see ConnectQmlSignals()
      *  @see stateHistoryUpdated()
@@ -219,127 +213,123 @@ signals:
 
 public slots:
     // From StateHistory
-    /** Lekérdezi a statHistory-tól az eszköz aktuális állapotát, és kiírja a standard outputra. */
+    /** @brief Prints the current state onto the standard output
+     *
+     *  Current state asked from stateHistory.
+     *
+     *  @see StateHistory
+     */
     void plotData();
 
-    /** Lekérdezi a statHistory-tól az eszköz aktuális és korábbi állapotait, majd frissíti a felhasználói felületet. */
+    /** @brief Sends data to the QML side
+     *
+     *  Data includes current state's measured values and showStateNumber number of previous states' measured values.
+     *  Current and previous states asked from stateHistory.
+     *  Emits signal historyContextUpdated.
+     *
+     *  @see showStateNumber
+     *  @see StateHistory
+     *  @see historyContextUpdated()
+     */
     void stateHistoryUpdated();
 
     // From Proxy
-    /** Az eszköz állapotát "Stopped" állapotra váltja a felhasználói felületen */
+    /** Sets the state to "Stopped" on the user interface */
     void stoppedSlot();
 
-    /** Az eszköz kapcsolódási állapotát "Disconnected" állapotra váltja a felhasználói felületen. */
+    /** Sets the state of connection to "Disconnected" on the user interface */
     void disconnectedSlot();
 
     // From QML
-    /** @brief Kapcsolódás kezdeményezése.
+    /** @brief Emits signalCommand with command ID ID_connect.
      *
-     *  QML esemény hatására hívódik meg.
-     *  Emittálja a signalCommand jelzést.
+     *  Called by the effect of a QML signal which is emitted when Connect selected in the File menu by the user.
      *
      *  @see signalCommand()
      */
     void receiveConnectSignal();
 
-    /** @brief Kapcsolatbontás kezdeményezése.
+    /** @brief Emits signalCommand with command ID ID_disconnect.
      *
-     *  QML esemény hatására hívódik meg.
-     *  Emittálja a signalCommand jelzést.
+     *  Called by the effect of a QML signal which is emitted when Disconnect selected in the File menu by the user.
      *
      *  @see signalCommand()
      */
     void receiveDisconnectSignal();
 
-    /** @brief Szabályozás elindításának kezdeményezése.
+    /** @brief Emits signalCommand with command ID ID_start.
      *
-     *  QML esemény hatására hívódik meg.
-     *  Emittálja a signalCommand jelzést.
+     *  Called by the effect of a QML signal which is emitted when Start button is pushed by the user.
      *
      *  @see signalCommand()
      */
     void receiveStartSignal();
 
-    /** @brief Szabályozás leállításának kezdeményezése.
+    /** @brief Emits signalCommand with command ID ID_stop.
      *
-     *  QML esemény hatására hívódik meg.
-     *  Emittálja a signalCommand jelzést.
+     *  Called by the effect of a QML signal which is emitted when Stop button is pushed by the user.
      *
      *  @see signalCommand()
      */
     void receiveStopSignal();
 
-    /** @brief P paraméter beállítása.
+    /** @brief Gets the value of parameter P from QML and emits signalCommand with command ID ID_pid_p and with new value of P.
      *
-     *  QML esemény hatására hívódik meg.
-     *  Lekérdezi a beállított értéket a getValueFromQML metódussal.
-     *  Emittálja a signalCommand jelzést.
+     *  Called by the effect of a QML signal which is emitted when Set button for controller parameter P is pushed by the user.
      *
      *  @see getValueFromQML()
      *  @see signalCommand()
      */
     void receiveSetPSignal();
 
-    /** @brief I paraméter beállítása.
+    /** @brief Gets the value of parameter I from QML and emits signalCommand with command ID ID_pid_o and with new value of I.
      *
-     *  QML esemény hatására hívódik meg.
-     *  Lekérdezi a beállított értéket a getValueFromQML metódussal.
-     *  Emittálja a signalCommand jelzést.
+     *  Called by the effect of a QML signal which is emitted when Set button for controller parameter I is pushed by the user.
      *
      *  @see getValueFromQML()
      *  @see signalCommand()
      */
     void receiveSetISignal();
 
-    /** @brief D paraméter beállítása.
+    /** @brief Gets the value of parameter D from QML and emits signalCommand with command ID ID_pid_d and with new value of D.
      *
-     *  QML esemény hatására hívódik meg.
-     *  Lekérdezi a beállított értéket a getValueFromQML metódussal.
-     *  Emittálja a signalCommand jelzést.
+     *  Called by the effect of a QML signal which is emitted when Set button for controller parameter D is pushed by the user.
      *
      *  @see getValueFromQML()
      *  @see signalCommand()
      */
     void receiveSetDSignal();
 
-    /** @brief Alapjel beállítása az 1-es hőmérséklethez.
+    /** @brief Gets the setpoint for first temperature from QML and emits signalCommand with command ID ID_req_temp_1 and with new value of setpoint.
      *
-     *  QML esemény hatására hívódik meg.
-     *  Lekérdezi a beállított értéket a getValueFromQML metódussal.
-     *  Emittálja a signalCommand jelzést.
+     *  Called by the effect of a QML signal which is emitted when Set button for first temperature's setpoint is pushed by the user.
      *
      *  @see getValueFromQML()
      *  @see signalCommand()
      */
     void receiveSetTemp1Signal();
 
-    /** @brief Alapjel beállítása az 2-es hőmérséklethez.
+    /** @brief Gets the setpoint for second temperature from QML and emits signalCommand with command ID ID_req_temp_1 and with new value of setpoint.
      *
-     *  QML esemény hatására hívódik meg.
-     *  Lekérdezi a beállított értéket a getValueFromQML metódussal.
-     *  Emittálja a signalCommand jelzést.
+     *  Called by the effect of a QML signal which is emitted when Set button for second temperature's setpoint is pushed by the user.
      *
      *  @see getValueFromQML()
      *  @see signalCommand()
      */
     void receiveSetTemp2Signal();
 
-    /** @brief Alapjel beállítása az 3-as hőmérséklethez.
+    /** @brief Gets the setpoint for third temperature from QML and emits signalCommand with command ID ID_req_temp_1 and with new value of setpoint.
      *
-     *  QML esemény hatására hívódik meg.
-     *  Lekérdezi a beállított értéket a getValueFromQML metódussal.
-     *  Emittálja a signalCommand jelzést.
+     *  Called by the effect of a QML signal which is emitted when Set button for third temperature's setpoint is pushed by the user.
      *
      *  @see getValueFromQML()
      *  @see signalCommand()
      */
     void receiveSetTemp3Signal();
 
-    /** @brief Alapjel beállítása az 4-es hőmérséklethez.
+    /** @brief Gets the setpoint for fourth temperature from QML and emits signalCommand with command ID ID_req_temp_1 and with new value of setpoint.
      *
-     *  QML esemény hatására hívódik meg.
-     *  Lekérdezi a beállított értéket a getValueFromQML metódussal.
-     *  Emittálja a signalCommand jelzést.
+     *  Called by the effect of a QML signal which is emitted when Set button for fourth temperature's setpoint is pushed by the user.
      *
      *  @see getValueFromQML()
      *  @see signalCommand()
