@@ -18,8 +18,11 @@
  * measured temperature values, measured fan speed values and actuator values for diagnostic purposes, and let the user define the controller parameters
  * (P, I, D) and temperature setpoints, as well as start and stop the temperature controlling.
  *
+ * \section GUI
+ * This is the overview of the GUI.
+ *
  * All current values (temperatures, speeds, actuators) are visible on the user interface in text format. In case of current temperature values
- * a column diagram is shown as well to make it more expressive. Prevoius values of temperatures, speeds and actuators displayed on three
+ * a column diagram is shown as well to make it more expressive. Previous values of temperatures, speeds and actuators displayed on three
  * history graphs: one for the temperatures, one for the speeds, and one for the actuator values. Display can be switched on / switched off for
  * each value by checking / unchecking radio buttons. The user interface also informs the user about the state of the connection to the device
  * (which can be "Connected" or "Unconnected") and about the state of the device itself (which can be "Running" or "Stopped").
@@ -30,11 +33,47 @@
  * \image html image_full.png
  * 
  *
- * \section HVAC
- * This is the section of the embedded HVAC node
+ * \section HVAC - Heating Ventillation Air Conditioning system
+ * This is the overview of the embedded software and hardware.
+ *
+ * The embedded system is controlled by an STM32F4 Discovery board. 4 fans can be connected to the controller through an H-bridge, each of them can be controlled individually with PWM signals.
+ * 4 temperature sensors can be used, each of them belongs to a fan, communicate through SPI with the microprocessor. One PID controller is implemented which controls all fans based on their thermometer seperatelly,
+ * but with the same PID parameters, thus 4 different setpoints can be applied on the system at the same time.
+ * The system communicates through virtual com port with the PC. The messages are the follows with the appropiate header ID:
+ *
+ * NAME                             ID
+ * Thermometer 1 measured value     1
+ * Thermometer 2 measured value     2
+ * Thermometer 3 measured value     3
+ * Thermometer 4 measured value     4
+ * Fan 1 speed                      5
+ * Fan 2 speed                      6
+ * Actuator 1                       7
+ * Actuator 2                       8
+ * P parameter                      9
+ * I parameter                      10
+ * D parameter                      11
+ * Requested temperature 1          12
+ * Requested temperature 2          13
+ * Requested temperature 3          14
+ * Requested temperature 4          15
+ * START                            16
+ * STOP                             17
+ * HVAC is in stopped state         21
+ *
+ *It is seen that the embedded system sends out temperature values, fans's actual frequencies, the PID's actuator values and a signal indicating the HVAC is in stopped state.
+ *The system receives START/STOP messages, the P,I,D and setpoints values.
+ *
+ *Currently 2 fans are installed in the system, that is why only 2 fan speed and 2 actuator message are defined.
+ *
  * 
  * \section Communication
- * This is the overview of the Communication mechanism
+ * This is the overview of the Communication mechanism.
+ *
+ * The communcation happens through a virtual COM port which is handled as a normal serial port, the OS does the translation between USB and serial protocols.
+ * When a full message received, the communication modul sends a signal to the proxy indication a new message is waiting for being parsed.
+ * When a package is ready to be sent the proxy passes a package to the communication module which then composes the frames from the packet and sends them out to the HVAC.
+ *
  * \image html image_communication.png
  *
  *
