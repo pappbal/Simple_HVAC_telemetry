@@ -279,6 +279,7 @@ public slots:
      *  Data includes current state's measured values and showStateNumber number of previous states' measured values.
      *  Current and previous states asked from stateHistory.
      *  Emits signal historyContextUpdated.
+     *  Sets the state of device to "Running" and the state of connection to "Connected" on the user interface.
      *
      *  @see showStateNumber
      *  @see StateHistory
@@ -290,8 +291,11 @@ public slots:
     /** Sets the state to "Stopped" on the user interface */
     void stoppedSlot();
 
-    /** Sets the state of connection to "Disconnected" on the user interface */
+    /** Sets the state of connection to "Disconnected" and the state of device to "Stopped" on the user interface */
     void disconnectedSlot();
+
+    /** Sets the state of connection to "Connected" on the user interface */
+    void connectedSlot();
 
     // From QML
     /** @brief Emits signalCommand with command ID ID_connect.

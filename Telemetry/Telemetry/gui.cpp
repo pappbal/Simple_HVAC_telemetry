@@ -227,6 +227,21 @@ void GUI::disconnectedSlot()
 
     QVariant newState = false;
     QMetaObject::invokeMethod(MainForm, "setIsConnected", Q_RETURN_ARG(QVariant, returnedValue), Q_ARG(QVariant, newState));
+    QMetaObject::invokeMethod(MainForm, "setIsRunning", Q_RETURN_ARG(QVariant, returnedValue), Q_ARG(QVariant, newState));
+}
+
+void GUI::connectedSlot()
+{
+    string messageString = "Connected";
+    QString message = QString::fromStdString(messageString);
+
+    auto MainForm = findItemByName("MainForm");
+    QVariant returnedValue;
+    QVariant messageText = message;
+    QMetaObject::invokeMethod(MainForm, "showMessage", Q_RETURN_ARG(QVariant, returnedValue), Q_ARG(QVariant, messageText));
+
+    QVariant newState = true;
+    QMetaObject::invokeMethod(MainForm, "setIsConnected", Q_RETURN_ARG(QVariant, returnedValue), Q_ARG(QVariant, newState));
 }
 
 void GUI::plotData(){
