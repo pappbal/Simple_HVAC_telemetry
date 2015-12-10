@@ -1,12 +1,17 @@
 var searchData=
 [
-  ['sendcommand',['sendCommand',['../class_proxy.html#ab531e3dadd74cdac564a4b95df0432f6',1,'Proxy']]],
-  ['senddata',['sendData',['../class_communication.html#ab3b5e0ddd4f5cb13812538d5ef652804',1,'Communication']]],
-  ['serial_5fcommunication',['Serial_Communication',['../class_serial___communication.html',1,'Serial_Communication'],['../class_serial___communication.html#ae770c17c8557b1755235c39ee507f49c',1,'Serial_Communication::Serial_Communication()']]],
-  ['setparam',['setParam',['../class_state.html#a36474bf7594b13650b952a3384799233',1,'State']]],
-  ['signaldisconnected',['signalDisconnected',['../class_proxy.html#a7c14da3121986191b4015d98025a538d',1,'Proxy']]],
-  ['signalhvacstopped',['signalHVACStopped',['../class_proxy.html#a308832fd706862351b2678a93aee1853',1,'Proxy']]],
-  ['speeds',['Speeds',['../class_speeds.html',1,'']]],
-  ['state',['State',['../class_state.html',1,'State'],['../class_state.html#ab91bb1dd5aa6260ab2a456581daf9ec2',1,'State::State()'],['../class_state.html#a6c25a4da517d9de8cc0cb211be1d951a',1,'State::State(State &amp;&amp;other)'],['../class_state.html#a7325c890ee133fde5ca26eb4cea1f8ce',1,'State::State(const State &amp;other)']]],
-  ['statehistory',['StateHistory',['../class_state_history.html',1,'StateHistory'],['../class_state_history.html#ab92c21fbd7b87cde8b829e4f1dc7611d',1,'StateHistory::StateHistory()']]]
+  ['read_5freceived_5fdata',['read_received_data',['../class_serial___communication.html#a0013c6c8200b3084dcb92640f350648b',1,'Serial_Communication']]],
+  ['readytosend',['readyToSend',['../class_state.html#ae078b30022dd6de9e7f4ffa4a88e5933',1,'State']]],
+  ['receiveconnectsignal',['receiveConnectSignal',['../class_g_u_i.html#aae7d06a8383bd9ef7a865a8fd928db8a',1,'GUI']]],
+  ['receivedisconnectsignal',['receiveDisconnectSignal',['../class_g_u_i.html#a9d62ae03c821a735d3593a438db35162',1,'GUI']]],
+  ['receivesetdsignal',['receiveSetDSignal',['../class_g_u_i.html#ac6e99253cfc5ec1a500b69f4b2b3ea52',1,'GUI']]],
+  ['receivesetisignal',['receiveSetISignal',['../class_g_u_i.html#a2de7add4e7eee641ebd3d64ef04e8846',1,'GUI']]],
+  ['receivesetpsignal',['receiveSetPSignal',['../class_g_u_i.html#aa3f6f12b77c50a02dba444cf4aa0a6ca',1,'GUI']]],
+  ['receivesettemp1signal',['receiveSetTemp1Signal',['../class_g_u_i.html#afdf22089d724466959d8856681c71bfa',1,'GUI']]],
+  ['receivesettemp2signal',['receiveSetTemp2Signal',['../class_g_u_i.html#a0e1764751934629e673f13a7be772362',1,'GUI']]],
+  ['receivesettemp3signal',['receiveSetTemp3Signal',['../class_g_u_i.html#ac34f9645b5e751a9eedd07ee294e688c',1,'GUI']]],
+  ['receivesettemp4signal',['receiveSetTemp4Signal',['../class_g_u_i.html#a5c5b5adafd8e2876ec75c033374c3e50',1,'GUI']]],
+  ['receivestartsignal',['receiveStartSignal',['../class_g_u_i.html#a7de844a9e424473b5ad463bfa11bbb0e',1,'GUI']]],
+  ['receivestopsignal',['receiveStopSignal',['../class_g_u_i.html#aac7927a4be8991e32743222943db7bdb',1,'GUI']]],
+  ['reset',['reset',['../class_temperatures.html#a31580d84fe293ed3440025efdfe48bb6',1,'Temperatures::reset()'],['../class_speeds.html#a572c9537960e046a055f94a7bb028fe2',1,'Speeds::reset()'],['../class_actuators.html#a1402ca0e8ecc8b6d8d79ddf06c66dcfb',1,'Actuators::reset()'],['../class_state.html#a4e93b6afe93bea420937159c4993a627',1,'State::reset()']]]
 ];

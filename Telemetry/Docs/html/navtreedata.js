@@ -3,9 +3,10 @@ var NAVTREE =
   [ "Telemetry", "index.html", [
     [ "Overview", "index.html", [
       [ "Introduction", "index.html#Introduction", null ],
-      [ "HVAC", "index.html#HVAC", null ],
-      [ "Communication", "index.html#Communication", null ],
+      [ "GUI", "index.html#GUI", null ],
       [ "Representation", "index.html#Representation", null ],
+      [ "Communication", "index.html#Communication", null ],
+      [ "HVAC", "index.html#HVAC", null ],
       [ "Sequences", "index.html#Sequences", null ]
     ] ],
     [ "Classes", "annotated.html", [

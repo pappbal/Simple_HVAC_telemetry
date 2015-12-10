@@ -16,7 +16,6 @@ var class_g_u_i =
     [ "receiveSetTemp4Signal", "class_g_u_i.html#a5c5b5adafd8e2876ec75c033374c3e50", null ],
     [ "receiveStartSignal", "class_g_u_i.html#a7de844a9e424473b5ad463bfa11bbb0e", null ],
     [ "receiveStopSignal", "class_g_u_i.html#aac7927a4be8991e32743222943db7bdb", null ],
-    [ "sendSignal", "class_g_u_i.html#a0b7149809a096de2f515563f3e34e39c", null ],
     [ "signalCommand", "class_g_u_i.html#a37b5f394d3db1fbca2c3256e0b1a1182", null ],
     [ "stateHistoryUpdated", "class_g_u_i.html#a32fb7eacfe7fbb043c590f44bc68d2f2", null ],
     [ "stoppedSlot", "class_g_u_i.html#ae77147681e307c8c29eca3737491b21d", null ],

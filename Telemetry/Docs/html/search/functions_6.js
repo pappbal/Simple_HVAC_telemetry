@@ -1,11 +1,5 @@
 var searchData=
 [
-  ['sendcommand',['sendCommand',['../class_proxy.html#ab531e3dadd74cdac564a4b95df0432f6',1,'Proxy']]],
-  ['senddata',['sendData',['../class_communication.html#ab3b5e0ddd4f5cb13812538d5ef652804',1,'Communication']]],
-  ['serial_5fcommunication',['Serial_Communication',['../class_serial___communication.html#ae770c17c8557b1755235c39ee507f49c',1,'Serial_Communication']]],
-  ['setparam',['setParam',['../class_state.html#a36474bf7594b13650b952a3384799233',1,'State']]],
-  ['signaldisconnected',['signalDisconnected',['../class_proxy.html#a7c14da3121986191b4015d98025a538d',1,'Proxy']]],
-  ['signalhvacstopped',['signalHVACStopped',['../class_proxy.html#a308832fd706862351b2678a93aee1853',1,'Proxy']]],
-  ['state',['State',['../class_state.html#ab91bb1dd5aa6260ab2a456581daf9ec2',1,'State::State()'],['../class_state.html#a6c25a4da517d9de8cc0cb211be1d951a',1,'State::State(State &amp;&amp;other)'],['../class_state.html#a7325c890ee133fde5ca26eb4cea1f8ce',1,'State::State(const State &amp;other)']]],
-  ['statehistory',['StateHistory',['../class_state_history.html#ab92c21fbd7b87cde8b829e4f1dc7611d',1,'StateHistory']]]
+  ['open_5fserial_5fport',['open_serial_port',['../class_serial___communication.html#abb6d80f681d29718d4981c54fb976f22',1,'Serial_Communication']]],
+  ['operator_3d',['operator=',['../class_temperatures.html#a10832ac4239a9c37863d548f462eca9d',1,'Temperatures::operator=(Temperatures &amp;&amp;other)'],['../class_temperatures.html#abe234e609c53984be1be0949b63cc653',1,'Temperatures::operator=(const Temperatures &amp;other)'],['../class_speeds.html#afcb8c96bf3c9c5a5c0f335b8c9bfcda5',1,'Speeds::operator=(Speeds &amp;&amp;other)'],['../class_speeds.html#acb523f8fd06a9e5049036fb84144ad5b',1,'Speeds::operator=(const Speeds &amp;other)'],['../class_actuators.html#ada246d316d6655c877c5f352a074692c',1,'Actuators::operator=(Actuators &amp;&amp;other)'],['../class_actuators.html#a3f47e40b0931fc41c451bd54e8547818',1,'Actuators::operator=(const Actuators &amp;other)'],['../class_state.html#acb87ac4823954f62617632faba3f48a3',1,'State::operator=(State &amp;&amp;other)'],['../class_state.html#a57229f2db32144885eef8b7d8da598ef',1,'State::operator=(const State &amp;other)']]]
 ];

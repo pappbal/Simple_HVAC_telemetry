@@ -1,6 +1,14 @@
 var searchData=
 [
-  ['package',['Package',['../class_package.html#a1e7c228e665f1bc7a3d739b22431801b',1,'Package::Package()'],['../class_package.html#a1d3b72ed71c025d11577c240f22a387c',1,'Package::Package(QByteArray data)'],['../class_package.html#a63f98e34d6b29d382d60a621681fcdb0',1,'Package::Package(quint8 ID, quint32 data)'],['../class_package.html#a386c30f29b287dc1e4285ef1f776ff72',1,'Package::Package(const Package &amp;other)']]],
-  ['plotdata',['plotData',['../class_g_u_i.html#a4f1cd50c478481707bda9a2903a1a3ce',1,'GUI']]],
-  ['proxy',['Proxy',['../class_proxy.html#a0e074f85af167a918d2df246222f7632',1,'Proxy']]]
+  ['sendcommand',['sendCommand',['../class_proxy.html#ab531e3dadd74cdac564a4b95df0432f6',1,'Proxy']]],
+  ['senddata',['sendData',['../class_communication.html#ab3b5e0ddd4f5cb13812538d5ef652804',1,'Communication']]],
+  ['serial_5fcommunication',['Serial_Communication',['../class_serial___communication.html#ae770c17c8557b1755235c39ee507f49c',1,'Serial_Communication']]],
+  ['setparam',['setParam',['../class_state.html#a36474bf7594b13650b952a3384799233',1,'State']]],
+  ['signalcommand',['signalCommand',['../class_g_u_i.html#a37b5f394d3db1fbca2c3256e0b1a1182',1,'GUI']]],
+  ['signaldisconnected',['signalDisconnected',['../class_proxy.html#a7c14da3121986191b4015d98025a538d',1,'Proxy']]],
+  ['signalhvacstopped',['signalHVACStopped',['../class_proxy.html#a308832fd706862351b2678a93aee1853',1,'Proxy']]],
+  ['state',['State',['../class_state.html#ab91bb1dd5aa6260ab2a456581daf9ec2',1,'State::State()'],['../class_state.html#a6c25a4da517d9de8cc0cb211be1d951a',1,'State::State(State &amp;&amp;other)'],['../class_state.html#a7325c890ee133fde5ca26eb4cea1f8ce',1,'State::State(const State &amp;other)']]],
+  ['statehistory',['StateHistory',['../class_state_history.html#ab92c21fbd7b87cde8b829e4f1dc7611d',1,'StateHistory']]],
+  ['statehistoryupdated',['stateHistoryUpdated',['../class_g_u_i.html#a32fb7eacfe7fbb043c590f44bc68d2f2',1,'GUI']]],
+  ['stoppedslot',['stoppedSlot',['../class_g_u_i.html#ae77147681e307c8c29eca3737491b21d',1,'GUI']]]
 ];

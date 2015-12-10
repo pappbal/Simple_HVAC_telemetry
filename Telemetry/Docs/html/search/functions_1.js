@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['dataready',['dataReady',['../class_proxy.html#abf3ed9235ebff052c3eb341d5c3228c9',1,'Proxy']]]
+  ['connectqmlsignals',['ConnectQmlSignals',['../class_g_u_i.html#a73e61a6319f027011b91a0a652022702',1,'GUI']]]
 ];

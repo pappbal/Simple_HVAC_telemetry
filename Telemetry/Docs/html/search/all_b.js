@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['_7eproxy',['~Proxy',['../class_proxy.html#a2f9c8445a2a1db22422185ffd92a795e',1,'Proxy']]],
-  ['_7eserial_5fcommunication',['~Serial_Communication',['../class_serial___communication.html#af41c363636e2712b7081329faa0192ba',1,'Serial_Communication']]]
+  ['temperatures',['Temperatures',['../class_temperatures.html',1,'']]],
+  ['tick',['tick',['../class_proxy.html#ac58a41536e56a591109c4c07293166e8',1,'Proxy']]]
 ];
