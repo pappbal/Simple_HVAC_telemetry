@@ -18,6 +18,8 @@
  * measured temperature values, measured fan speed values and actuator values for diagnostic purposes, and let the user define the controller parameters
  * (P, I, D) and temperature setpoints, as well as start and stop the temperature controlling.
  *
+ * Video about the working system (in hungarian): https://drive.google.com/open?id=0BzYGHIbT62_UdGRQUUR6dnBtRTQ
+ *
  * \section GUI
  * This is the overview of the GUI.
  *
