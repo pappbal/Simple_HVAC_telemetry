@@ -94,6 +94,7 @@ void Proxy::sendCommand(qint8 pid_ID, qint32 data)
     {
        // Package package(ID_start,0);
         this->disconnected = 0;
+        emit signalConnected();
        // comm.sendData(package);
         timer.start(timeout_in_sec*1000.0F);
     }

@@ -37,6 +37,7 @@ int main(int argc, char *argv[])
 
     QObject::connect(&proxy, SIGNAL(signalDisconnected()), &gui, SLOT(disconnectedSlot()));
     QObject::connect(&proxy, SIGNAL(signalHVACStopped()), &gui, SLOT(stoppedSlot()));
+    QObject::connect(&proxy, SIGNAL(signalConnected()), &gui, SLOT(connectedSlot()));
 
 
 //    gui.signalCommand(16,1);

@@ -31,7 +31,7 @@ public:
 signals:
     /**
      * @brief signalDisconnected
-     * Signals GUI about disconnected signal
+     * Signals GUI about disconnection
      */
     void signalDisconnected();
     /**
@@ -39,6 +39,12 @@ signals:
      * Signals GUI that HVAC is sending "Stopped" messages
      */
     void signalHVACStopped();
+
+    /**
+     * @brief signalConnected
+     * Signals GUI about connection
+     */
+    void signalConnected();
 public slots:
     void dataReady(); //slot for communication. Called on new incoming packet.
     void sendCommand(qint8 pid_ID, qint32 data); //slot for GUI. Called when parameter is set.
