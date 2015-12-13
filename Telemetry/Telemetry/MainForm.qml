@@ -37,360 +37,367 @@ Item {
         eventLogModel.append({message: messageText});
     }
 
-    RowLayout {
-        id: baseGrid
+    ScrollView
+    {
+
         anchors.fill: parent
 
-        GroupBox
-        {
-            id: leftGroup
-            Layout.fillHeight: true
+        RowLayout {
+            id: baseGrid
+            width: children.width
+            height: children.height
+
+            GroupBox
+            {
+                id: leftGroup
+                Layout.fillHeight: true
+
+                ColumnLayout
+                {
+                    id: columnLayout1
+                    anchors.fill: parent
+
+                    RowLayout
+                    {
+                        ColumnLayout
+                        {
+                            StartButton
+                            {
+                                id: startButton
+                            }
+
+                            StopButton
+                            {
+                                id: stopButton
+                            }
+                        }
+
+                        GroupBox
+                        {
+                            title: "Status"
+
+                            Layout.fillWidth: true
+
+                            ColumnLayout
+                            {
+                                Text{ Layout.fillHeight: true; font.bold: true; color: isConnected ? "green" : "red"; text: isConnected ? "Connected" : "Disconnected" }
+                                Text{ Layout.fillHeight: true; font.bold: true; color: isRunning ? "green" : "red"; text: isRunning ? "Running" : "Stopped" }
+                            }
+                        }
+
+                    }
+
+                    Text {
+                        id: messagesLabel
+                        text: "Messages:"
+                        font.bold: true
+                    }
+
+                    Rectangle{
+                        Layout.fillHeight: true
+                        implicitWidth: 340
+
+                        color: "white"
+                        border.width: 1
+                        border.color: "black"
+
+                        ScrollView
+                        {
+                            anchors.fill: parent
+                            Layout.fillHeight: true
+                            Layout.fillWidth: true
+                            Layout.minimumWidth: 250
+                            Layout.preferredWidth: 150
+                            Layout.maximumWidth: 250
+                            Layout.minimumHeight: 250
+
+                            anchors.top: parent.top
+                            anchors.topMargin: 3
+
+                            ListView
+                            {
+                                id: eventLog
+                                anchors.fill: parent
+
+                                spacing: 3
+
+                                delegate: Component {
+
+                                    Row {
+                                        anchors.left: parent.left
+                                        anchors.margins: 10
+                                        Text {
+                                            text: message
+                                            anchors.verticalCenter: parent.verticalCenter
+                                            horizontalAlignment: Text.AlignLeft
+                                        }
+                                    }
+                               }
+                                model: ListModel { id: eventLogModel }
+
+                                onCountChanged: {
+                                    eventLog.currentIndex = eventLog.count - 1;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
 
             ColumnLayout
             {
-                id: columnLayout1
-                anchors.fill: parent
+                id: columnLayout2
 
-                RowLayout
+                Item
                 {
+                    Layout.preferredHeight: 10;
+                }
+
+                SetPID
+                {
+                    id: setPid
+                    Layout.preferredHeight: 161;
+                }
+
+                TemperatureSettings
+                {
+                    id: temperatureSettingsID
+                    Layout.preferredHeight: 195;
+                }
+
+                MeasuredValues
+                {
+                    id: measuredValuesID
+                    Layout.preferredHeight: 150;
+
+                    measuredTemp1: valueMeasuredTemp1
+                    measuredTemp2: valueMeasuredTemp2
+                    measuredTemp3: valueMeasuredTemp3
+                    measuredTemp4: valueMeasuredTemp4
+
+                    measuredSpeed1: valueMeasuredSpeed1
+                    measuredSpeed2: valueMeasuredSpeed2
+
+                    measuredActuator1: valueMeasuredActuator1
+                    measuredActuator2: valueMeasuredActuator2
+                }
+
+                GroupBox
+                {
+                    title: "Temperatures column diagram"
+
+                    ColumnDiagramTemperature{
+                        objectName: "columnDiagTemp"
+                        id: columnDiagramTempID
+
+                        width: 565
+                        height: 300//500
+
+                    }
+                }
+
+            }
+
+            ColumnLayout
+            {
+                id: rightColumn
+
+                GroupBox
+                {
+                    title: "Temperatures"
+
                     ColumnLayout
                     {
-                        StartButton
+                        RowLayout
                         {
-                            id: startButton
-                        }
+                            id: tempRadioButtons
+                            Layout.fillWidth: true
 
-                        StopButton
-                        {
-                            id: stopButton
-                        }
-                    }
+                            RadioButton
+                            {
+                                id: selectTemp1
+                                text: "Temp1"
+                                checked: true
 
-                    GroupBox
-                    {
-                        title: "Status"
-
-                        Layout.fillWidth: true
-
-                        ColumnLayout
-                        {
-                            Text{ Layout.fillHeight: true; font.bold: true; color: isConnected ? "green" : "red"; text: isConnected ? "Connected" : "Disconnected" }
-                            Text{ Layout.fillHeight: true; font.bold: true; color: isRunning ? "green" : "red"; text: isRunning ? "Running" : "Stopped" }
-                        }
-                    }
-
-                }
-
-                Text {
-                    id: messagesLabel
-                    text: "Messages:"
-                    font.bold: true
-                }
-
-                Rectangle{
-                    Layout.fillHeight: true
-                    implicitWidth: 340
-
-                    color: "white"
-                    border.width: 1
-                    border.color: "black"
-
-                    ScrollView
-                    {
-                        anchors.fill: parent
-                        Layout.fillHeight: true
-                        Layout.fillWidth: true
-                        Layout.minimumWidth: 250
-                        Layout.preferredWidth: 150
-                        Layout.maximumWidth: 250
-                        Layout.minimumHeight: 250
-
-                        anchors.top: parent.top
-                        anchors.topMargin: 3
-
-                        ListView
-                        {
-                            id: eventLog
-                            anchors.fill: parent
-
-                            spacing: 3
-
-                            delegate: Component {
-
-                                Row {
-                                    anchors.left: parent.left
-                                    anchors.margins: 10
-                                    Text {
-                                        text: message
-                                        anchors.verticalCenter: parent.verticalCenter
-                                        horizontalAlignment: Text.AlignLeft
-                                    }
+                                onClicked:
+                                {
+                                    historyGraphTemperature.showTemp1 = !historyGraphTemperature.showTemp1;
+                                    historyGraphTemperature.requestPaint();
                                 }
-                           }
-                            model: ListModel { id: eventLogModel }
-
-                            onCountChanged: {
-                                eventLog.currentIndex = eventLog.count - 1;
                             }
+                            RadioButton
+                            {
+                                id: selectTemp2
+                                text: "Temp2"
+                                checked: true
+
+
+                                onClicked:
+                                {
+                                    historyGraphTemperature.showTemp2 = !historyGraphTemperature.showTemp2;
+                                    historyGraphTemperature.requestPaint();
+                                }
+                            }
+                            RadioButton
+                            {
+                                id: selectTemp3
+                                text: "Temp3"
+                                checked: true
+
+
+                                onClicked:
+                                {
+                                    historyGraphTemperature.showTemp3 = !historyGraphTemperature.showTemp3;
+                                    historyGraphTemperature.requestPaint();
+                                }
+                            }
+                            RadioButton
+                            {
+                                id: selectTemp4
+                                text: "Temp4"
+                                checked: true
+
+
+                                onClicked:
+                                {
+                                    historyGraphTemperature.showTemp4 = !historyGraphTemperature.showTemp4;
+                                    historyGraphTemperature.requestPaint();
+                                }
+                            }
+                        }
+
+                        HistoryGraphTemperature {
+                            id: historyGraphTemperature
+
+                            objectName: "historyGraphTemperature"
+
+                            Layout.fillWidth: true
+                            Layout.preferredWidth: 800
+                            Layout.preferredHeight: 250
+
+                            graphVelocities: historyGraphVelocity
+
+                            graphTemperatures1: historyGraphTemperatures1
+                            graphTemperatures2: historyGraphTemperatures2
+                            graphTemperatures3: historyGraphTemperatures3
+                            graphTemperatures4: historyGraphTemperatures4
                         }
                     }
                 }
-            }
-        }
 
-        ColumnLayout
-        {
-            id: columnLayout2
-
-            Item
-            {
-                Layout.preferredHeight: 10;
-            }
-
-            SetPID
-            {
-                id: setPid
-                Layout.preferredHeight: 161;
-            }
-
-            TemperatureSettings
-            {
-                id: temperatureSettingsID
-                Layout.preferredHeight: 195;
-            }
-
-            MeasuredValues
-            {
-                id: measuredValuesID
-                Layout.preferredHeight: 150;
-
-                measuredTemp1: valueMeasuredTemp1
-                measuredTemp2: valueMeasuredTemp2
-                measuredTemp3: valueMeasuredTemp3
-                measuredTemp4: valueMeasuredTemp4
-
-                measuredSpeed1: valueMeasuredSpeed1
-                measuredSpeed2: valueMeasuredSpeed2
-
-                measuredActuator1: valueMeasuredActuator1
-                measuredActuator2: valueMeasuredActuator2
-            }
-
-            GroupBox
-            {
-                title: "Temperatures column diagram"
-
-                ColumnDiagramTemperature{
-                    objectName: "columnDiagTemp"
-                    id: columnDiagramTempID
-
-                    width: 565
-                    height: 300//500
-
-                }
-            }
-
-        }
-
-        ColumnLayout
-        {
-            id: rightColumn
-
-            GroupBox
-            {
-                title: "Temperatures"
-
-                ColumnLayout
+                GroupBox
                 {
-                    RowLayout
+                    title: "Speeds"
+                    id: speeds
+
+                    ColumnLayout
                     {
-                        id: tempRadioButtons
-                        Layout.fillWidth: true
-
-                        RadioButton
+                        RowLayout
                         {
-                            id: selectTemp1
-                            text: "Temp1"
-                            checked: true
+                            id: speedRadioButtons
+                            Layout.fillWidth: true
 
-                            onClicked:
+                            anchors.bottom: historyGraphTemperature.top
+
+                            RadioButton
                             {
-                                historyGraphTemperature.showTemp1 = !historyGraphTemperature.showTemp1;
-                                historyGraphTemperature.requestPaint();
+                                id: selectSpeed1
+                                text: "Speed1"
+                                checked: true
+
+                                onClicked:
+                                {
+                                    historyGraphSpeed.showSpeed1 = !historyGraphSpeed.showSpeed1;
+                                    historyGraphSpeed.requestPaint();
+                                }
+                            }
+                            RadioButton
+                            {
+                                id: selectSpeed2
+                                text: "Speed2"
+                                checked: true
+
+
+                                onClicked:
+                                {
+                                    historyGraphSpeed.showSpeed2 = !historyGraphSpeed.showSpeed2;
+                                    historyGraphSpeed.requestPaint();
+                                }
                             }
                         }
-                        RadioButton
-                        {
-                            id: selectTemp2
-                            text: "Temp2"
-                            checked: true
 
+                        HistoryGraphSpeed {
+                            id: historyGraphSpeed
 
-                            onClicked:
-                            {
-                                historyGraphTemperature.showTemp2 = !historyGraphTemperature.showTemp2;
-                                historyGraphTemperature.requestPaint();
-                            }
+                            objectName: "historyGraphSpeed"
+
+                            Layout.fillWidth: true
+                            Layout.preferredWidth: 800
+                            Layout.preferredHeight: 270
+
+                            graphVelocities: historyGraphVelocity
+
+                            graphSpeed1: historyGraphSpeeds1
+                            graphSpeed2: historyGraphSpeeds2
                         }
-                        RadioButton
-                        {
-                            id: selectTemp3
-                            text: "Temp3"
-                            checked: true
-
-
-                            onClicked:
-                            {
-                                historyGraphTemperature.showTemp3 = !historyGraphTemperature.showTemp3;
-                                historyGraphTemperature.requestPaint();
-                            }
-                        }
-                        RadioButton
-                        {
-                            id: selectTemp4
-                            text: "Temp4"
-                            checked: true
-
-
-                            onClicked:
-                            {
-                                historyGraphTemperature.showTemp4 = !historyGraphTemperature.showTemp4;
-                                historyGraphTemperature.requestPaint();
-                            }
-                        }
-                    }
-
-                    HistoryGraphTemperature {
-                        id: historyGraphTemperature
-
-                        objectName: "historyGraphTemperature"
-
-                        Layout.fillWidth: true
-                        Layout.preferredWidth: 800
-                        Layout.preferredHeight: 250
-
-                        graphVelocities: historyGraphVelocity
-
-                        graphTemperatures1: historyGraphTemperatures1
-                        graphTemperatures2: historyGraphTemperatures2
-                        graphTemperatures3: historyGraphTemperatures3
-                        graphTemperatures4: historyGraphTemperatures4
                     }
                 }
-            }
 
-            GroupBox
-            {
-                title: "Speeds"
-                id: speeds
-
-                ColumnLayout
+                GroupBox
                 {
-                    RowLayout
+                    title: "Actuators"
+                    id: actuators
+
+                    ColumnLayout
                     {
-                        id: speedRadioButtons
-                        Layout.fillWidth: true
-
-                        anchors.bottom: historyGraphTemperature.top
-
-                        RadioButton
+                        RowLayout
                         {
-                            id: selectSpeed1
-                            text: "Speed1"
-                            checked: true
+                            id: actuatorRadioButtons
+                            Layout.fillWidth: true
 
-                            onClicked:
+                            anchors.bottom: historyGraphTemperature.top
+
+                            RadioButton
                             {
-                                historyGraphSpeed.showSpeed1 = !historyGraphSpeed.showSpeed1;
-                                historyGraphSpeed.requestPaint();
+                                id: selectAct1
+                                text: "Actuator1"
+                                checked: true
+
+                                onClicked:
+                                {
+                                    historyGraphActuator.showAct1 = !historyGraphActuator.showAct1;
+                                    historyGraphActuator.requestPaint();
+                                }
+                            }
+                            RadioButton
+                            {
+                                id: selectAct2
+                                text: "Actuator2"
+                                checked: true
+
+
+                                onClicked:
+                                {
+                                    historyGraphActuator.showAct2 = !historyGraphActuator.showAct2;
+                                    historyGraphActuator.requestPaint();
+                                }
                             }
                         }
-                        RadioButton
-                        {
-                            id: selectSpeed2
-                            text: "Speed2"
-                            checked: true
 
+                        HistoryGraphActuator {
+                            id: historyGraphActuator
 
-                            onClicked:
-                            {
-                                historyGraphSpeed.showSpeed2 = !historyGraphSpeed.showSpeed2;
-                                historyGraphSpeed.requestPaint();
-                            }
+                            objectName: "historyGraphActuator"
+
+                            Layout.fillWidth: true
+                            Layout.preferredWidth: 800
+                            Layout.preferredHeight: 270
+
+                            graphVelocities: historyGraphVelocity
+
+                            graphAct1: historyGraphAct1
+                            graphAct2: historyGraphAct2
                         }
-                    }
-
-                    HistoryGraphSpeed {
-                        id: historyGraphSpeed
-
-                        objectName: "historyGraphSpeed"
-
-                        Layout.fillWidth: true
-                        Layout.preferredWidth: 800
-                        Layout.preferredHeight: 270
-
-                        graphVelocities: historyGraphVelocity
-
-                        graphSpeed1: historyGraphSpeeds1
-                        graphSpeed2: historyGraphSpeeds2
-                    }
-                }
-            }
-
-            GroupBox
-            {
-                title: "Actuators"
-                id: actuators
-
-                ColumnLayout
-                {
-                    RowLayout
-                    {
-                        id: actuatorRadioButtons
-                        Layout.fillWidth: true
-
-                        anchors.bottom: historyGraphTemperature.top
-
-                        RadioButton
-                        {
-                            id: selectAct1
-                            text: "Actuator1"
-                            checked: true
-
-                            onClicked:
-                            {
-                                historyGraphActuator.showAct1 = !historyGraphActuator.showAct1;
-                                historyGraphActuator.requestPaint();
-                            }
-                        }
-                        RadioButton
-                        {
-                            id: selectAct2
-                            text: "Actuator2"
-                            checked: true
-
-
-                            onClicked:
-                            {
-                                historyGraphActuator.showAct2 = !historyGraphActuator.showAct2;
-                                historyGraphActuator.requestPaint();
-                            }
-                        }
-                    }
-
-                    HistoryGraphActuator {
-                        id: historyGraphActuator
-
-                        objectName: "historyGraphActuator"
-
-                        Layout.fillWidth: true
-                        Layout.preferredWidth: 800
-                        Layout.preferredHeight: 270
-
-                        graphVelocities: historyGraphVelocity
-
-                        graphAct1: historyGraphAct1
-                        graphAct2: historyGraphAct2
                     }
                 }
             }
